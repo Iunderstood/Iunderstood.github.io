@@ -347,15 +347,18 @@ consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
 Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 
 &gt; This is the first level of quoting.
+&gt;
 &gt; &gt; This is nested blockquote.
+&gt;
 &gt; Back to the first level.
 </code></pre><blockquote>
 <p>This is a blockquote</p>
 <p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,<br>consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.<br>Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
 <p>This is the first level of quoting.</p>
 <blockquote>
-<p>This is nested blockquote.<br>Back to the first level.</p>
+<p>This is nested blockquote.</p>
 </blockquote>
+<p>Back to the first level.</p>
 <h2 id="这是一个标题"><a href="#这是一个标题" class="headerlink" title="这是一个标题"></a>这是一个标题</h2><ol>
 <li>这是第一行列表项</li>
 <li>这是第二行列表项</li>
@@ -375,24 +378,20 @@ Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 </code></pre><ul>
 <li>Red</li>
 <li>Green</li>
-<li>Blue<h5 id="列表2"><a href="#列表2" class="headerlink" title="列表2"></a>列表2</h5><ul>
+<li>Blue</li>
+</ul>
+<h5 id="列表2"><a href="#列表2" class="headerlink" title="列表2"></a>列表2</h5><pre><code>+ Red
++ Green
++ Blue
+</code></pre><ul>
 <li>Red</li>
 <li>Green</li>
 <li>Blue</li>
 </ul>
-</li>
-</ul>
-<ul>
-<li>Red</li>
-<li>Green</li>
-<li>Blue<h5 id="列表3"><a href="#列表3" class="headerlink" title="列表3"></a>列表3</h5><ul>
-<li>Red</li>
-<li>Green</li>
-<li>Blue</li>
-</ul>
-</li>
-</ul>
-<ul>
+<h5 id="列表3"><a href="#列表3" class="headerlink" title="列表3"></a>列表3</h5><pre><code>- Red
+- Green
+- Blue
+</code></pre><ul>
 <li>Red</li>
 <li>Green</li>
 <li>Blue</li>
@@ -403,20 +402,20 @@ Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 </code></pre><ol>
 <li>Red</li>
 <li>Green</li>
-<li>Blue<h5 id="列表2-1"><a href="#列表2-1" class="headerlink" title="列表2"></a>列表2</h5><ol>
+<li>Blue</li>
+</ol>
+<h5 id="列表2-1"><a href="#列表2-1" class="headerlink" title="列表2"></a>列表2</h5><pre><code>1. Red
+2. Green
+3. Blue
+</code></pre><ol>
 <li>Red</li>
 <li>Green</li>
 <li>Blue</li>
 </ol>
-</li>
-<li>Red</li>
-<li>Green</li>
-<li>Blue<h5 id="列表3-1"><a href="#列表3-1" class="headerlink" title="列表3"></a>列表3</h5><ol>
-<li>Red</li>
-<li>Green</li>
-<li>Blue</li>
-</ol>
-</li>
+<h5 id="列表3-1"><a href="#列表3-1" class="headerlink" title="列表3"></a>列表3</h5><pre><code>3. Red
+4. Green
+5. Blue
+</code></pre><ol>
 <li>Red</li>
 <li>Green</li>
 <li>Blue</li>
@@ -558,7 +557,7 @@ than from [Yahoo](http://search.yahoo.com/ &quot;Yahoo Search&quot;) or
 <p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a> than from<br><a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
 <p>下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：</p>
 <p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a><br>than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or<br><a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
-<h1 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h1><h3 id="被-或-包围的字词会被转成用-标签包围-斜体-，用两个-或-包起来的话，则会被转成-加粗"><a href="#被-或-包围的字词会被转成用-标签包围-斜体-，用两个-或-包起来的话，则会被转成-加粗" class="headerlink" title="被  或 _ 包围的字词会被转成用  标签包围(斜体)，用两个  或 _ 包起来的话，则会被转成 (加粗)"></a>被 <em> 或 _ 包围的字词会被转成用 <em></em> 标签包围(斜体)，用两个 </em> 或 _ 包起来的话，则会被转成 <strong></strong>(加粗)</h3><pre><code>*single asterisks*
+<h1 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h1><h3 id="被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗"><a href="#被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗" class="headerlink" title="被  或 _ 包围的字词会被转成用 &lt;em&gt; 标签包围(斜体)，用两个  或 _ 包起来的话，则会被转成 &lt;strong&gt;(加粗)"></a>被 <em> 或 _ 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围(斜体)，用两个 </em> 或 _ 包起来的话，则会被转成 <code>&lt;strong&gt;</code>(加粗)</h3><pre><code>*single asterisks*
 
 _single underscores_
 
@@ -585,12 +584,12 @@ __double underscores__
 <h4 id="参考式-gt-Alt-text-id-id-url-to-image-quot-Optional-title-attribute-quot"><a href="#参考式-gt-Alt-text-id-id-url-to-image-quot-Optional-title-attribute-quot" class="headerlink" title="参考式-&gt;![Alt text][id] [id]: url/to/image  &quot;Optional title attribute&quot;"></a>参考式-&gt;<code>![Alt text][id] [id]: url/to/image  &quot;Optional title attribute&quot;</code></h4><pre><code>![image][boy]
 [boy]: /img/boy.png &quot;boy.png&quot;
 </code></pre><p><img src="/img/boy.png" alt="image" title="boy.png"></p>
-<p>Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <img> 标签</p>
+<p>Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <code>&lt;img&gt;</code> 标签</p>
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h1 id="自动链接"><a href="#自动链接" class="headerlink" title="自动链接"></a>自动链接</h1><h3 id="处理网址和电子邮件信箱"><a href="#处理网址和电子邮件信箱" class="headerlink" title="处理网址和电子邮件信箱"></a>处理网址和电子邮件信箱</h3><h3 id="只要是用尖括号包起来，-Markdown-就会自动把它转成链接-网址的链接文字就和链接地址一样"><a href="#只要是用尖括号包起来，-Markdown-就会自动把它转成链接-网址的链接文字就和链接地址一样" class="headerlink" title="只要是用尖括号包起来， Markdown 就会自动把它转成链接(网址的链接文字就和链接地址一样)"></a>只要是用尖括号包起来， Markdown 就会自动把它转成链接(网址的链接文字就和链接地址一样)</h3><pre><code>&lt;http://www.baidu.com/&gt;
 
 &lt;1245204973@qq.com&gt;
 </code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
-<p><a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#49;&#x32;&#52;&#x35;&#50;&#48;&#x34;&#57;&#x37;&#51;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;">&#49;&#x32;&#52;&#x35;&#50;&#48;&#x34;&#57;&#x37;&#51;&#x40;&#113;&#113;&#x2e;&#x63;&#111;&#109;</a></p>
+<p><a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#49;&#x32;&#52;&#x35;&#50;&#48;&#52;&#57;&#55;&#x33;&#x40;&#113;&#113;&#46;&#99;&#111;&#109;">&#49;&#x32;&#52;&#x35;&#50;&#48;&#52;&#57;&#55;&#x33;&#x40;&#113;&#113;&#46;&#99;&#111;&#109;</a></p>
 <p>Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人</p>
 <h1 id="反斜杠"><a href="#反斜杠" class="headerlink" title="反斜杠"></a>反斜杠</h1><h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><pre><code>\   反斜线
 `   反引号
@@ -604,7 +603,11 @@ _   底线
 -   减号
 .   英文句点
 !   惊叹号
-</code></pre>
+</code></pre><h2 id="第一次写博客的经验"><a href="#第一次写博客的经验" class="headerlink" title="第一次写博客的经验"></a>第一次写博客的经验</h2><h3 id="本人使用的是hexo博客框架"><a href="#本人使用的是hexo博客框架" class="headerlink" title="本人使用的是hexo博客框架"></a>本人使用的是hexo博客框架</h3><p>1.开始写文章时应该先用<code>hexo new [layout] &lt;title&gt;</code>命令来创建一篇新的文章(有时候就是因为没有执行这条命令而直接手动在<code>.../blog/source/_posts</code>目录下创建一个<code>.md</code>文件，就会在生成并部署时发生一些错误的报错–即本身没有错，它却给你报错了)</p>
+<p>2.使用上述命令解决了创建问题，接下来是部署的问题，部署的时候有可能不能一次性成功，哪怕上一次还成功部署了(或许是上一次我运气好吧)；后来看控制台报错得知好像是邮箱<code>private</code>的问题，看到这里我好像记起来在上一次成功部署之后有点得意，便在<code>github</code>上逛了一下，就是那时我把邮箱改成了<code>private</code>，见截图：<img src="/img/email_private.png" alt="email_private" title="email_private.png"><br>接下来我改回来，问题果然就解决了    –记得在部署前一定要先生成静态文件(<code>hexo generate</code>)，之后再部署，不然服务器上的内容不会发生变化(原因是你本次部署上去的public内容和上次是一样的)，可以使用<code>hexo generate --deploy</code>命令实现生成完毕后自动部署</p>
+<p>3.还有一点就是在文章中添加图片，方法是在<code>.../blog/source</code>目录下创建一个<code>img</code>文件(其他的也可以)，文章中这样写：<code>![Alt text](/path/to/img.jpg &quot;Optional title&quot;)</code>，这是例子：<code>![image](/img/boy.png &quot;boy.png&quot;)</code></p>
+<p>目前就记这么多吧，后面学习过程中再慢慢积累~~~</p>
+
           
         
       
