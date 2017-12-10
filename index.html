@@ -359,13 +359,16 @@ Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 <p>This is nested blockquote.</p>
 </blockquote>
 <p>Back to the first level.</p>
+</blockquote>
+<h3 id="引用的区块内也可以使用其他的-Markdown-语法，包括标题、列表、代码区块等"><a href="#引用的区块内也可以使用其他的-Markdown-语法，包括标题、列表、代码区块等" class="headerlink" title="引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等"></a>引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等</h3><pre><code>&gt; ## 这是一个标题
+&gt; 1. 这是第一行列表项
+&gt; 2. 这是第二行列表项
+&gt;
+&gt; 给出一些例子代码：
+&gt; 
+&gt; return shell_exec(&quot;echo $input | $markdown_script&quot;);
+</code></pre><blockquote>
 <h2 id="这是一个标题"><a href="#这是一个标题" class="headerlink" title="这是一个标题"></a>这是一个标题</h2><ol>
-<li>这是第一行列表项</li>
-<li>这是第二行列表项</li>
-</ol>
-<p>给出一些例子代码：</p>
-<p>return shell_exec(“echo $input | $markdown_script”);</p>
-<h2 id="这是一个标题-1"><a href="#这是一个标题-1" class="headerlink" title="这是一个标题"></a>这是一个标题</h2><ol>
 <li>这是第一行列表项</li>
 <li>这是第二行列表项</li>
 </ol>
@@ -534,7 +537,7 @@ ___
 [Iunderstood]: &lt;http://Iunderstood.github.io/&gt; &quot;newlife&apos;sBlog&quot;
 [Iunderstood]: http://Iunderstood.github.io/ 
 &quot;newlife&apos;sBlog&quot;
-</code></pre><p><a href="http://Iunderstood.github.io/" target="_blank" rel="noopener">newlife’sBlog</a><br><a href="http://Iunderstood.github.io/" target="_blank" rel="noopener">Iunderstood</a>: <a href="http://Iunderstood.github.io/" target="_blank" rel="noopener">http://Iunderstood.github.io/</a> ‘newlife’sBlog’</p>
+</code></pre><p><a href="http://Iunderstood.github.io" target="_blank" rel="noopener">newlife’sBlog</a><br><a href="http://Iunderstood.github.io" target="_blank" rel="noopener">Iunderstood</a>: <a href="http://Iunderstood.github.io/" target="_blank" rel="noopener">http://Iunderstood.github.io/</a> ‘newlife\’sBlog’</p>
 <p>“newlife’sBlog”</p>
 <h6 id="链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的"><a href="#链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的" class="headerlink" title="链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的"></a>链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的</h6><pre><code>[小米][m]
 
@@ -566,15 +569,14 @@ I get 10 times more traffic from [Google][] than from [Yahoo][] or [MSN][].
 
 下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：
 
-I get 10 times more traffic from [Google](http://google.com/ &quot;Google&quot;)
-than from [Yahoo](http://search.yahoo.com/ &quot;Yahoo Search&quot;) or [MSN](http://search.msn.com/ &quot;MSN Search&quot;).
+I get 10 times more traffic from [Google](http://google.com/ &quot;Google&quot;) than from [Yahoo](http://search.yahoo.com/ &quot;Yahoo Search&quot;) or [MSN](http://search.msn.com/ &quot;MSN Search&quot;).
 </code></pre><p>下面是一个参考式链接的范例：</p>
 <p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a> than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
 <p>如果改成用链接名称的方式写：</p>
 <p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a> than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
 <p>下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：</p>
 <p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a><br>than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
-<h1 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h1><h3 id="被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗"><a href="#被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗" class="headerlink" title="被 * 或 _ 包围的字词会被转成用 &lt;em&gt; 标签包围(斜体)，用两个 * 或 _ 包起来的话，则会被转成 &lt;strong&gt;(加粗)"></a>被 <code>*</code> 或 <code>_</code> 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围(斜体)，用两个 * 或 _ 包起来的话，则会被转成 <code>&lt;strong&gt;</code>(加粗)</h3><pre><code>*single asterisks*
+<h1 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h1><h3 id="被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗"><a href="#被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗" class="headerlink" title="被 * 或 _ 包围的字词会被转成用 &lt;em&gt; 标签包围(斜体)，用两个 * 或 _ 包起来的话，则会被转成 &lt;strong&gt;(加粗)"></a>被 <code>*</code> 或 <code>_</code> 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围(斜体)，用两个 <code>*</code> 或 <code>_</code> 包起来的话，则会被转成 <code>&lt;strong&gt;</code>(加粗)</h3><pre><code>*single asterisks*
 
 _single underscores_
 
@@ -585,7 +587,7 @@ __double underscores__
 <p><em>single underscores</em></p>
 <p><strong>double asterisks</strong></p>
 <p><strong>double underscores</strong></p>
-<h4 id="如果你的-和-两边都有空白的话，它们就只会被当成普通的符号"><a href="#如果你的-和-两边都有空白的话，它们就只会被当成普通的符号" class="headerlink" title="如果你的 * 和 _ 两边都有空白的话，它们就只会被当成普通的符号"></a>如果你的 * 和 _ 两边都有空白的话，它们就只会被当成普通的符号</h4><p>如果要在文字前后直接插入普通的星号或底线，你可以用反斜线：</p>
+<h4 id="如果你的-和-两边都有空白的话，它们就只会被当成普通的符号"><a href="#如果你的-和-两边都有空白的话，它们就只会被当成普通的符号" class="headerlink" title="如果你的 * 和 _ 两边都有空白的话，它们就只会被当成普通的符号"></a>如果你的 <code>*</code> 和 <code>_</code> 两边都有空白的话，它们就只会被当成普通的符号</h4><p>如果要在文字前后直接插入普通的星号或底线，你可以用反斜线：</p>
 <pre><code>\*this text is surrounded by literal asterisks\*
 </code></pre><p>*this text is surrounded by literal asterisks*</p>
 <h1 id="代码-标记一小段行内代码"><a href="#代码-标记一小段行内代码" class="headerlink" title="代码(标记一小段行内代码)"></a>代码(标记一小段行内代码)</h1><pre><code>Use the `printf()` function.
@@ -607,7 +609,7 @@ A backtick-delimited string in a code span: `` `foo` ``
 
 &lt;1245204973@qq.com&gt;
 </code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
-<p><a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#49;&#50;&#x34;&#x35;&#x32;&#48;&#x34;&#x39;&#55;&#x33;&#64;&#x71;&#x71;&#x2e;&#99;&#x6f;&#109;">&#49;&#50;&#x34;&#x35;&#x32;&#48;&#x34;&#x39;&#55;&#x33;&#64;&#x71;&#x71;&#x2e;&#99;&#x6f;&#109;</a></p>
+<p><a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x31;&#50;&#52;&#x35;&#x32;&#48;&#x34;&#57;&#55;&#x33;&#x40;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;">&#x31;&#50;&#52;&#x35;&#x32;&#48;&#x34;&#57;&#55;&#x33;&#x40;&#113;&#x71;&#x2e;&#99;&#111;&#x6d;</a></p>
 <p>Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人</p>
 <h1 id="反斜杠"><a href="#反斜杠" class="headerlink" title="反斜杠"></a>反斜杠</h1><h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><pre><code>\   反斜线
 `   反引号
