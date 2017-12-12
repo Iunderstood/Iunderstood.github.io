@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="模块模块的分类 核心(内置)模块 文件模块 后缀名为.js的文件 后缀名为.json 的JSON文件 后缀名为.node 的经过编译后的二进制模块文件   第三方模块  文件模块js 模块 使用exports对象导出成员 模块定义为类 定义类变量  json 模块 fs读入内存，并且转化成json对象  二进制模块 node编译后的二进制文件 不需要再编译，可以直接使用  第三方模块 查找文件模块">
+<meta name="keywords" content="Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js模块之Buffer与文件操作">
+<meta property="og:url" content="http://yoursite.com/2017/12/11/Node-js模块之Buffer与文件操作/index.html">
+<meta property="og:site_name" content="newlife&#39;s blog">
+<meta property="og:description" content="模块模块的分类 核心(内置)模块 文件模块 后缀名为.js的文件 后缀名为.json 的JSON文件 后缀名为.node 的经过编译后的二进制模块文件   第三方模块  文件模块js 模块 使用exports对象导出成员 模块定义为类 定义类变量  json 模块 fs读入内存，并且转化成json对象  二进制模块 node编译后的二进制文件 不需要再编译，可以直接使用  第三方模块 查找文件模块">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookmodule.jpg">
+<meta property="og:image" content="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookfile.jpg">
+<meta property="og:image" content="http://yoursite.com/img/exports.png">
+<meta property="og:image" content="http://yoursite.com/img/ascii.png">
+<meta property="og:image" content="http://yoursite.com/img/code_assistant.png">
+<meta property="og:updated_time" content="2017-12-12T07:43:10.557Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js模块之Buffer与文件操作">
+<meta name="twitter:description" content="模块模块的分类 核心(内置)模块 文件模块 后缀名为.js的文件 后缀名为.json 的JSON文件 后缀名为.node 的经过编译后的二进制模块文件   第三方模块  文件模块js 模块 使用exports对象导出成员 模块定义为类 定义类变量  json 模块 fs读入内存，并且转化成json对象  二进制模块 node编译后的二进制文件 不需要再编译，可以直接使用  第三方模块 查找文件模块">
+<meta name="twitter:image" content="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookmodule.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/11/Node-js模块之Buffer与文件操作/"/>
+
+
+
+
+
+  <title>Node.js模块之Buffer与文件操作 | newlife's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">newlife's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/11/Node-js模块之Buffer与文件操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node.js模块之Buffer与文件操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-11T22:49:30+08:00">
+                2017-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><h2 id="模块的分类"><a href="#模块的分类" class="headerlink" title="模块的分类"></a>模块的分类</h2><ul>
+<li><em>核心</em>(内置)模块</li>
+<li><em>文件</em>模块<ul>
+<li>后缀名为.js的文件</li>
+<li>后缀名为.json 的JSON文件</li>
+<li>后缀名为.node 的经过编译后的二进制模块文件</li>
+</ul>
+</li>
+<li><em>第三方</em>模块</li>
+</ul>
+<h2 id="文件模块"><a href="#文件模块" class="headerlink" title="文件模块"></a>文件模块</h2><h3 id="js-模块"><a href="#js-模块" class="headerlink" title="js 模块"></a>js 模块</h3><ul>
+<li>使用exports对象导出<strong>成员</strong></li>
+<li>模块定义为<strong>类</strong></li>
+<li>定义<strong>类变量</strong></li>
+</ul>
+<h3 id="json-模块"><a href="#json-模块" class="headerlink" title="json 模块"></a>json 模块</h3><ul>
+<li>fs读入内存，并且转化成json对象</li>
+</ul>
+<h3 id="二进制模块"><a href="#二进制模块" class="headerlink" title="二进制模块"></a>二进制模块</h3><ul>
+<li>node编译后的二进制文件 不需要再编译，可以直接使用</li>
+</ul>
+<h2 id="第三方模块"><a href="#第三方模块" class="headerlink" title="第三方模块"></a>第三方模块</h2><p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookmodule.jpg" class="img-responsive"></p>
+<h2 id="查找文件模块"><a href="#查找文件模块" class="headerlink" title="查找文件模块"></a>查找文件模块</h2><h3 id="当没有以’-‘或者’-‘来指向一个文件时，这个模块要么是核心模块，要么就是从node-modules文件夹加载的"><a href="#当没有以’-‘或者’-‘来指向一个文件时，这个模块要么是核心模块，要么就是从node-modules文件夹加载的" class="headerlink" title="当没有以’/‘或者’./‘来指向一个文件时，这个模块要么是核心模块，要么就是从node_modules文件夹加载的"></a>当没有以’/‘或者’./‘来指向一个文件时，这个模块要么是<strong>核心模块</strong>，要么就是从<strong>node_modules</strong>文件夹加载的</h3><p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookfile.jpg" class="img-responsive"></p>
+<ol>
+<li><p>从<strong>module.paths</strong>中取出第一个目录开始</p>
+</li>
+<li><p>直接从目录中查找该文件，存在结束，不存在执行下一条</p>
+</li>
+<li><p>尝试添加.js .json .node<strong>后缀</strong>查找</p>
+</li>
+<li><p>尝试将require()的参数作为一个<strong>包</strong>来查找，读取package.json，找到<strong>main</strong>指定的文件，不存在进行 3</p>
+</li>
+<li><p>查询查找该目录下的<strong>index</strong>(.js/.node)</p>
+</li>
+<li><p>继续失败查看<strong>下一个</strong>目录，很像<strong>作用域链</strong>查找，<strong>同步阻塞式</strong>的查找，很慢。幸亏有<strong>缓存</strong></p>
+</li>
+</ol>
+<h2 id="module-属性和方法"><a href="#module-属性和方法" class="headerlink" title="module 属性和方法"></a>module 属性和方法</h2><h3 id="module-对象"><a href="#module-对象" class="headerlink" title="module 对象"></a>module 对象</h3><pre><code>Object module {
+  id: String, // 模块的ID,模块标识，为该模块文件在系统中的**绝对路径**
+  exports: Object, // 该模块的**导出对象**
+  parent: Object | undefined, // 引用该模块的**父模块**,即调用当前模块的模块对象
+  filename: String | null, // 模块文件名,最终解析的文件名称，模块的**绝对路径**, 与__filename相同。
+  loaded: Boolean, // 该模块是否**加载完成**(属性值为布尔值)
+  children: Array, // 该模块的引用列表，**子模块**对象，即当前模块require的模块对象
+  paths: Array // 模块的**查找路径**(加载路径)
+}
+</code></pre><h2 id="require"><a href="#require" class="headerlink" title="require"></a>require</h2><blockquote>
+<p>引入模块</p>
+</blockquote>
+<h3 id="require-函数"><a href="#require-函数" class="headerlink" title="require 函数"></a>require 函数</h3><pre><code>Function require {
+  [Function], // 函数体
+  resolve: Function, // 根据模块标识解析模块，使用内部的 require() 机制查询模块的位置,返回绝对路径,此操作只返回解析后的文件名，不会加载该模块
+  main: undefined | Object, // 应用的主(main)模块
+  extensions: {&apos;.js&apos;:Function, &apos;.json&apos;:Function, &apos;.node&apos;:Function}, // 指示 require 怎样处理特定的文件扩展名(废弃的 )
+
+  例如：把 .sjs 文件当做 .js 文件处理：
+  require.extensions[&apos;.sjs&apos;] = require.extensions[&apos;.js&apos;];
+
+  cache: Object // 模块缓存，被引入的模块将被缓存在这个对象中，以模块的绝对路径为key
+  delete require.cache[key] // 清除require缓存，其中key为模块的绝对路径
+}
+</code></pre><h2 id="exports-和-module-exports-的区别"><a href="#exports-和-module-exports-的区别" class="headerlink" title="exports 和 module.exports 的区别"></a>exports 和 module.exports 的区别</h2><p>参考地址:</p>
+<blockquote>
+<p><a href="http://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="noopener">http://cnodejs.org/topic/5231a630101e574521e45ef8</a></p>
+<p><a href="http://cnodejs.org/topic/52308842101e574521c16e06" target="_blank" rel="noopener">http://cnodejs.org/topic/52308842101e574521c16e06</a></p>
+</blockquote>
+<h3 id="先来看一个例子"><a href="#先来看一个例子" class="headerlink" title="先来看一个例子"></a>先来看一个例子</h3><p>test.js</p>
+<pre><code>var a = {name: 1};
+var b = a;
+
+console.log(a);
+console.log(b);
+
+b.name = 2;
+console.log(a);
+console.log(b);
+
+var b = {name: 3};
+console.log(a);
+console.log(b);
+</code></pre><p>运行 test.js 结果为：</p>
+<pre><code>{ name: 1 }
+{ name: 1 }
+{ name: 2 }
+{ name: 2 }
+{ name: 2 }
+{ name: 3 }
+</code></pre><p>解释：a 是一个对象，b 是对 a 的引用，即 a 和 b 指向同一块内存，所以前两个输出一样。当对 b 作修改时，即 a 和 b 指向同一块内存地址的内容发生了改变，所以 a 也会体现出来，所以第三四个输出一样。当 b 被覆盖时，b 指向了一块新的内存，a 还是指向原来的内存，所以最后两个输出不一样</p>
+<h3 id="下面说明两者的区别"><a href="#下面说明两者的区别" class="headerlink" title="下面说明两者的区别"></a>下面说明两者的区别</h3><p>每一个node.js执行文件，都自动创建一个module对象，同时，module对象会创建一个叫exports的属性</p>
+<ol>
+<li>module.exports 初始值为一个空对象 {}</li>
+<li>exports 是指向的 module.exports 的引用</li>
+<li>require() 返回的是 module.exports 而不是 exports</li>
+</ol>
+<h4 id="现在我们来看-Node-js-官方文档的截图"><a href="#现在我们来看-Node-js-官方文档的截图" class="headerlink" title="现在我们来看 Node.js 官方文档的截图:"></a>现在我们来看 Node.js 官方文档的截图:</h4><p><img src="/img/exports.png" alt="exports" title="exports.png"></p>
+<h4 id="我们经常看到这样的写法："><a href="#我们经常看到这样的写法：" class="headerlink" title="我们经常看到这样的写法："></a>我们经常看到这样的写法：</h4><p><code>exports = module.exports = somethings</code></p>
+<p>上面的代码等价于:</p>
+<p><code>module.exports = somethings
+exports = module.exports</code></p>
+<p>原理很简单，即 module.exports 指向新的对象时，exports 断开了与 module.exports 的引用，那么通过 exports = module.exports 让 exports 重新指向 module.exports 即可</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><h3 id="在-node-js-中通过包来对具有相互依赖关系的模块进行统一管理。一个包就是一个目录。"><a href="#在-node-js-中通过包来对具有相互依赖关系的模块进行统一管理。一个包就是一个目录。" class="headerlink" title="在 node.js 中通过包来对具有相互依赖关系的模块进行统一管理。一个包就是一个目录。"></a>在 node.js 中通过包来对具有<strong>相互依赖</strong>关系的模块进行统一管理。一个包就是一个<strong>目录</strong>。</h3><ul>
+<li>package.json 包描述文件</li>
+<li>bin 用于存放可执行二进制文件的目录</li>
+<li>lib 用于存放JavaScript代码的目录</li>
+<li>doc 用于存放文档(说明文档)的目录</li>
+<li>test 用于存放单元测试和其它测试用例的代码</li>
+</ul>
+<h2 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h2><pre><code>{
+&quot;name&quot;:&quot;包的名称，必须是唯一的，由小写英文字母、数字和下划线组成，不能包含空格。&quot;,
+&quot;description&quot;：&quot;包的简要说明。&quot;,
+&quot;version&quot;:&quot;符合语义化八本识别规范的版本字符串。&quot;,
+&quot;keywords&quot;：&quot;关键字数组，通常用于搜索。&quot;,
+&quot;maintainers&quot;:&quot;维护者数组，每个元素要包含name、email（可选）、web（可选）字段。&quot;,
+&quot;contributors&quot;：&quot;贡献者数组，格式与maintainers相同。包的作者应该是贡献者数组的第一个元素。&quot;,
+&quot;bugs&quot;：&quot;提交bug的地址，可以是网址或者电子邮件地址。&quot;.,
+&quot;licenses&quot;:&quot;许可证数组，每个元素要包含type(许可证的名称)和url(链接到许可证文本的地址)字段。&quot;,
+&quot;repositories&quot;：&quot;仓库托管地址数组。每个元素要包含type(许可证的名称)和url(链接到许可证文本的地址)字段。&quot;,
+&quot;dependencies&quot;:&quot;包的依赖，一个关联数组，由包名称和版本组成。&quot;
+}
+</code></pre><h2 id="npm-包管理工具"><a href="#npm-包管理工具" class="headerlink" title="npm 包管理工具"></a>npm 包管理工具</h2><ul>
+<li>npm <strong>search</strong> gulp 查找包</li>
+<li><strong>npmview</strong> gulp 查看包</li>
+<li>npm <strong>install</strong> gulp 安装包</li>
+<li>npm <strong>install -g</strong> express-generator 全局安装包</li>
+<li>npm <strong>root -g</strong> 查看全局安装路径</li>
+<li>npm config <strong>set prefix</strong> “d:\global” 修改全局路径</li>
+<li><strong>npmlist</strong> 显示当前目录下所有的包</li>
+<li><strong>npmlist -g</strong> 显示全局下所有包</li>
+<li>npm <strong>uninstall</strong> gulp 卸载本地的包</li>
+<li>npm <strong>uninstall</strong> gulp <strong>-g</strong> 卸载全局下的包</li>
+<li>npm <strong>update</strong> gulp 更新本地的gulp</li>
+<li>npm <strong>update</strong> <strong>-g</strong> gulp 更新全局下的gulp</li>
+<li>npm <strong>update</strong> 更新当前目录下所有的包</li>
+<li>npm <strong>update -g</strong> 更新全局下所有的包</li>
+</ul>
+<h1 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h1><h2 id="什么是-Buffer"><a href="#什么是-Buffer" class="headerlink" title="什么是 Buffer"></a>什么是 Buffer</h2><ul>
+<li>缓冲区Buffer是暂时存放输入输出数据的一段<strong>内存</strong>。 {:&amp;.moveIn}</li>
+<li>JS语言自身只有字符串数据类型，没有<strong>二进制</strong>数据类型，而在处理TCP和文件流的时候，必须要处理二进制数据。</li>
+<li>NodeJS提供了一个Buffer对象来提供对二进制数据的操作</li>
+<li>是一个表示<strong>固定</strong>内存分配的全局对象，也就是说要放到缓存区中的字节数需要<strong>提前确定</strong></li>
+<li>Buffer好比由一个<strong>八位字节</strong>元素(每个元素都是一个字节，并且每个字节为8位)组成的数组，可以有效的在javascript中表示二进制数据</li>
+</ul>
+<h3 id="什么是字节"><a href="#什么是字节" class="headerlink" title="什么是字节"></a>什么是字节</h3><ul>
+<li>字节(Byte)是计算机存储时的一种<em>计量</em>单位，一个字节等于<em>8位(bit)</em>二进制数</li>
+<li>字节是通过网络传输信息的单位</li>
+<li>一个字节最大值十进制数是255</li>
+</ul>
+<h3 id="ASCII-码"><a href="#ASCII-码" class="headerlink" title="ASCII 码"></a>ASCII 码</h3><ul>
+<li>ASCII 码使用指定的7位或者8位二进制数组合来表示128或256种可能的字<br><img src="/img/ascii.png" alt="ascii" title="ascii.png"></li>
+</ul>
+<h2 id="创建-Buffer"><a href="#创建-Buffer" class="headerlink" title="创建 Buffer"></a>创建 Buffer</h2><ul>
+<li>new Buffer(size) // 指定大小</li>
+<li>new Buffer(array) // 通过数组来创建</li>
+<li>new Buffer(str,[encoding]) // 通过字符串来创建</li>
+</ul>
+<h2 id="Buffer-操作"><a href="#Buffer-操作" class="headerlink" title="Buffer 操作"></a>Buffer 操作</h2><p>Node.js 中文网地址: <a href="http://nodejs.cn/api/buffer.html" target="_blank" rel="noopener">http://nodejs.cn/api/buffer.html</a></p>
+<ul>
+<li><p>Buffer和字符串长度</p>
+<p>  <code>buf.length</code> 返回 buf 在字节数上分配的内存量</p>
+<p>  <code>length</code> 属性表示一个字符串的长度</p>
+</li>
+<li><p>Buffer和字符串的转换</p>
+<p>  Buffer 转字符串</p>
+<p>  <code>buf.toString([encoding],[start],[end])</code> 包含 start,不包含 end,默认值:<code>&#39;utf8&#39;</code>,<code>0</code>,<code>buf.length</code></p>
+<p>  字符串转 Buffer</p>
+<p>  <code>new Buffer(string, [encoding])</code> (废弃的) 使用 <code>Buffer.from(string, [encoding])</code> 替代</p>
+</li>
+<li><p>Buffer和数值对象转换</p>
+<p>  <code>buf.readInt8(offset, [noAssert])</code></p>
+<p>  从 buf 中指定的 offset 读取一个有符号的8位整数值</p>
+<ul>
+<li>offset <code>&lt;integer&gt;</code> 开始读取前要跳过的字节数，必须满足：0 &lt;= offset &lt;= buf.length - 1</li>
+<li>noAssert <code>&lt;boolean&gt;</code> 是否跳过 offset 检验？默认: false</li>
+<li>返回: <code>&lt;integer&gt;</code></li>
+<li>设置 noAssert 为 true 则 offset 可超出 buf 的最后一位字节，但后果是不确定的</li>
+<li><p>还有其他的转换成其他数值格式的方法…</p>
+<p><code>buf.writeInt8(value, offset[, noAssert])</code></p>
+<p>写入 value 到 buf 中指定的 offset 位置 value 应当是一个有效的有符号的8位整数。 当 value * 不是一个有符号的8位整数时，反应是不确定的</p>
+</li>
+<li>value <code>&lt;integer&gt;</code> 要写入 buf 的数值</li>
+<li>offset <code>&lt;integer&gt;</code> 开始写入前要跳过的字节数，必须满足：0 &lt;= offset &lt;= buf.length - 1</li>
+<li>noAssert <code>&lt;boolean&gt;</code> 是否跳过 value 和 offset 检验？默认: false</li>
+<li>返回: <code>&lt;integer&gt;</code> offset 加上写入的字节数</li>
+</ul>
+</li>
+<li><p>Buffer 和 JSON 对象转换</p>
+<p>  <code>http://nodejs.cn/api/buffer.html</code></p>
+<ul>
+<li><p>返回 buf 的 JSON 格式。 当使用<code>JSON.stringify()</code>字符串化一个 Buffer 实例时，JSON.stringify() 会隐式地调用该函数</p>
+</li>
+<li><p>返回: <code>&lt;Object&gt;</code></p>
+</li>
+</ul>
+</li>
+<li><p>复制 Buffer</p>
+<pre><code>`buf.copy(targetBuffer,[targetStart],[sourceStart],[sourceEnd]);`
+</code></pre></li>
+</ul>
+<h2 id="Buffer-常用方法"><a href="#Buffer-常用方法" class="headerlink" title="Buffer 常用方法"></a>Buffer 常用方法</h2><ul>
+<li>合并 Buffer: <code>Buffer.concat([buf1,buf2],length)</code></li>
+<li>复制 Buffer: <code>buf.copy(targetBuffer,[targetStart],[sourceStart],[sourceEnd]);</code></li>
+<li>判断是否是 Buffer: <code>Buffer.isBuffer</code></li>
+<li>获取字节长度: <code>Buffer.byteLength</code></li>
+<li>检查字符编码:<code>Buffer.isEncoding(encoding)</code>(如果 encoding 是一个支持的字符编码则返回 true，否则返回 false)</li>
+</ul>
+<h1 id="file-system-文件系统"><a href="#file-system-文件系统" class="headerlink" title="file system(文件系统)"></a>file system(文件系统)</h1><h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><h3 id="异步读取"><a href="#异步读取" class="headerlink" title="异步读取"></a>异步读取</h3><pre><code>/**
+ * 1.异步方法需要把回调函数传入
+ * 2. 回调函数会在同步方法执行完毕之后才执行异步回调
+ * 3.异步方法不能阻塞主线程，不会影响后续代码的执行
+ */
+</code></pre><p><code>readFile</code></p>
+<h3 id="同步读取"><a href="#同步读取" class="headerlink" title="同步读取"></a>同步读取</h3><pre><code>/**
+ * 1. 每一个同步方法和异步方法都是成对出现的
+ * 2. 同步方法会阻塞主线程的执行，在数据没有返回之间不能执行后续代码
+ * 3. 它不需要传递回调函数，通过函数返回值接收结果
+ */
+</code></pre><p><code>readFileSync</code></p>
+<blockquote>
+<p>try catch只能捕获同步方法的异常，异步方法的异常无法捕获，异步异常只能通过方法内部的回调函数来捕获</p>
+</blockquote>
+<h2 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h2><h3 id="异步写入"><a href="#异步写入" class="headerlink" title="异步写入"></a>异步写入</h3><p><code>writeFile</code></p>
+<pre><code>/**
+ * 异步操作
+ * flag 是表示要对此文件做何种类型的操作
+ *   w 清空并写入
+ *   a 在原有基础上追加
+ */
+fs.writeFile(&apos;./write.txt&apos;, &apos;node读写&apos;, {flag: &apos;a&apos;}, function (err) {
+    if (err) {
+        console.log(err);
+    }
+});
+
+fs.appendFile(&apos;./write.txt&apos;,&apos;node&apos;);
+</code></pre><h3 id="同步写入"><a href="#同步写入" class="headerlink" title="同步写入"></a>同步写入</h3><p><code>writeFileSync</code></p>
+<blockquote>
+<p>回调里面的 err data 是由fs.readFile决定的</p>
+</blockquote>
+<h3 id="运用-fs-的读取和写入方法实现-copy-功能"><a href="#运用-fs-的读取和写入方法实现-copy-功能" class="headerlink" title="运用 fs 的读取和写入方法实现 copy 功能"></a>运用 fs 的<code>读取</code>和<code>写入</code>方法实现 copy 功能</h3><blockquote>
+<p>（注意点：当数据内容本身是 utf8 编码时才能在方法中加上 “utf8” 编码，否则就会转换错误，例如图片就是二进制数据，使用 utf8 编码不能正常处理）</p>
+</blockquote>
+<pre><code>/**
+ * 1. 把src里的文件内容，写入到target文件里
+ * 2.写入时要先清空再写入
+ */
+
+&apos;use strict&apos;;
+
+var fs = require(&apos;fs&apos;);
+
+function copy(src, target) {
+    fs.readFile(src, function (err, data) {
+        fs.writeFile(target, data, function (err) {
+            console.log(&quot;copy success from &quot; + src + &quot;to &quot; + target);
+        });
+    });
+}
+copy(&quot;./atm.jpg&quot;, &apos;./atm2.jpg&apos;);
+
+copy(&apos;./name.txt&apos;, &apos;./name.bak.txt&apos;);
+</code></pre><h4 id="回调函数的嵌套"><a href="#回调函数的嵌套" class="headerlink" title="回调函数的嵌套"></a>回调函数的嵌套</h4><pre><code>//1.回调函数嵌套实现多个异步操作完成之后执行的回调
+//1. 需要的时间长，m+n
+//2. 代码可读性非常差
+fs.readFile(&apos;./name.txt&apos;, &apos;utf8&apos;, function (err, name) {
+    fs.readFile(&apos;./age.txt&apos;, &apos;utf8&apos;, function (err, age) {
+        console.log(name, age);
+    });
+});
+</code></pre><h1 id="操作目录"><a href="#操作目录" class="headerlink" title="操作目录"></a>操作目录</h1><ol>
+<li><p>创建目录</p>
+<blockquote>
+<p>创建目录 的时候要求父目录必须存在</p>
+</blockquote>
+<pre><code>fs.mkdir(&apos;test/t1/t2&apos;, function (err) {
+    if (err) {
+        console.log(err);
+        console.log(&apos;目录创建失败&apos;);
+    } else {
+        console.log(&apos;目录创建成功&apos;);
+    }
+});
+</code></pre></li>
+<li><p>读取目录下面所有的文件</p>
+<pre><code>fs.readdir(&apos;./book&apos;, function (err, files) {
+    console.log(files);
+});
+</code></pre></li>
+<li><p>获取一个文件或目录详情</p>
+<pre><code>fs.readdir(&apos;./book&apos;, function (err, files) {
+    //循环文件列表
+    files.forEach(function (file) {
+        //获取文件的详情
+        fs.stat(&apos;./book/&apos; + file, function (err, state) {
+            console.log(state.isDirectory());//是否是目录
+            console.log(state.isFile());//是否是文件
+            console.log(state.size);
+            // state是一个对象，里面有许多字段；其中 atime,mtime,birthtime,ctime都是 Date 对象的实例
+            // 但是atime表示最后一次读取文件的时间，mtime(modify)表示最后一次修改文件的时间（当打开文件最后结果却没有变化时时间是不会变的），
+birthtime表示文件创建时间，ctime表示最后一次修改文件的时间（当打开文件结果却没有变化时时间也会变）
+        });
+    });
+});
+</code></pre></li>
+<li><p>判断一个文件(或文件夹)是否存在</p>
+<pre><code>fs.exists(&apos;./book&apos;, function (exists) {
+    console.log(exists);
+});
+</code></pre></li>
+</ol>
+<h1 id="处理路径"><a href="#处理路径" class="headerlink" title="处理路径"></a>处理路径</h1><pre><code>var path = require(&apos;path&apos;);
+
+//合并 连接路径
+console.log(path.join(&apos;book&apos;, &apos;mysql.json&apos;));
+//seperator 分隔符
+console.log(path.sep);
+console.log(__filename);//获取当前模块的绝地路径
+console.log(__dirname);//获取 当前模块所在的绝对目录
+//获取一个路径里文件的名
+console.log(path.basename(&apos;7.path.js&apos;, &apos;.js&apos;));
+//获取一个路径里文件的扩展名
+console.log(path.extname(&apos;7.path.js&apos;));
+//从一个相对路径解析出一个绝对路径
+//以应用程序的所在目录为根起
+console.log(path.resolve(&apos;book&apos;, &apos;node.json&apos;, &apos;..&apos;, &apos;mysql.json&apos;));
+</code></pre><h3 id="path-resolve-绝对路径"><a href="#path-resolve-绝对路径" class="headerlink" title="path.resolve 绝对路径"></a><code>path.resolve</code> 绝对路径</h3><blockquote>
+<p>参考链接: <a href="https://www.cnblogs.com/52cik/p/learn-node-path.html" target="_blank" rel="noopener">https://www.cnblogs.com/52cik/p/learn-node-path.html</a></p>
+</blockquote>
+<p>这个绝对路径操作，跟上面的不太一样，如果你懂命令行 cd 命令，那就秒懂了，否则需要花点时间多跑几个例子才能理解。这次直接上官方例子</p>
+<pre><code>path.resolve(&apos;foo/bar&apos;, &apos;/tmp/file/&apos;, &apos;..&apos;, &apos;a/../subfile&apos;);
+// 返回 /tmp/subfile
+</code></pre><p>相当于命令行下的</p>
+<pre><code>cd foo/bar
+cd /tmp/file/
+cd ..
+cd a/../subfile
+pwd
+</code></pre><p>他的解析不是在是简单的拼接关系，而是类似 cd 命令的解析了</p>
+<h1 id="webstorm-的设置及一些使用技巧"><a href="#webstorm-的设置及一些使用技巧" class="headerlink" title="webstorm 的设置及一些使用技巧"></a>webstorm 的设置及一些使用技巧</h1><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li><p>配置字体和大小</p>
+<p>  <code>File</code> -&gt; <code>Settings</code> -&gt; <code>Editor</code> -&gt; <code>Colors &amp; Fonts</code> -&gt; <code>Font</code></p>
+</li>
+<li><p>配置 智能提示<br><img src="/img/code_assistant.png" alt="code_assistant" title="code_assistant.png">  </p>
+<blockquote>
+<p>此外，还需要点击 <code>enable</code> 按钮来允许，以及点击 <code>Usage scope</code> 来勾选你所需要的提示类型</p>
+</blockquote>
+</li>
+<li><p>乱码问题：</p>
+<pre><code>1. 在 Settings 中搜索 File Encoding 来找到编码：
+2. IDE Encoding-&gt;针对于整个 IDE,就是所有的项目
+3. Project Encoding-&gt;针对当前项目
+4. 而且还要注意当前文件的编码-&gt;代码编码区右下角显示的编码是否为你所需要的
+</code></pre></li>
+<li><p>查看node相关方法的源码实现：</p>
+<pre><code>ctrl+鼠标左键点击，即可进入node源码
+</code></pre></li>
+<li><p>编辑文件的模板：</p>
+<pre><code>1. 任意一个目录右键-&gt;Edit File Template,即可进入编辑模板页面
+2. File页面-&gt;点击&quot;+&quot;新建模板-&gt;&quot;Name&quot;:名称;&quot;Extension&quot;:扩展名-&gt;Apply-&gt;Ok
+3. 中间空白区域可以写模板，直接写就行，记得最后也要Apply-&gt;Ok
+</code></pre></li>
+</ul>
+<blockquote>
+<p>本文所用资料来自于<em>珠峰培训</em>和一些网上摘录(一些引用没有一一给出地址，望原作者见谅)</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/10/markdown-grammar-markdown语法/" rel="next" title="markdown_grammar(markdown语法">
+                <i class="fa fa-chevron-left"></i> markdown_grammar(markdown语法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="newlife" />
+            
+              <p class="site-author-name" itemprop="name">newlife</p>
+              <p class="site-description motion-element" itemprop="description">newlife means newborn</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/newlife201702" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:1245204973@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模块"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6A21;&#x5757;" class="headerlink" title="&#x6A21;&#x5757;"></a>&#x6A21;&#x5757;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块的分类"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x6A21;&#x5757;&#x7684;&#x5206;&#x7C7B;" class="headerlink" title="&#x6A21;&#x5757;&#x7684;&#x5206;&#x7C7B;"></a>&#x6A21;&#x5757;&#x7684;&#x5206;&#x7C7B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模块"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#&#x6587;&#x4EF6;&#x6A21;&#x5757;" class="headerlink" title="&#x6587;&#x4EF6;&#x6A21;&#x5757;"></a>&#x6587;&#x4EF6;&#x6A21;&#x5757;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#js-模块"><span class="nav-number">1.2.1.</span> <span class="nav-text"><a href="#js-&#x6A21;&#x5757;" class="headerlink" title="js &#x6A21;&#x5757;"></a>js &#x6A21;&#x5757;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json-模块"><span class="nav-number">1.2.2.</span> <span class="nav-text"><a href="#json-&#x6A21;&#x5757;" class="headerlink" title="json &#x6A21;&#x5757;"></a>json &#x6A21;&#x5757;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二进制模块"><span class="nav-number">1.2.3.</span> <span class="nav-text"><a href="#&#x4E8C;&#x8FDB;&#x5236;&#x6A21;&#x5757;" class="headerlink" title="&#x4E8C;&#x8FDB;&#x5236;&#x6A21;&#x5757;"></a>&#x4E8C;&#x8FDB;&#x5236;&#x6A21;&#x5757;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三方模块"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#&#x7B2C;&#x4E09;&#x65B9;&#x6A21;&#x5757;" class="headerlink" title="&#x7B2C;&#x4E09;&#x65B9;&#x6A21;&#x5757;"></a>&#x7B2C;&#x4E09;&#x65B9;&#x6A21;&#x5757;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找文件模块"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#&#x67E5;&#x627E;&#x6587;&#x4EF6;&#x6A21;&#x5757;" class="headerlink" title="&#x67E5;&#x627E;&#x6587;&#x4EF6;&#x6A21;&#x5757;"></a>&#x67E5;&#x627E;&#x6587;&#x4EF6;&#x6A21;&#x5757;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#当没有以’-‘或者’-‘来指向一个文件时，这个模块要么是核心模块，要么就是从node-modules文件夹加载的"><span class="nav-number">1.4.1.</span> <span class="nav-text"><a href="#&#x5F53;&#x6CA1;&#x6709;&#x4EE5;&#x2019;-&#x2018;&#x6216;&#x8005;&#x2019;-&#x2018;&#x6765;&#x6307;&#x5411;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x65F6;&#xFF0C;&#x8FD9;&#x4E2A;&#x6A21;&#x5757;&#x8981;&#x4E48;&#x662F;&#x6838;&#x5FC3;&#x6A21;&#x5757;&#xFF0C;&#x8981;&#x4E48;&#x5C31;&#x662F;&#x4ECE;node-modules&#x6587;&#x4EF6;&#x5939;&#x52A0;&#x8F7D;&#x7684;" class="headerlink" title="&#x5F53;&#x6CA1;&#x6709;&#x4EE5;&#x2019;/&#x2018;&#x6216;&#x8005;&#x2019;./&#x2018;&#x6765;&#x6307;&#x5411;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x65F6;&#xFF0C;&#x8FD9;&#x4E2A;&#x6A21;&#x5757;&#x8981;&#x4E48;&#x662F;&#x6838;&#x5FC3;&#x6A21;&#x5757;&#xFF0C;&#x8981;&#x4E48;&#x5C31;&#x662F;&#x4ECE;node_modules&#x6587;&#x4EF6;&#x5939;&#x52A0;&#x8F7D;&#x7684;"></a>&#x5F53;&#x6CA1;&#x6709;&#x4EE5;&#x2019;/&#x2018;&#x6216;&#x8005;&#x2019;./&#x2018;&#x6765;&#x6307;&#x5411;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#x65F6;&#xFF0C;&#x8FD9;&#x4E2A;&#x6A21;&#x5757;&#x8981;&#x4E48;&#x662F;<strong>&#x6838;&#x5FC3;&#x6A21;&#x5757;</strong>&#xFF0C;&#x8981;&#x4E48;&#x5C31;&#x662F;&#x4ECE;<strong>node_modules</strong>&#x6587;&#x4EF6;&#x5939;&#x52A0;&#x8F7D;&#x7684;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module-属性和方法"><span class="nav-number">1.5.</span> <span class="nav-text"><a href="#module-&#x5C5E;&#x6027;&#x548C;&#x65B9;&#x6CD5;" class="headerlink" title="module &#x5C5E;&#x6027;&#x548C;&#x65B9;&#x6CD5;"></a>module &#x5C5E;&#x6027;&#x548C;&#x65B9;&#x6CD5;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#module-对象"><span class="nav-number">1.5.1.</span> <span class="nav-text"><a href="#module-&#x5BF9;&#x8C61;" class="headerlink" title="module &#x5BF9;&#x8C61;"></a>module &#x5BF9;&#x8C61;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#require"><span class="nav-number">1.6.</span> <span class="nav-text"><a href="#require" class="headerlink" title="require"></a>require</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#require-函数"><span class="nav-number">1.6.1.</span> <span class="nav-text"><a href="#require-&#x51FD;&#x6570;" class="headerlink" title="require &#x51FD;&#x6570;"></a>require &#x51FD;&#x6570;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exports-和-module-exports-的区别"><span class="nav-number">1.7.</span> <span class="nav-text"><a href="#exports-&#x548C;-module-exports-&#x7684;&#x533A;&#x522B;" class="headerlink" title="exports &#x548C; module.exports &#x7684;&#x533A;&#x522B;"></a>exports &#x548C; module.exports &#x7684;&#x533A;&#x522B;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#先来看一个例子"><span class="nav-number">1.7.1.</span> <span class="nav-text"><a href="#&#x5148;&#x6765;&#x770B;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;" class="headerlink" title="&#x5148;&#x6765;&#x770B;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;"></a>&#x5148;&#x6765;&#x770B;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下面说明两者的区别"><span class="nav-number">1.7.2.</span> <span class="nav-text"><a href="#&#x4E0B;&#x9762;&#x8BF4;&#x660E;&#x4E24;&#x8005;&#x7684;&#x533A;&#x522B;" class="headerlink" title="&#x4E0B;&#x9762;&#x8BF4;&#x660E;&#x4E24;&#x8005;&#x7684;&#x533A;&#x522B;"></a>&#x4E0B;&#x9762;&#x8BF4;&#x660E;&#x4E24;&#x8005;&#x7684;&#x533A;&#x522B;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#现在我们来看-Node-js-官方文档的截图"><span class="nav-number">1.7.2.1.</span> <span class="nav-text"><a href="#&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x6765;&#x770B;-Node-js-&#x5B98;&#x65B9;&#x6587;&#x6863;&#x7684;&#x622A;&#x56FE;" class="headerlink" title="&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x6765;&#x770B; Node.js &#x5B98;&#x65B9;&#x6587;&#x6863;&#x7684;&#x622A;&#x56FE;:"></a>&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x6765;&#x770B; Node.js &#x5B98;&#x65B9;&#x6587;&#x6863;&#x7684;&#x622A;&#x56FE;:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我们经常看到这样的写法："><span class="nav-number">1.7.2.2.</span> <span class="nav-text"><a href="#&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x770B;&#x5230;&#x8FD9;&#x6837;&#x7684;&#x5199;&#x6CD5;&#xFF1A;" class="headerlink" title="&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x770B;&#x5230;&#x8FD9;&#x6837;&#x7684;&#x5199;&#x6CD5;&#xFF1A;"></a>&#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x770B;&#x5230;&#x8FD9;&#x6837;&#x7684;&#x5199;&#x6CD5;&#xFF1A;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包"><span class="nav-number">1.8.</span> <span class="nav-text"><a href="#&#x5305;" class="headerlink" title="&#x5305;"></a>&#x5305;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在-node-js-中通过包来对具有相互依赖关系的模块进行统一管理。一个包就是一个目录。"><span class="nav-number">1.8.1.</span> <span class="nav-text"><a href="#&#x5728;-node-js-&#x4E2D;&#x901A;&#x8FC7;&#x5305;&#x6765;&#x5BF9;&#x5177;&#x6709;&#x76F8;&#x4E92;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x7684;&#x6A21;&#x5757;&#x8FDB;&#x884C;&#x7EDF;&#x4E00;&#x7BA1;&#x7406;&#x3002;&#x4E00;&#x4E2A;&#x5305;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x76EE;&#x5F55;&#x3002;" class="headerlink" title="&#x5728; node.js &#x4E2D;&#x901A;&#x8FC7;&#x5305;&#x6765;&#x5BF9;&#x5177;&#x6709;&#x76F8;&#x4E92;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x7684;&#x6A21;&#x5757;&#x8FDB;&#x884C;&#x7EDF;&#x4E00;&#x7BA1;&#x7406;&#x3002;&#x4E00;&#x4E2A;&#x5305;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x76EE;&#x5F55;&#x3002;"></a>&#x5728; node.js &#x4E2D;&#x901A;&#x8FC7;&#x5305;&#x6765;&#x5BF9;&#x5177;&#x6709;<strong>&#x76F8;&#x4E92;&#x4F9D;&#x8D56;</strong>&#x5173;&#x7CFB;&#x7684;&#x6A21;&#x5757;&#x8FDB;&#x884C;&#x7EDF;&#x4E00;&#x7BA1;&#x7406;&#x3002;&#x4E00;&#x4E2A;&#x5305;&#x5C31;&#x662F;&#x4E00;&#x4E2A;<strong>&#x76EE;&#x5F55;</strong>&#x3002;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#package-json"><span class="nav-number">1.9.</span> <span class="nav-text"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm-包管理工具"><span class="nav-number">1.10.</span> <span class="nav-text"><a href="#npm-&#x5305;&#x7BA1;&#x7406;&#x5DE5;&#x5177;" class="headerlink" title="npm &#x5305;&#x7BA1;&#x7406;&#x5DE5;&#x5177;"></a>npm &#x5305;&#x7BA1;&#x7406;&#x5DE5;&#x5177;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Buffer"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-Buffer"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;-Buffer" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F; Buffer"></a>&#x4EC0;&#x4E48;&#x662F; Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是字节"><span class="nav-number">2.1.1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x5B57;&#x8282;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x5B57;&#x8282;"></a>&#x4EC0;&#x4E48;&#x662F;&#x5B57;&#x8282;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ASCII-码"><span class="nav-number">2.1.2.</span> <span class="nav-text"><a href="#ASCII-&#x7801;" class="headerlink" title="ASCII &#x7801;"></a>ASCII &#x7801;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-Buffer"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x521B;&#x5EFA;-Buffer" class="headerlink" title="&#x521B;&#x5EFA; Buffer"></a>&#x521B;&#x5EFA; Buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer-操作"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#Buffer-&#x64CD;&#x4F5C;" class="headerlink" title="Buffer &#x64CD;&#x4F5C;"></a>Buffer &#x64CD;&#x4F5C;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer-常用方法"><span class="nav-number">2.4.</span> <span class="nav-text"><a href="#Buffer-&#x5E38;&#x7528;&#x65B9;&#x6CD5;" class="headerlink" title="Buffer &#x5E38;&#x7528;&#x65B9;&#x6CD5;"></a>Buffer &#x5E38;&#x7528;&#x65B9;&#x6CD5;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#file-system-文件系统"><span class="nav-number">3.</span> <span class="nav-text"><a href="#file-system-&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;" class="headerlink" title="file system(&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;)"></a>file system(&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#读取文件"><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#&#x8BFB;&#x53D6;&#x6587;&#x4EF6;" class="headerlink" title="&#x8BFB;&#x53D6;&#x6587;&#x4EF6;"></a>&#x8BFB;&#x53D6;&#x6587;&#x4EF6;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#异步读取"><span class="nav-number">3.1.1.</span> <span class="nav-text"><a href="#&#x5F02;&#x6B65;&#x8BFB;&#x53D6;" class="headerlink" title="&#x5F02;&#x6B65;&#x8BFB;&#x53D6;"></a>&#x5F02;&#x6B65;&#x8BFB;&#x53D6;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步读取"><span class="nav-number">3.1.2.</span> <span class="nav-text"><a href="#&#x540C;&#x6B65;&#x8BFB;&#x53D6;" class="headerlink" title="&#x540C;&#x6B65;&#x8BFB;&#x53D6;"></a>&#x540C;&#x6B65;&#x8BFB;&#x53D6;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写入文件"><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#&#x5199;&#x5165;&#x6587;&#x4EF6;" class="headerlink" title="&#x5199;&#x5165;&#x6587;&#x4EF6;"></a>&#x5199;&#x5165;&#x6587;&#x4EF6;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#异步写入"><span class="nav-number">3.2.1.</span> <span class="nav-text"><a href="#&#x5F02;&#x6B65;&#x5199;&#x5165;" class="headerlink" title="&#x5F02;&#x6B65;&#x5199;&#x5165;"></a>&#x5F02;&#x6B65;&#x5199;&#x5165;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步写入"><span class="nav-number">3.2.2.</span> <span class="nav-text"><a href="#&#x540C;&#x6B65;&#x5199;&#x5165;" class="headerlink" title="&#x540C;&#x6B65;&#x5199;&#x5165;"></a>&#x540C;&#x6B65;&#x5199;&#x5165;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运用-fs-的读取和写入方法实现-copy-功能"><span class="nav-number">3.2.3.</span> <span class="nav-text"><a href="#&#x8FD0;&#x7528;-fs-&#x7684;&#x8BFB;&#x53D6;&#x548C;&#x5199;&#x5165;&#x65B9;&#x6CD5;&#x5B9E;&#x73B0;-copy-&#x529F;&#x80FD;" class="headerlink" title="&#x8FD0;&#x7528; fs &#x7684;&#x8BFB;&#x53D6;&#x548C;&#x5199;&#x5165;&#x65B9;&#x6CD5;&#x5B9E;&#x73B0; copy &#x529F;&#x80FD;"></a>&#x8FD0;&#x7528; fs &#x7684;<code>&#x8BFB;&#x53D6;</code>&#x548C;<code>&#x5199;&#x5165;</code>&#x65B9;&#x6CD5;&#x5B9E;&#x73B0; copy &#x529F;&#x80FD;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#回调函数的嵌套"><span class="nav-number">3.2.3.1.</span> <span class="nav-text"><a href="#&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x7684;&#x5D4C;&#x5957;" class="headerlink" title="&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x7684;&#x5D4C;&#x5957;"></a>&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x7684;&#x5D4C;&#x5957;</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作目录"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x64CD;&#x4F5C;&#x76EE;&#x5F55;" class="headerlink" title="&#x64CD;&#x4F5C;&#x76EE;&#x5F55;"></a>&#x64CD;&#x4F5C;&#x76EE;&#x5F55;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#处理路径"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x5904;&#x7406;&#x8DEF;&#x5F84;" class="headerlink" title="&#x5904;&#x7406;&#x8DEF;&#x5F84;"></a>&#x5904;&#x7406;&#x8DEF;&#x5F84;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#path-resolve-绝对路径"><span class="nav-number">5.0.1.</span> <span class="nav-text"><a href="#path-resolve-&#x7EDD;&#x5BF9;&#x8DEF;&#x5F84;" class="headerlink" title="path.resolve &#x7EDD;&#x5BF9;&#x8DEF;&#x5F84;"></a><code>path.resolve</code> &#x7EDD;&#x5BF9;&#x8DEF;&#x5F84;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#webstorm-的设置及一些使用技巧"><span class="nav-number">6.</span> <span class="nav-text"><a href="#webstorm-&#x7684;&#x8BBE;&#x7F6E;&#x53CA;&#x4E00;&#x4E9B;&#x4F7F;&#x7528;&#x6280;&#x5DE7;" class="headerlink" title="webstorm &#x7684;&#x8BBE;&#x7F6E;&#x53CA;&#x4E00;&#x4E9B;&#x4F7F;&#x7528;&#x6280;&#x5DE7;"></a>webstorm &#x7684;&#x8BBE;&#x7F6E;&#x53CA;&#x4E00;&#x4E9B;&#x4F7F;&#x7528;&#x6280;&#x5DE7;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">6.1.</span> <span class="nav-text"><a href="#&#x914D;&#x7F6E;" class="headerlink" title="&#x914D;&#x7F6E;"></a>&#x914D;&#x7F6E;</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">newlife</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
