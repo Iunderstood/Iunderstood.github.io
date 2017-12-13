@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/img/http_file.png">
 <meta property="og:image" content="http://yoursite.com/img/http_router.png">
 <meta property="og:image" content="http://yoursite.com/img/http_post.png">
-<meta property="og:updated_time" content="2017-12-13T07:54:41.983Z">
+<meta property="og:updated_time" content="2017-12-13T08:25:37.458Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js之http">
 <meta name="twitter:description" content="命令行中执行 命令行窗口中： netstat 命令用于显示各种网络相关信息 也可以通过 git bash 命令行窗口来访问服务器   输入命令： curl http://localhost:8080 / curl -v http://localhost:8080  (可以是任意可访问的地址)   可以看到请求和响应的内容   User-Agent: 代表客户端的代理（每种浏览器的代理都不一样，服务">
@@ -472,7 +472,7 @@
 <ul>
 <li><code>port</code> 端口</li>
 <li><code>host</code>    主机</li>
-<li><code>backlog</code>    <strong>等待</strong>中的队列数量</li>
+<li><code>backlog</code>    <strong>等待</strong>中的队列数量，默认值是 511</li>
 <li><code>callback</code> server(服务)监听成功(<strong>请求</strong>到来)的时候服务器调用的回调函数</li>
 </ul>
 </li>
@@ -500,7 +500,7 @@
 <p>  响应头对象</p>
 <ul>
 <li>content-type <strong>内容类型</strong>    </li>
-<li>location <em>*重定向</em>到的URL地址</li>
+<li>location <strong>重定向</strong>到的URL地址</li>
 <li>content-disposition    下载的<strong>文件名</strong></li>
 <li>content-length 响应内容的<strong>字节数</strong></li>
 <li>set-cookie 写入客户端<strong>cookie</strong></li>
@@ -508,7 +508,7 @@
 <li>Cache-Control <strong>缓存</strong></li>
 <li>Expires 指定缓存<strong>过期时间</strong></li>
 <li>Etag 服务器响应<strong>内容没有发生变化</strong>时不重新下载数据</li>
-<li>connection 默认是 <code>keep-alive</code> <strong>保持连接</strong>，想断开用 <code>close</code></li>
+<li>connection 默认是 <code>keep-alive</code> <strong>保持连接</strong>，想断开连接用 <code>close</code></li>
 </ul>
 </li>
 </ul>
@@ -632,6 +632,22 @@ var queryStr = querystring.stringify(obj,[sep],[eq]); //对象转字符串
 <li><code>end</code>事件则是在<strong>所有数据</strong>接收完成后触发</li>
 </ul>
 <h1 id="创建-http-客户端"><a href="#创建-http-客户端" class="headerlink" title="创建 http 客户端"></a>创建 http 客户端</h1><p><code>request</code> 方法可以向其他网站请求数据</p>
+<ul>
+<li>options<ul>
+<li>host <strong>域名</strong>或目标主机IP</li>
+<li>hostname <strong>域名</strong>或目标主机，优先级比 host 高</li>
+<li>port <strong>端口</strong>号</li>
+<li>method </li>
+<li>path</li>
+<li>headers</li>
+<li>auth</li>
+</ul>
+</li>
+<li>callback = function(response) {}<br>当<strong>获取</strong>到目标网站所返回的<strong>响应流</strong>时调用的回调函数<ul>
+<li><code>response</code> 是一个 http.IncomingMessage 对象</li>
+</ul>
+</li>
+</ul>
 <blockquote>
 <p>方法说明及示例：<br><a href="https://www.cnblogs.com/liyinghao/p/6180591.html" target="_blank" rel="noopener">https://www.cnblogs.com/liyinghao/p/6180591.html</a></p>
 </blockquote>
