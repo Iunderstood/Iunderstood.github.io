@@ -623,14 +623,29 @@ var queryStr = querystring.stringify(obj,[sep],[eq]); //对象转字符串
 </ul>
 <h1 id="创建-http-客户端"><a href="#创建-http-客户端" class="headerlink" title="创建 http 客户端"></a>创建 http 客户端</h1><p><code>request</code> 方法可以向其他网站请求数据</p>
 <ul>
-<li>options<ul>
-<li>host <strong>域名</strong>或目标主机IP</li>
-<li>hostname <strong>域名</strong>或目标主机，优先级比 host 高</li>
-<li>port <strong>端口</strong>号</li>
-<li>method </li>
-<li>path</li>
-<li>headers</li>
-<li>auth</li>
+<li><p>options</p>
+<ul>
+<li><p>host </p>
+<p>  <strong>域名</strong>或目标主机IP</p>
+</li>
+<li><p>hostname </p>
+<p>  <strong>域名</strong>或目标主机，优先级比 host 高</p>
+</li>
+<li><p>port </p>
+<p>  <strong>端口</strong>号</p>
+</li>
+<li><p>method </p>
+<p>  请求<strong>方法</strong></p>
+</li>
+<li><p>path</p>
+<p>  请求的<strong>路径</strong>，默认为 <code>/</code></p>
+</li>
+<li><p>headers</p>
+<p>  客户端请求<strong>头对象</strong></p>
+</li>
+<li><p>auth</p>
+<p>  <strong>认证</strong>信息，如 “username:password”</p>
+</li>
 </ul>
 </li>
 <li>callback = function(response) {}<br>当<strong>获取</strong>到目标网站所返回的<strong>响应流</strong>时调用的回调函数<ul>

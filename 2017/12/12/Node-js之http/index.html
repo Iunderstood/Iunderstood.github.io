@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/img/http_file.png">
 <meta property="og:image" content="http://yoursite.com/img/http_router.png">
 <meta property="og:image" content="http://yoursite.com/img/http_post.png">
-<meta property="og:updated_time" content="2017-12-13T08:25:37.458Z">
+<meta property="og:updated_time" content="2017-12-13T08:33:25.135Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js之http">
 <meta name="twitter:description" content="命令行中执行 命令行窗口中： netstat 命令用于显示各种网络相关信息 也可以通过 git bash 命令行窗口来访问服务器   输入命令： curl http://localhost:8080 / curl -v http://localhost:8080  (可以是任意可访问的地址)   可以看到请求和响应的内容   User-Agent: 代表客户端的代理（每种浏览器的代理都不一样，服务">
@@ -633,14 +633,29 @@ var queryStr = querystring.stringify(obj,[sep],[eq]); //对象转字符串
 </ul>
 <h1 id="创建-http-客户端"><a href="#创建-http-客户端" class="headerlink" title="创建 http 客户端"></a>创建 http 客户端</h1><p><code>request</code> 方法可以向其他网站请求数据</p>
 <ul>
-<li>options<ul>
-<li>host <strong>域名</strong>或目标主机IP</li>
-<li>hostname <strong>域名</strong>或目标主机，优先级比 host 高</li>
-<li>port <strong>端口</strong>号</li>
-<li>method </li>
-<li>path</li>
-<li>headers</li>
-<li>auth</li>
+<li><p>options</p>
+<ul>
+<li><p>host </p>
+<p>  <strong>域名</strong>或目标主机IP</p>
+</li>
+<li><p>hostname </p>
+<p>  <strong>域名</strong>或目标主机，优先级比 host 高</p>
+</li>
+<li><p>port </p>
+<p>  <strong>端口</strong>号</p>
+</li>
+<li><p>method </p>
+<p>  请求<strong>方法</strong></p>
+</li>
+<li><p>path</p>
+<p>  请求的<strong>路径</strong>，默认为 <code>/</code></p>
+</li>
+<li><p>headers</p>
+<p>  客户端请求<strong>头对象</strong></p>
+</li>
+<li><p>auth</p>
+<p>  <strong>认证</strong>信息，如 “username:password”</p>
+</li>
 </ul>
 </li>
 <li>callback = function(response) {}<br>当<strong>获取</strong>到目标网站所返回的<strong>响应流</strong>时调用的回调函数<ul>
