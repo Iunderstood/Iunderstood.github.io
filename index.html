@@ -392,10 +392,9 @@
 <h1 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h1><ul>
 <li>每条 http 请求报文都包括一个方法表示本次将要进行何种类型的操作，如入去一个页面，删除一个资源</li>
 <li>GET 是用来从服务器获取数据，没有请求体，不会影响服务器端的数据</li>
-<li>POST 是用来将数据发送到服务器，post 会把要发送的数据放到请求体中，可能会影响到服务器端的数据<br>简单说明:<br><img src="/img/http_method1.png" alt="http_method1" title="method_method1.png"><br>详细说明:<br><img src="/img/http_method2.png" alt="http_method2" title="method_method2.png"></li>
+<li>POST 是用来将数据发送到服务器，post 会把要发送的数据放到请求体中，可能会影响到服务器端的数据<br>简单说明:<br><img src="/img/http_method1.png" alt="http_method1" title="method_method1.png"><br>详细说明(来源于<a href="http://www.runoob.com/http/http-methods.html" title="菜鸟教程" target="_blank" rel="noopener">菜鸟教程</a>):<br><img src="/img/http_method2.png" alt="http_method2" title="method_method2.png"></li>
 </ul>
-<h1 id="常见请求头信息"><a href="#常见请求头信息" class="headerlink" title="常见请求头信息"></a>常见请求头信息</h1><p>###从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息</p>
-<ul>
+<h1 id="常见请求头信息"><a href="#常见请求头信息" class="headerlink" title="常见请求头信息"></a>常见请求头信息</h1><h3 id="从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息"><a href="#从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息" class="headerlink" title="从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息"></a>从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息</h3><ul>
 <li><p><code>host</code></p>
 <p>  请求的服务主机；HTTP/1.1 请求必须包含主机头，否则会返回 <code>404</code> 状态码</p>
 </li>
