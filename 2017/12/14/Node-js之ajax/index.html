@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/img/querystring_parse2.png">
 <meta property="og:image" content="http://yoursite.com/img/querystring_stringify1.png">
 <meta property="og:image" content="http://yoursite.com/img/querystring_stringify2.png">
-<meta property="og:updated_time" content="2017-12-16T08:31:26.630Z">
+<meta property="og:updated_time" content="2017-12-17T04:48:18.959Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js之ajax">
 <meta name="twitter:description" content="第一步    创建 ajax 对象var XHR = new XMLHttpRequest(); 第二步    打开请求xhr.open(method, url, async, user, password); 参数解析 第三步    指定接收响应的 回调函数 当 XMLHTTPRequest 对象的 readyState 属性改变时调用回调函数   xhr.onreadystatechange">
@@ -509,7 +509,81 @@ Person {
      [arguments]: null,
      [caller]: null,
      [prototype]: { [constructor]: [Circular] } } }
-</code></pre><h1 id="mime-模块"><a href="#mime-模块" class="headerlink" title="mime 模块"></a><code>mime</code> 模块</h1><p><a href="https://www.cnblogs.com/jeacy/p/6992435.html" target="_blank" rel="noopener">https://www.cnblogs.com/jeacy/p/6992435.html</a></p>
+</code></pre><ul>
+<li>util.inherits(constructor, superConstructor)是一个实现对象间原型继承 的函数</li>
+</ul>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf</a></p>
+<ul>
+<li><p>示例如下：</p>
+<pre><code>var util = require(&apos;util&apos;); 
+function Base() { 
+    this.name = &apos;base&apos;; 
+    this.base = 1991; 
+    this.sayHello = function() { 
+    console.log(&apos;Hello &apos; + this.name); 
+    }; 
+} 
+Base.prototype.showName = function() { 
+    console.log(this.name);
+}; 
+function Sub() { 
+    this.name = &apos;sub&apos;; 
+} 
+util.inherits(Sub, Base); 
+var objBase = new Base(); 
+objBase.showName(); 
+objBase.sayHello(); 
+console.log(objBase); 
+var objSub = new Sub(); 
+objSub.showName(); 
+//objSub.sayHello(); 
+console.log(objSub); 
+</code></pre></li>
+<li><p>我们定义了一个基础对象Base 和一个继承自Base 的Sub，Base 有三个在构造函数 内定义的属性和一个原型中定义的函数，通过util.inherits 实现继承。运行结果如下：</p>
+<pre><code>base 
+Hello base 
+{ name: &apos;base&apos;, base: 1991, sayHello: [Function] } 
+sub 
+{ name: &apos;sub&apos; }
+</code></pre></li>
+<li><p>注意：Sub 仅仅继承了Base 在原型中定义的函数，而构造函数内部创造的 base 属 性和 sayHello 函数都没有被 Sub 继承。<br>同时，在原型中定义的属性不会被console.log 作 为对象的属性输出。如果我们去掉 objSub.sayHello(); 这行的注释，将会看到：</p>
+<pre><code>node.js:201 
+throw e; // process.nextTick error, or &apos;error&apos; event on first tick 
+^ 
+TypeError: Object #&amp;lt;Sub&amp;gt; has no method &apos;sayHello&apos; 
+</code></pre></li>
+<li><p>util.inherits(Children,Parent) <code>&lt;Child,Parent是两个类&gt;</code> 实现原理：<code>Object.setPrototypeOf(ctor.prototype,superCtor.prototype)-&gt; Children.prototype=new Parent();</code></p>
+<pre><code>util.inherits(Children,Parent)
+// 解释：
+function temp() {}
+temp.prototype=Parent.prototype;
+Children.prototype=new temp();
+</code></pre></li>
+<li><p>通过 <code>Parent.call(this);</code> 实现子类对父类在非原型上的自定义的属性的继承</p>
+<pre><code>function Children() {
+    Parent.call(this);
+    this.name = &quot;children&quot;;
+}
+</code></pre></li>
+<li><p>util.isArray(object)</p>
+<ul>
+<li>如果给定的参数 “object” 是一个数组返回true，否则返回false</li>
+</ul>
+</li>
+<li>util.isRegExp(object)<ul>
+<li>如果给定的参数 “object” 是一个正则表达式返回true，否则返回false</li>
+</ul>
+</li>
+<li>util.isDate(object)<ul>
+<li>如果给定的参数 “object” 是一个日期返回true，否则返回false</li>
+</ul>
+</li>
+<li>util.isError(object)<ul>
+<li>如果给定的参数 “object” 是一个错误对象返回true，否则返回false</li>
+</ul>
+</li>
+</ul>
+<h1 id="mime-模块"><a href="#mime-模块" class="headerlink" title="mime 模块"></a><code>mime</code> 模块</h1><p><a href="https://www.cnblogs.com/jeacy/p/6992435.html" target="_blank" rel="noopener">https://www.cnblogs.com/jeacy/p/6992435.html</a></p>
 <pre><code>// 在使用nodejs中的mime模块处理静态文件的时候，出现mime.lookup的错误，
 // 具体错误如下：
 // mime.lookup is not a function
@@ -613,6 +687,7 @@ var data = toJson(document.querySelector(&apos;form&apos;));
 xhr.send(JSON.stringify(data));
 </code></pre><h1 id="ajax-请求注意事项"><a href="#ajax-请求注意事项" class="headerlink" title="ajax 请求注意事项"></a><code>ajax</code> 请求注意事项</h1><ul>
 <li>xhr.send() 方法不要错误的放到 onreadystatechange 对应的回调函数中去，那样不会发送请求(这个错误比较隐晦，不容易被发现)</li>
+<li>异步请求时xhr.send() 是异步执行的方法，所以 onreadystatechange 方法可以放在 send 方法的前面和后面都可以；但是当为同步请求时，onreadystatechange 方法一定要放在 send 方法的前面，否则无法操作返回的数据</li>
 <li>只有当提交form表单，并且是GET请求的时候，浏览器才会把表单进行序列化(参数字符串)拼到URL后面(因为GET请求没有请求体)</li>
 <li>在 form 起始标签中可以通过 “method” 来指定是 “GET” 还是 “POST” 请求</li>
 <li>只有 type=”submit” 的按钮在点击后才会生成查询字符串(参数字符串) -&gt; <input type="submit" value="注册">;<input type="button" id="regBtn" value="注册"> 这样是不会生成参数字符串的</li>
@@ -671,6 +746,10 @@ xhr.send(JSON.stringify(data));
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/17/Node-js之全局对象-global/" rel="prev" title="Node.js之全局对象_global">
+                Node.js之全局对象_global <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -751,7 +830,7 @@ xhr.send(JSON.stringify(data));
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="全局对象 1.global的属性可以不用引用，也不用声明，就可以直接用 2.在node中在模块中能直接用有两种 是全局对象下面的属性 初始化模块时传入的参数   为什么能够直接在模块中访问 global,那是因为 global 也是 blobal 的属性(这句话比较绕口，但这确实是原理：自己身上有一个对自己的引用)  console  console.log() console.info() co">
+<meta name="keywords" content="Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js之全局对象_global">
+<meta property="og:url" content="http://yoursite.com/2017/12/17/Node-js之全局对象-global/index.html">
+<meta property="og:site_name" content="newlife&#39;s blog">
+<meta property="og:description" content="全局对象 1.global的属性可以不用引用，也不用声明，就可以直接用 2.在node中在模块中能直接用有两种 是全局对象下面的属性 初始化模块时传入的参数   为什么能够直接在模块中访问 global,那是因为 global 也是 blobal 的属性(这句话比较绕口，但这确实是原理：自己身上有一个对自己的引用)  console  console.log() console.info() co">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-17T04:28:45.001Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js之全局对象_global">
+<meta name="twitter:description" content="全局对象 1.global的属性可以不用引用，也不用声明，就可以直接用 2.在node中在模块中能直接用有两种 是全局对象下面的属性 初始化模块时传入的参数   为什么能够直接在模块中访问 global,那是因为 global 也是 blobal 的属性(这句话比较绕口，但这确实是原理：自己身上有一个对自己的引用)  console  console.log() console.info() co">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/17/Node-js之全局对象-global/"/>
+
+
+
+
+
+  <title>Node.js之全局对象_global | newlife's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">newlife's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/17/Node-js之全局对象-global/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node.js之全局对象_global</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-17T10:59:34+08:00">
+                2017-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="全局对象"><a href="#全局对象" class="headerlink" title="全局对象"></a>全局对象</h1><ul>
+<li>1.global的属性可以不用引用，也不用声明，就可以直接用</li>
+<li>2.在node中在模块中能直接用有两种<ol>
+<li>是全局对象下面的属性</li>
+<li>初始化模块时传入的参数</li>
+</ol>
+</li>
+<li><p>为什么能够直接在模块中访问 global,那是因为 global 也是 blobal 的属性(这句话比较绕口，但这确实是原理：自己身上有一个对自己的引用)</p>
+</li>
+<li><p>console</p>
+<ul>
+<li>console.log()</li>
+<li>console.info()</li>
+<li>console.error()</li>
+<li>console.warn()</li>
+<li>console.time()</li>
+<li><p>console.timeEnd()</p>
+<ul>
+<li>需要传入一个字符串参数，并且要求两个方法的参数一致</li>
+<li><p>用来计算在这两行代码之间的js代码执行所花费的时间，可以用来测试代码性能，对一些耗时间的代码进行针对性的优化</p>
+<pre><code>console.time(&quot;test&quot;);
+for (var i = 0; i &lt; 1000000; i++) {
+}
+console.timeEnd(&quot;test&quot;);
+</code></pre></li>
+</ul>
+</li>
+<li>日志重定向：可以把日志信息存储到一个文件中，方便日后寻找错误</li>
+<li>在cmd命令窗口中通过cmd的特性使用日志重定向功能能够把log和info的输出重定向到日志文件中，如果需要把错误的日志信息也重定向到日志文件中，需要在前面加上”2”，当然普通的就是加”1”；那么就需要这样写：<code>node console.js1&gt;log.txt 2&gt;err.txt</code></li>
+<li>如果还想把错误的日志信息也存放到普通的日志信息一起时，就需要这样写：<code>node console.js 1&gt;log.txt 2&gt;&amp;1</code></li>
+</ul>
+</li>
+<li>__filename<ul>
+<li>global.__filename-&gt;当前js文件的绝对路径以及文件名</li>
+</ul>
+</li>
+<li>__dirname<ul>
+<li>global.__dirname-&gt;当前js文件的绝对路径</li>
+<li>这里注意 <strong>filename 和 </strong>dirname 都不是 global 的属性(试想一下，全局属性只能有一份，这样的话这两个属性值模块之间就会相互覆盖了，所以这是不存在的)，而是初始化模块时传入的参数(<strong>filename 和 </strong>dirname 是每个模块特有的)</li>
+</ul>
+</li>
+<li>setTimeout(callback, delay[, …args])<ul>
+<li>定时器(一次性执行)</li>
+</ul>
+</li>
+<li>setImmediate(callback[, …args])<ul>
+<li><code>callback</code> <code>&lt;Function&gt;</code> 在 Node.js 事件循环的当前回合结束时要调用的函数</li>
+<li><code>...args</code> <code>&lt;any&gt;</code> 当调用 <code>callback</code> 时要传入的可选参数</li>
+<li>返回一个用于 clearImmediate() 的 <code>Immediate</code></li>
+<li>setImmediate 和 setTimeout 都是下一次执行的，但是它们谁先执行谁后执行存在几率，就是说不一定谁在前谁在后</li>
+</ul>
+</li>
+</ul>
+<h1 id="process"><a href="#process" class="headerlink" title="process"></a>process</h1><p><a href="http://www.css88.com/archives/4548" target="_blank" rel="noopener">http://www.css88.com/archives/4548</a></p>
+<h3 id="process常用的方法"><a href="#process常用的方法" class="headerlink" title="process常用的方法"></a>process常用的方法</h3><ul>
+<li>process.exit()：退出当前进程</li>
+<li>process.stdout()-&gt;standard output</li>
+<li>process.stderr()-&gt;standard error<ul>
+<li>上面两个方法也是输出功能，其实console的相关输出功能就是调用了这两个方法（不管是为了减少代码的书写还是为了程序的可读性，推荐使用console对象进行输出）</li>
+</ul>
+</li>
+<li><p>process.stdin()</p>
+<ul>
+<li>监听用户的输入（在监听之前需要进行编码的设置，注意这里的编码设置和之前网页内容的编码设置不同，一般这里设为”utf-8”，设为”gbk”或”gb2312”会报错）</li>
+<li><p>然后通过”on”方法进行事件监听来监听用户的输入(有两种方法来获取用户的输入内容)</p>
+<pre><code>process.stdin.setEncoding(&quot;utf-8&quot;);
+//    process.stdin.on(&quot;data&quot;, function (data) {
+//        console.log(data);
+//    });
+//另一种监听输入的方法：这个事件不会主动把用户的输入传到回调函数中，而需要手动的通过方法来获取
+process.stdin.on(&quot;readable&quot;, function () {
+    var data = process.stdin.read();
+    console.log(data);
+});
+</code></pre></li>
+</ul>
+</li>
+<li><p>process.cwd()</p>
+<ul>
+<li><p>cwd-&gt;current working dir;很容易和__dirname搞混(返回运行当前脚本的工作目录的路径)</p>
+<pre><code>console.log(&quot;dirname:&quot; + __dirname);//dirname-&gt;js文件所在目录
+console.log(&quot;cwd:&quot; + process.cwd());//cwd()-&gt;执行node命令时，我们在哪个目录
+//例如cwd_subdir.js在subdir文件夹中，进入subdir的上一级目录，当在cmd窗口中这样执行时效果非常明显:node subdir/cwd_subdir.js
+//dirname-&gt;js文件所在目录(就会到subdir这个目录)
+//cwd()-&gt;执行node命令时，我们在哪个目录(这里就会是subdir的上一级目录)
+</code></pre></li>
+</ul>
+</li>
+<li>process.chdir()<ul>
+<li>方法变更Node.js进程的当前工作目录，如果变更目录失败会抛出异常(例如，如果指定的目录不存在)(改变工作目录)</li>
+</ul>
+</li>
+<li>process.memoryUsage()<ul>
+<li>返回Node.js进程的内存使用情况的对象，该对象每个属性值的单位为字节</li>
+</ul>
+</li>
+<li><p>process.nextTick()</p>
+<ul>
+<li>将 callback 添加到”next tick 队列”。 一旦当前事件轮询队列的任务全部完成，在next tick队列中的所有callbacks会被依次调用(将一个回调函数放在下次事件循环的顶部)</li>
+<li><p>这种方式不是 <code>setTimeout(fn, 0)</code> 的别名。它更加有效率。事件轮询随后的ticks 调用，会在任何I/O事件（包括定时器）之前运行</p>
+<pre><code>console.log(&apos;start&apos;);
+process.nextTick(() =&gt; {
+  console.log(&apos;nextTick callback&apos;);
+});
+console.log(&apos;scheduled&apos;);
+// Output:
+// start
+// scheduled
+// nextTick callback
+</code></pre></li>
+</ul>
+</li>
+</ul>
+<h3 id="process常用的事件"><a href="#process常用的事件" class="headerlink" title="process常用的事件"></a>process常用的事件</h3><ul>
+<li>“exit”-&gt;程序正常的退出触发执行</li>
+<li><p>“SIGINT”(signal interrupted)-&gt;程序运行时出现一个中断信号触发执行</p>
+<pre><code>//process事件：
+process.on(&quot;exit&quot;, function () {
+    console.log(&quot;programe will exit.&quot;);
+});//在程序正常退出前执行
+process.on(&quot;SIGINT&quot;, function () {
+    console.log(&quot;programe has a sigint.&quot;);//（这里可以在用户按下&quot;ctrl+c&quot;强制退出前做一些必要的操作，然后再执行下面的方法退出）
+    process.exit();//在处理中断的回调函数中让程序正常退出
+});//例如之前监听用户输入时按下&quot;ctrl+c&quot;结束监听时就会产生一个中断信号
+</code></pre></li>
+</ul>
+<h3 id="process常用的属性"><a href="#process常用的属性" class="headerlink" title="process常用的属性"></a>process常用的属性</h3><ul>
+<li>process.argv<ul>
+<li>返回一个数组，这个数组包含了启动Node.js进程时的命令行参数(当前进程的命令行参数数组)<ul>
+<li>是一个数组，里面的内容是执行node命令时一条命令中以空格隔开的各项内容；其中第一项是node命令，第二项是执行的js文件的绝对路径；因此也就能通过这个属性来获取当执行node命令时在后面附加的其他参数（由于第0,1项都被占用了，所以其实是从第2项开始的）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/14/Node-js之ajax/" rel="next" title="Node.js之ajax">
+                <i class="fa fa-chevron-left"></i> Node.js之ajax
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="newlife" />
+            
+              <p class="site-author-name" itemprop="name">newlife</p>
+              <p class="site-description motion-element" itemprop="description">newlife means newborn</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/newlife201702" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:1245204973@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#全局对象"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5168;&#x5C40;&#x5BF9;&#x8C61;" class="headerlink" title="&#x5168;&#x5C40;&#x5BF9;&#x8C61;"></a>&#x5168;&#x5C40;&#x5BF9;&#x8C61;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#process"><span class="nav-number">2.</span> <span class="nav-text"><a href="#process" class="headerlink" title="process"></a>process</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process常用的方法"><span class="nav-number">2.0.1.</span> <span class="nav-text"><a href="#process&#x5E38;&#x7528;&#x7684;&#x65B9;&#x6CD5;" class="headerlink" title="process&#x5E38;&#x7528;&#x7684;&#x65B9;&#x6CD5;"></a>process&#x5E38;&#x7528;&#x7684;&#x65B9;&#x6CD5;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process常用的事件"><span class="nav-number">2.0.2.</span> <span class="nav-text"><a href="#process&#x5E38;&#x7528;&#x7684;&#x4E8B;&#x4EF6;" class="headerlink" title="process&#x5E38;&#x7528;&#x7684;&#x4E8B;&#x4EF6;"></a>process&#x5E38;&#x7528;&#x7684;&#x4E8B;&#x4EF6;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process常用的属性"><span class="nav-number">2.0.3.</span> <span class="nav-text"><a href="#process&#x5E38;&#x7528;&#x7684;&#x5C5E;&#x6027;" class="headerlink" title="process&#x5E38;&#x7528;&#x7684;&#x5C5E;&#x6027;"></a>process&#x5E38;&#x7528;&#x7684;&#x5C5E;&#x6027;</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Node-js-v8-9-0-文档"><span class="nav-number">2.0.3.0.0.1.</span> <span class="nav-text"><a href="#Node-js-v8-9-0-&#x6587;&#x6863;" class="headerlink" title="Node.js v8.9.0 &#x6587;&#x6863;"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 &#x6587;&#x6863;" target="_blank" rel="noopener">Node.js v8.9.0 &#x6587;&#x6863;</a></span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">newlife</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
