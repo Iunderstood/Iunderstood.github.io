@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="同源策略同源策略就是规定了javascript 可以操作 那些web内容的一个完整的安全限制 ajax属于同源策略jsonp属于非同源策略（跨域请求）-&amp;gt;实现跨域请求的方式有很多种，只不过jsonp是最常用的 什么是同源？同源就是规定多个 web 资源的 url 中 scheme(协议) 、hostname(域名或IP) 、port(端口) 必须相同，用当前页面的URL地址 对比 数据请求的">
+<meta name="keywords" content="Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js之跨域请求_jsonp">
+<meta property="og:url" content="http://yoursite.com/2017/12/17/Node-js之跨域请求-jsonp/index.html">
+<meta property="og:site_name" content="newlife&#39;s blog">
+<meta property="og:description" content="同源策略同源策略就是规定了javascript 可以操作 那些web内容的一个完整的安全限制 ajax属于同源策略jsonp属于非同源策略（跨域请求）-&amp;gt;实现跨域请求的方式有很多种，只不过jsonp是最常用的 什么是同源？同源就是规定多个 web 资源的 url 中 scheme(协议) 、hostname(域名或IP) 、port(端口) 必须相同，用当前页面的URL地址 对比 数据请求的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-17T14:38:05.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js之跨域请求_jsonp">
+<meta name="twitter:description" content="同源策略同源策略就是规定了javascript 可以操作 那些web内容的一个完整的安全限制 ajax属于同源策略jsonp属于非同源策略（跨域请求）-&amp;gt;实现跨域请求的方式有很多种，只不过jsonp是最常用的 什么是同源？同源就是规定多个 web 资源的 url 中 scheme(协议) 、hostname(域名或IP) 、port(端口) 必须相同，用当前页面的URL地址 对比 数据请求的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/17/Node-js之跨域请求-jsonp/"/>
+
+
+
+
+
+  <title>Node.js之跨域请求_jsonp | newlife's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">newlife's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/17/Node-js之跨域请求-jsonp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node.js之跨域请求_jsonp</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-17T21:52:15+08:00">
+                2017-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h1><p>同源策略就是规定了javascript 可以操作 那些web内容的一个完整的安全限制</p>
+<p>ajax属于同源策略<br>jsonp属于非同源策略（跨域请求）-&gt;实现跨域请求的方式有很多种，只不过jsonp是最常用的</p>
+<h1 id="什么是同源？"><a href="#什么是同源？" class="headerlink" title="什么是同源？"></a>什么是同源？</h1><p>同源就是规定多个 web 资源的 url 中 <code>scheme(协议)</code> 、<code>hostname(域名或IP)</code> 、<code>port(端口)</code> 必须相同，用当前页面的URL地址 对比 数据请求的接口地址只要有一项不同那么这个 <code>web</code> 资源就不是同源的；</p>
+<p>以上三部分完全相同属于同源策略，我们使用ajax技术获取数据；只要有一个不一样的，就属于非同源，我们一般使用jsonp获取数据</p>
+<h1 id="什么是跨域？"><a href="#什么是跨域？" class="headerlink" title="什么是跨域？"></a>什么是跨域？</h1><p>当请求的资源的 URL 与 当前页面 的 URL 中的 <code>hostname(域名或IP)</code> 、<code>port(端口)</code> 有一个不同的时候就算是跨域操作</p>
+<h1 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h1><p>jsonp和ajax相同，都是客户端向服务器端发送请求：给服务器端传递数据 或者 从服务器端获取数据 的方式</p>
+<ul>
+<li>script 元素可以作为一种 Ajax 传输协议</li>
+<li>只需设置 script 元素的 <code>src</code> 属性并且插入到 DOM 中，浏览器就会发<br>出一个 HTTP 请求到 src 属性所指向的 URL </li>
+<li>script不受 同源策略 的影响</li>
+<li>script元素会 自动下载 并 执行 下载的数据</li>
+<li><p>使用这种script元素来进行 Ajax 数据的传输的技术就叫做 JSONP ,也<br>就是 <code>JSON with Padding</code></p>
+<pre><code>//服务器不可以返回这样的数据[&quot;baidu&quot;,&quot;telnet&quot;,&quot;alibaba&quot;]
+//服务器会返回一个这样的响应
+functionName([&quot;baidu&quot;,&quot;telnet&quot;,&quot;alibaba&quot;])
+</code></pre></li>
+</ul>
+<blockquote>
+<p>其中的 functionName 必须是在 window 下可以访问的名称</p>
+</blockquote>
+<h1 id="jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）："><a href="#jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）：" class="headerlink" title="jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）："></a>jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）：</h1><ul>
+<li>在script的世界中，没有同源跨域这一说，只要你给我src属性中的地址是一个合法的地址，script都可以把对应的内容请求回来</li>
+<li>jsonp就是利用了script的这个原理<ol>
+<li>我们首先需要把请求数据的那个跨域的API数据接口的地址，赋值给script的src属性</li>
+<li>把当前页面中的某一个函数名当做参数值，传递给（这里以腾讯服务器为例）腾讯的服务器（URL问号传参，一般这么写：?callback=fn[callback是参数名]，之前有？了就不能写？了，而是使用&amp;，而且参数名一般为callback，因为函数名是不固定的，如果连参数名都不固定的话，人家就不知道哪个参数名里面的值是你传递过去的函数名了；如果客户端和服务器端保持统一使用了相同的名称，那么不用callback也是可以的）</li>
+<li>腾讯服务器接收到你的请求后，需要进行特殊的处理：把你传递进来的函数名和它要给你的数据拼接成一个字符串<br>例如：我们传递进去的函数名是fn（函数名可以任意指定），它准备好的数据是’fn({“name”:”zhufeng})’-&gt;’我传递的函数名(需要给我们的数据)’</li>
+<li>最后腾讯的服务器把准备好的数据通过http协议返回给我们客户端，客户端发现其实就是让我们的fn执行，而且还给fn传递了一堆数据，那些数据就是我们想要的</li>
+</ol>
+</li>
+</ul>
+<h1 id="ajax同源请求"><a href="#ajax同源请求" class="headerlink" title="ajax同源请求"></a>ajax同源请求</h1><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;ajax同源请求&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var xhr = new XMLHttpRequest;
+    xhr.open(&quot;get&quot;, &quot;data.txt&quot;, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 &amp;&amp; xhr.status == 200) {//xhr.status一般为200，这里这么写只是为了方便，一般应该严格使用正则去匹配来判断
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send(null);
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="JSONP-跨域请求"><a href="#JSONP-跨域请求" class="headerlink" title="JSONP 跨域请求"></a>JSONP 跨域请求</h1><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;jsonp跨域请求&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!--不能在第一个script标签中的src属性中写入请求数据地址，会报错（fn is not defined），应该在第二个script标签中操作--&gt;
+&lt;script charset=&quot;utf-8&quot; type=&quot;text/javascript&quot;&gt;
+    function fn(data) {
+        console.log(data);
+    }
+&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; type=&quot;text/javascript&quot;
+        src=&quot;http://matchweb.sports.qq.com/kbs/calendar?columnId=100000&amp;callback=fn&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="模拟jsonp请求的服务器server-js"><a href="#模拟jsonp请求的服务器server-js" class="headerlink" title="模拟jsonp请求的服务器server.js"></a>模拟jsonp请求的服务器server.js</h1><pre><code>var http = require(&quot;http&quot;), fs = require(&quot;fs&quot;), url = require(&quot;url&quot;);
+var server = http.createServer(function (request, response) {
+    var urlObj = url.parse(request.url, true);
+    var pathname = urlObj.pathname;
+    var query = urlObj.query;//存储的是客户端请求的URL地址中问号传参后面的信息（并且是以对象的键值对方式存储的） {id:xx}
+    var reg = /\.(html|css|js|json|txt|ico)/i;
+    if (reg.test(pathname)) {
+        var suffix = reg.exec(pathname)[1].toUpperCase();
+        var suffixMIME = &quot;text/plain&quot;;
+        switch (suffix) {
+            case &quot;HTML&quot;:
+                suffixMIME = &quot;text/html&quot;;
+                break;
+            case &quot;CSS&quot;:
+                suffixMIME = &quot;text/css&quot;;
+                break;
+            case &quot;JS&quot;:
+                suffixMIME = &quot;text/javascript&quot;;
+                break;
+            case &quot;JSON&quot;:
+                suffixMIME = &quot;application/json&quot;;
+                break;
+            case &quot;ICO&quot;:
+                suffixMIME = &quot;application/octet-stream&quot;;
+                break;
+        }
+        try {
+            var con = fs.readFileSync(&quot;.&quot; + pathname, &quot;utf-8&quot;);
+            response.writeHead(200, {&quot;content-type&quot;: suffixMIME + &quot;;charset=utf-8:&quot;});
+            response.end(con);
+        } catch (e) {
+            response.writeHead(404, {&quot;content-type&quot;: &quot;text/plain;charset=utf-8:&quot;});
+            response.end(&quot;file is not found!&quot;);
+        }
+    }
+    //jsonp的处理
+    if (pathname === &quot;/getAll&quot;) {
+        //接收客户端传递进来的函数名
+        var fnName = query[&quot;callback&quot;];
+        //准备数据
+        var con = fs.readFileSync(&quot;./customer.json&quot;, &quot;utf-8&quot;);
+        //返回给客户端的内容
+        response.writeHead(200, {&quot;content-type&quot;: &quot;text/javascript;charset=utf-8;&quot;});//注意：类型要为text/javascript，这样客户端才会把返回的内容按照js代码来解析，也就才会有函数执行
+        response.end(fnName + &quot;(&quot; + con + &quot;)&quot;);//理论上来说con可以是其他格式的数据（任何它想要返回的），比如：一般格式的字符串，json格式的字符串，数字，xml格式字符串...但是一般返回给客户端的是json格式的字符串
+        //里面不管传了几个参数，在客户端都一样执行：response.end(fnName + &quot;(&quot; + con + &quot;,100)&quot;);这种情况下只要客户端也声明了第二个参数来接收这个100，就同样能获取到
+    }
+});
+server.listen(8080, function () {
+    console.log(&quot;server is created success,listening on 8080 port!&quot;);
+});
+</code></pre><h1 id="jquery的ajax和jsonp的调用"><a href="#jquery的ajax和jsonp的调用" class="headerlink" title="jquery的ajax和jsonp的调用"></a>jquery的ajax和jsonp的调用</h1><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;42-2jquery的ajax和jsonp的调用&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script charset=&quot;UTF-8&quot; type=&quot;text/javascript&quot; src=&quot;../js/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;UTF-8&quot; type=&quot;text/javascript&quot;&gt;
+    //ajax
+    $.ajax({
+        url: &quot;data.txt&quot;,
+        type: &quot;get&quot;,
+        dataType: &quot;json&quot;,
+        data: null,
+        async: true,
+        timeout: 1000,//设置超时时间，一般都设定为3000ms；如果在设置的时间内没有请求成功，就会执行error这个方法
+        cache: false,//设定为get请求方式时不走缓存数据，原理其实就是在URL的末尾加随机数，默认是true
+        success: function () {
+
+        },//请求成功会执行success这个方法
+        error: function () {
+
+        }//请求失败会执行error这个方法
+    });
+
+    //jsonp都是get和异步请求的，不存在其他的请求方式和同步请求，而且jQuery默认就会给jsonp的请求清除缓存
+    //jsonp     http://matchweb.sports.qq.com/kbs/calender?columnId=100000
+    $.ajax({
+        url: &quot;http://matchweb.sports.qq.com/kbs/calender?columnId=100000&quot;,
+        dataType: &quot;jsonp&quot;,
+        jsonCallback: &quot;fn&quot;,//自定义传递给服务器的函数名，而不是使用jQuery自动生成的
+        jsonp: &quot;cb&quot;,//把传递函数名的那个形参callback变为cb
+        success: function () {
+
+        }
+    });
+    //最后请求的地址变为了：
+    //http://matchweb.sports.qq.com/kbs/calender?columnId=100000&amp;cb=fn&amp;_=1470108587279
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/17/Node-js之事件-events/" rel="next" title="Node.js之事件_events">
+                <i class="fa fa-chevron-left"></i> Node.js之事件_events
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="newlife" />
+            
+              <p class="site-author-name" itemprop="name">newlife</p>
+              <p class="site-description motion-element" itemprop="description">newlife means newborn</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/newlife201702" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:1245204973@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#同源策略"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x540C;&#x6E90;&#x7B56;&#x7565;" class="headerlink" title="&#x540C;&#x6E90;&#x7B56;&#x7565;"></a>&#x540C;&#x6E90;&#x7B56;&#x7565;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是同源？"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x540C;&#x6E90;&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x540C;&#x6E90;&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;&#x540C;&#x6E90;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是跨域？"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x8DE8;&#x57DF;&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x8DE8;&#x57DF;&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;&#x8DE8;&#x57DF;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSONP"><span class="nav-number">4.</span> <span class="nav-text"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）："><span class="nav-number">5.</span> <span class="nav-text"><a href="#jsonp&#x7684;&#x539F;&#x7406;&#xFF08;jsonp&#x8BF7;&#x6C42;&#x4E00;&#x5B9A;&#x9700;&#x8981;&#x5BF9;&#x65B9;&#x7684;&#x670D;&#x52A1;&#x5668;&#x505A;&#x652F;&#x6301;&#x624D;&#x53EF;&#x4EE5;&#xFF09;&#xFF1A;" class="headerlink" title="jsonp&#x7684;&#x539F;&#x7406;&#xFF08;jsonp&#x8BF7;&#x6C42;&#x4E00;&#x5B9A;&#x9700;&#x8981;&#x5BF9;&#x65B9;&#x7684;&#x670D;&#x52A1;&#x5668;&#x505A;&#x652F;&#x6301;&#x624D;&#x53EF;&#x4EE5;&#xFF09;&#xFF1A;"></a>jsonp&#x7684;&#x539F;&#x7406;&#xFF08;jsonp&#x8BF7;&#x6C42;&#x4E00;&#x5B9A;&#x9700;&#x8981;&#x5BF9;&#x65B9;&#x7684;&#x670D;&#x52A1;&#x5668;&#x505A;&#x652F;&#x6301;&#x624D;&#x53EF;&#x4EE5;&#xFF09;&#xFF1A;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ajax同源请求"><span class="nav-number">6.</span> <span class="nav-text"><a href="#ajax&#x540C;&#x6E90;&#x8BF7;&#x6C42;" class="headerlink" title="ajax&#x540C;&#x6E90;&#x8BF7;&#x6C42;"></a>ajax&#x540C;&#x6E90;&#x8BF7;&#x6C42;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSONP-跨域请求"><span class="nav-number">7.</span> <span class="nav-text"><a href="#JSONP-&#x8DE8;&#x57DF;&#x8BF7;&#x6C42;" class="headerlink" title="JSONP &#x8DE8;&#x57DF;&#x8BF7;&#x6C42;"></a>JSONP &#x8DE8;&#x57DF;&#x8BF7;&#x6C42;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟jsonp请求的服务器server-js"><span class="nav-number">8.</span> <span class="nav-text"><a href="#&#x6A21;&#x62DF;jsonp&#x8BF7;&#x6C42;&#x7684;&#x670D;&#x52A1;&#x5668;server-js" class="headerlink" title="&#x6A21;&#x62DF;jsonp&#x8BF7;&#x6C42;&#x7684;&#x670D;&#x52A1;&#x5668;server.js"></a>&#x6A21;&#x62DF;jsonp&#x8BF7;&#x6C42;&#x7684;&#x670D;&#x52A1;&#x5668;server.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery的ajax和jsonp的调用"><span class="nav-number">9.</span> <span class="nav-text"><a href="#jquery&#x7684;ajax&#x548C;jsonp&#x7684;&#x8C03;&#x7528;" class="headerlink" title="jquery&#x7684;ajax&#x548C;jsonp&#x7684;&#x8C03;&#x7528;"></a>jquery&#x7684;ajax&#x548C;jsonp&#x7684;&#x8C03;&#x7528;</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Node-js-v8-9-0-文档"><span class="nav-number">9.0.0.0.0.1.</span> <span class="nav-text"><a href="#Node-js-v8-9-0-&#x6587;&#x6863;" class="headerlink" title="Node.js v8.9.0 &#x6587;&#x6863;"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 &#x6587;&#x6863;" target="_blank" rel="noopener">Node.js v8.9.0 &#x6587;&#x6863;</a></span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">newlife</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

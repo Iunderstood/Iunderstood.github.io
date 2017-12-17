@@ -262,6 +262,287 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/17/Node-js之跨域请求-jsonp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/17/Node-js之跨域请求-jsonp/" itemprop="url">Node.js之跨域请求_jsonp</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-17T21:52:15+08:00">
+                2017-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h1><p>同源策略就是规定了javascript 可以操作 那些web内容的一个完整的安全限制</p>
+<p>ajax属于同源策略<br>jsonp属于非同源策略（跨域请求）-&gt;实现跨域请求的方式有很多种，只不过jsonp是最常用的</p>
+<h1 id="什么是同源？"><a href="#什么是同源？" class="headerlink" title="什么是同源？"></a>什么是同源？</h1><p>同源就是规定多个 web 资源的 url 中 <code>scheme(协议)</code> 、<code>hostname(域名或IP)</code> 、<code>port(端口)</code> 必须相同，用当前页面的URL地址 对比 数据请求的接口地址只要有一项不同那么这个 <code>web</code> 资源就不是同源的；</p>
+<p>以上三部分完全相同属于同源策略，我们使用ajax技术获取数据；只要有一个不一样的，就属于非同源，我们一般使用jsonp获取数据</p>
+<h1 id="什么是跨域？"><a href="#什么是跨域？" class="headerlink" title="什么是跨域？"></a>什么是跨域？</h1><p>当请求的资源的 URL 与 当前页面 的 URL 中的 <code>hostname(域名或IP)</code> 、<code>port(端口)</code> 有一个不同的时候就算是跨域操作</p>
+<h1 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h1><p>jsonp和ajax相同，都是客户端向服务器端发送请求：给服务器端传递数据 或者 从服务器端获取数据 的方式</p>
+<ul>
+<li>script 元素可以作为一种 Ajax 传输协议</li>
+<li>只需设置 script 元素的 <code>src</code> 属性并且插入到 DOM 中，浏览器就会发<br>出一个 HTTP 请求到 src 属性所指向的 URL </li>
+<li>script不受 同源策略 的影响</li>
+<li>script元素会 自动下载 并 执行 下载的数据</li>
+<li><p>使用这种script元素来进行 Ajax 数据的传输的技术就叫做 JSONP ,也<br>就是 <code>JSON with Padding</code></p>
+<pre><code>//服务器不可以返回这样的数据[&quot;baidu&quot;,&quot;telnet&quot;,&quot;alibaba&quot;]
+//服务器会返回一个这样的响应
+functionName([&quot;baidu&quot;,&quot;telnet&quot;,&quot;alibaba&quot;])
+</code></pre></li>
+</ul>
+<blockquote>
+<p>其中的 functionName 必须是在 window 下可以访问的名称</p>
+</blockquote>
+<h1 id="jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）："><a href="#jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）：" class="headerlink" title="jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）："></a>jsonp的原理（jsonp请求一定需要对方的服务器做支持才可以）：</h1><ul>
+<li>在script的世界中，没有同源跨域这一说，只要你给我src属性中的地址是一个合法的地址，script都可以把对应的内容请求回来</li>
+<li>jsonp就是利用了script的这个原理<ol>
+<li>我们首先需要把请求数据的那个跨域的API数据接口的地址，赋值给script的src属性</li>
+<li>把当前页面中的某一个函数名当做参数值，传递给（这里以腾讯服务器为例）腾讯的服务器（URL问号传参，一般这么写：?callback=fn[callback是参数名]，之前有？了就不能写？了，而是使用&amp;，而且参数名一般为callback，因为函数名是不固定的，如果连参数名都不固定的话，人家就不知道哪个参数名里面的值是你传递过去的函数名了；如果客户端和服务器端保持统一使用了相同的名称，那么不用callback也是可以的）</li>
+<li>腾讯服务器接收到你的请求后，需要进行特殊的处理：把你传递进来的函数名和它要给你的数据拼接成一个字符串<br>例如：我们传递进去的函数名是fn（函数名可以任意指定），它准备好的数据是’fn({“name”:”zhufeng})’-&gt;’我传递的函数名(需要给我们的数据)’</li>
+<li>最后腾讯的服务器把准备好的数据通过http协议返回给我们客户端，客户端发现其实就是让我们的fn执行，而且还给fn传递了一堆数据，那些数据就是我们想要的</li>
+</ol>
+</li>
+</ul>
+<h1 id="ajax同源请求"><a href="#ajax同源请求" class="headerlink" title="ajax同源请求"></a>ajax同源请求</h1><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;ajax同源请求&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var xhr = new XMLHttpRequest;
+    xhr.open(&quot;get&quot;, &quot;data.txt&quot;, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 &amp;&amp; xhr.status == 200) {//xhr.status一般为200，这里这么写只是为了方便，一般应该严格使用正则去匹配来判断
+            console.log(xhr.responseText);
+        }
+    };
+    xhr.send(null);
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="JSONP-跨域请求"><a href="#JSONP-跨域请求" class="headerlink" title="JSONP 跨域请求"></a>JSONP 跨域请求</h1><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;jsonp跨域请求&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!--不能在第一个script标签中的src属性中写入请求数据地址，会报错（fn is not defined），应该在第二个script标签中操作--&gt;
+&lt;script charset=&quot;utf-8&quot; type=&quot;text/javascript&quot;&gt;
+    function fn(data) {
+        console.log(data);
+    }
+&lt;/script&gt;
+&lt;script charset=&quot;utf-8&quot; type=&quot;text/javascript&quot;
+        src=&quot;http://matchweb.sports.qq.com/kbs/calendar?columnId=100000&amp;callback=fn&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="模拟jsonp请求的服务器server-js"><a href="#模拟jsonp请求的服务器server-js" class="headerlink" title="模拟jsonp请求的服务器server.js"></a>模拟jsonp请求的服务器server.js</h1><pre><code>var http = require(&quot;http&quot;), fs = require(&quot;fs&quot;), url = require(&quot;url&quot;);
+var server = http.createServer(function (request, response) {
+    var urlObj = url.parse(request.url, true);
+    var pathname = urlObj.pathname;
+    var query = urlObj.query;//存储的是客户端请求的URL地址中问号传参后面的信息（并且是以对象的键值对方式存储的） {id:xx}
+    var reg = /\.(html|css|js|json|txt|ico)/i;
+    if (reg.test(pathname)) {
+        var suffix = reg.exec(pathname)[1].toUpperCase();
+        var suffixMIME = &quot;text/plain&quot;;
+        switch (suffix) {
+            case &quot;HTML&quot;:
+                suffixMIME = &quot;text/html&quot;;
+                break;
+            case &quot;CSS&quot;:
+                suffixMIME = &quot;text/css&quot;;
+                break;
+            case &quot;JS&quot;:
+                suffixMIME = &quot;text/javascript&quot;;
+                break;
+            case &quot;JSON&quot;:
+                suffixMIME = &quot;application/json&quot;;
+                break;
+            case &quot;ICO&quot;:
+                suffixMIME = &quot;application/octet-stream&quot;;
+                break;
+        }
+        try {
+            var con = fs.readFileSync(&quot;.&quot; + pathname, &quot;utf-8&quot;);
+            response.writeHead(200, {&quot;content-type&quot;: suffixMIME + &quot;;charset=utf-8:&quot;});
+            response.end(con);
+        } catch (e) {
+            response.writeHead(404, {&quot;content-type&quot;: &quot;text/plain;charset=utf-8:&quot;});
+            response.end(&quot;file is not found!&quot;);
+        }
+    }
+    //jsonp的处理
+    if (pathname === &quot;/getAll&quot;) {
+        //接收客户端传递进来的函数名
+        var fnName = query[&quot;callback&quot;];
+        //准备数据
+        var con = fs.readFileSync(&quot;./customer.json&quot;, &quot;utf-8&quot;);
+        //返回给客户端的内容
+        response.writeHead(200, {&quot;content-type&quot;: &quot;text/javascript;charset=utf-8;&quot;});//注意：类型要为text/javascript，这样客户端才会把返回的内容按照js代码来解析，也就才会有函数执行
+        response.end(fnName + &quot;(&quot; + con + &quot;)&quot;);//理论上来说con可以是其他格式的数据（任何它想要返回的），比如：一般格式的字符串，json格式的字符串，数字，xml格式字符串...但是一般返回给客户端的是json格式的字符串
+        //里面不管传了几个参数，在客户端都一样执行：response.end(fnName + &quot;(&quot; + con + &quot;,100)&quot;);这种情况下只要客户端也声明了第二个参数来接收这个100，就同样能获取到
+    }
+});
+server.listen(8080, function () {
+    console.log(&quot;server is created success,listening on 8080 port!&quot;);
+});
+</code></pre><h1 id="jquery的ajax和jsonp的调用"><a href="#jquery的ajax和jsonp的调用" class="headerlink" title="jquery的ajax和jsonp的调用"></a>jquery的ajax和jsonp的调用</h1><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;42-2jquery的ajax和jsonp的调用&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script charset=&quot;UTF-8&quot; type=&quot;text/javascript&quot; src=&quot;../js/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;
+&lt;script charset=&quot;UTF-8&quot; type=&quot;text/javascript&quot;&gt;
+    //ajax
+    $.ajax({
+        url: &quot;data.txt&quot;,
+        type: &quot;get&quot;,
+        dataType: &quot;json&quot;,
+        data: null,
+        async: true,
+        timeout: 1000,//设置超时时间，一般都设定为3000ms；如果在设置的时间内没有请求成功，就会执行error这个方法
+        cache: false,//设定为get请求方式时不走缓存数据，原理其实就是在URL的末尾加随机数，默认是true
+        success: function () {
+
+        },//请求成功会执行success这个方法
+        error: function () {
+
+        }//请求失败会执行error这个方法
+    });
+
+    //jsonp都是get和异步请求的，不存在其他的请求方式和同步请求，而且jQuery默认就会给jsonp的请求清除缓存
+    //jsonp     http://matchweb.sports.qq.com/kbs/calender?columnId=100000
+    $.ajax({
+        url: &quot;http://matchweb.sports.qq.com/kbs/calender?columnId=100000&quot;,
+        dataType: &quot;jsonp&quot;,
+        jsonCallback: &quot;fn&quot;,//自定义传递给服务器的函数名，而不是使用jQuery自动生成的
+        jsonp: &quot;cb&quot;,//把传递函数名的那个形参callback变为cb
+        success: function () {
+
+        }
+    });
+    //最后请求的地址变为了：
+    //http://matchweb.sports.qq.com/kbs/calender?columnId=100000&amp;cb=fn&amp;_=1470108587279
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/17/Node-js之事件-events/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1389,7 +1670,7 @@ xhr.send(JSON.stringify(data));
 <p>  目前最常用的http抓包工具之一</p>
 </li>
 </ul>
-<blockquote>
+<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
 <p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
 <p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
 </blockquote>
@@ -2360,6 +2641,10 @@ pwd
 <blockquote>
 <p>本文所用资料来自于<strong>珠峰培训</strong>和一些网上摘录(一些引用没有一一给出地址，望原作者见谅)</p>
 </blockquote>
+<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
 
           
         
@@ -2776,7 +3061,7 @@ A backtick-delimited string in a code span: `` `foo` ``
 
 &lt;1245204973@qq.com&gt;
 </code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
-<p><a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x31;&#x32;&#x34;&#53;&#50;&#48;&#52;&#57;&#x37;&#x33;&#x40;&#x71;&#113;&#46;&#99;&#111;&#x6d;">&#x31;&#x32;&#x34;&#53;&#50;&#48;&#52;&#57;&#x37;&#x33;&#x40;&#x71;&#113;&#46;&#99;&#111;&#x6d;</a></p>
+<p><a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x31;&#x32;&#52;&#x35;&#x32;&#x30;&#x34;&#x39;&#55;&#51;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#x31;&#x32;&#52;&#x35;&#x32;&#x30;&#x34;&#x39;&#55;&#51;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;</a></p>
 <p>Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人</p>
 <h1 id="反斜杠"><a href="#反斜杠" class="headerlink" title="反斜杠"></a>反斜杠</h1><h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><pre><code>\   反斜线
 `   反引号
@@ -3151,7 +3436,7 @@ _   底线
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
