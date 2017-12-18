@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="fs 模块读写方法 流的概念 流是一组 有序 的，有 起点 和 终点 的 字节数据传输 手段 不关心文件的整体内容，只关注是否从文件中 读 到了数据，以及读到数据之后的 处理 流是一个 抽象接口 ，被 Node 中的很多对象所实现。比如对一个HTTP 服务器的请求对象request是一个流，stdout 也是一个流  stream.Readable 可读流使用实现了stream.Readable接">
+<meta name="description" content="fs 模块读写方法 流的概念fs 模块的读写方法都是 整体 读入或者写入的，这时候当一个文件过大时，就不能通过这种方式去操作了，因为内存的空间大小是有限的，当一个文件的大小超出了这个大小，就不能进行读写操作了(因为fs 的读写操作是文件整体通过内存中的缓存进行操作的)；这时就应该使用 流 来操作了  流是一组 有序 的，有 起点 和 终点 的 字节数据传输 手段 不关心文件的整体内容，只关注是否从">
 <meta name="keywords" content="Node.js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node.js之流_stream">
 <meta property="og:url" content="http://yoursite.com/2017/12/18/Node-js之流-stream/index.html">
 <meta property="og:site_name" content="newlife&#39;s blog">
-<meta property="og:description" content="fs 模块读写方法 流的概念 流是一组 有序 的，有 起点 和 终点 的 字节数据传输 手段 不关心文件的整体内容，只关注是否从文件中 读 到了数据，以及读到数据之后的 处理 流是一个 抽象接口 ，被 Node 中的很多对象所实现。比如对一个HTTP 服务器的请求对象request是一个流，stdout 也是一个流  stream.Readable 可读流使用实现了stream.Readable接">
+<meta property="og:description" content="fs 模块读写方法 流的概念fs 模块的读写方法都是 整体 读入或者写入的，这时候当一个文件过大时，就不能通过这种方式去操作了，因为内存的空间大小是有限的，当一个文件的大小超出了这个大小，就不能进行读写操作了(因为fs 的读写操作是文件整体通过内存中的缓存进行操作的)；这时就应该使用 流 来操作了  流是一组 有序 的，有 起点 和 终点 的 字节数据传输 手段 不关心文件的整体内容，只关注是否从">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/img/stream_fs.png">
 <meta property="og:image" content="http://yoursite.com/img/readstream_events.png">
 <meta property="og:image" content="http://yoursite.com/img/readstream_funcs.png">
 <meta property="og:image" content="http://yoursite.com/img/writable_funcs.png">
-<meta property="og:updated_time" content="2017-12-18T12:49:01.076Z">
+<meta property="og:updated_time" content="2017-12-18T12:59:50.713Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node.js之流_stream">
-<meta name="twitter:description" content="fs 模块读写方法 流的概念 流是一组 有序 的，有 起点 和 终点 的 字节数据传输 手段 不关心文件的整体内容，只关注是否从文件中 读 到了数据，以及读到数据之后的 处理 流是一个 抽象接口 ，被 Node 中的很多对象所实现。比如对一个HTTP 服务器的请求对象request是一个流，stdout 也是一个流  stream.Readable 可读流使用实现了stream.Readable接">
+<meta name="twitter:description" content="fs 模块读写方法 流的概念fs 模块的读写方法都是 整体 读入或者写入的，这时候当一个文件过大时，就不能通过这种方式去操作了，因为内存的空间大小是有限的，当一个文件的大小超出了这个大小，就不能进行读写操作了(因为fs 的读写操作是文件整体通过内存中的缓存进行操作的)；这时就应该使用 流 来操作了  流是一组 有序 的，有 起点 和 终点 的 字节数据传输 手段 不关心文件的整体内容，只关注是否从">
 <meta name="twitter:image" content="http://yoursite.com/img/stream_fs.png">
 
 
@@ -336,22 +336,26 @@
 
       
         <h1 id="fs-模块读写方法"><a href="#fs-模块读写方法" class="headerlink" title="fs 模块读写方法"></a><code>fs</code> 模块读写方法</h1><p><img src="/img/stream_fs.png" alt="stream_fs.png" title="stream_fs.png"></p>
-<h1 id="流的概念"><a href="#流的概念" class="headerlink" title="流的概念"></a>流的概念</h1><ul>
+<h1 id="流的概念"><a href="#流的概念" class="headerlink" title="流的概念"></a>流的概念</h1><p>fs 模块的读写方法都是 整体 读入或者写入的，这时候当一个文件过大时，就不能通过这种方式去操作了，因为内存的空间大小是有限的，当一个文件的大小超出了这个大小，就不能进行读写操作了(因为fs 的读写操作是文件整体通过内存中的缓存进行操作的)；这时就应该使用 流 来操作了</p>
+<ul>
 <li>流是一组 <code>有序</code> 的，有 <code>起点</code> 和 <code>终点</code> 的 <code>字节数据传输</code> 手段</li>
 <li>不关心文件的整体内容，只关注是否从文件中 <code>读</code> 到了数据，以及读到数据之后的 <code>处理</code></li>
 <li>流是一个 <code>抽象接口</code> ，被 Node 中的很多对象所实现。比如对一个HTTP 服务器的请求对象request是一个流，stdout 也是一个流</li>
 </ul>
+<blockquote>
+<p>互联网数据传输的足校单位是 字节</p>
+</blockquote>
 <h1 id="stream-Readable-可读流"><a href="#stream-Readable-可读流" class="headerlink" title="stream.Readable 可读流"></a>stream.Readable 可读流</h1><p>使用实现了stream.Readable接口的对象来将对象数据读取为流数据,在<br>您表明您 <code>准备好</code> 接收之前，Readable 流并不会开始发射数据</p>
 <h1 id="ReadStream-文件可读流"><a href="#ReadStream-文件可读流" class="headerlink" title="ReadStream 文件可读流"></a>ReadStream 文件可读流</h1><pre><code>fs.createReadStream(path,[options]);
 </code></pre><ul>
 <li>path: 读取的 <code>文件路径</code></li>
 <li>options:<ul>
 <li>-flags 对文件采取何种操作,默认为 ‘r’</li>
-<li>-encoding 指定 <code>编码</code> ，默认为null</li>
+<li>-encoding 指定 <code>编码</code> ，默认为null；当不指定时，就不进行编码，就是一个 buffer(二进制数据)；如果指定了编码，就会是一个字符串，相当于调用了 buffer 对象的 toString 方法</li>
 <li>-autoClose 读完数据后是否关闭文件描述符</li>
 <li>-start 用整数表示文件 <code>开始</code> 读取的字节数的索引位置</li>
 <li>-end 用整数表示文件 <code>结束</code> 读取的字节数的索引位置( 包括end位置 )</li>
-<li>highWaterMark 最高水位线，停止从底层资源读取前内部缓冲区最多能存放的字节数。缺省为 64kb</li>
+<li>highWaterMark 最高水位线，停止从底层资源读取前内部缓冲区最多能存放的字节数(其实就是触发一次 data 事件处理数据内容的大小)。缺省为 64kb</li>
 </ul>
 </li>
 </ul>
@@ -395,6 +399,9 @@ rs.on(&apos;error&apos;,function(err){
  * 3. 在流里判断错误，监听 它的 error事件
  **/
 </code></pre><h1 id="Writable-可写流"><a href="#Writable-可写流" class="headerlink" title="Writable 可写流"></a>Writable 可写流</h1><p>使用各种实现stream.Writable接口的对象来将流数据 <code>写入</code> 到对象中</p>
+<blockquote>
+<p>response 就是一个 可写流，同样拥有 write 和 end 方法</p>
+</blockquote>
 <h1 id="可写流的方法"><a href="#可写流的方法" class="headerlink" title="可写流的方法"></a>可写流的方法</h1><p><img src="/img/writable_funcs.png" alt="writable_funcs.png" title="writable_funcs.png"></p>
 <h1 id="WriteStream"><a href="#WriteStream" class="headerlink" title="WriteStream"></a>WriteStream</h1><p>在fs模块中使用 <code>createWriteStream</code> 方法创建一个将流数据写入文件中的 <code>WriteStream</code> 对象</p>
 <pre><code>fs.createWriteStream(path,[options]);
@@ -405,7 +412,7 @@ rs.on(&apos;error&apos;,function(err){
 <li>-encoding 指定 <code>编码</code> ，默认为null</li>
 <li>-autoClose 是否 <code>关闭</code> 文件描述符</li>
 <li>-start 用整数表示文件 <code>开始</code> 字节数的写入位置</li>
-<li>-highWaterMark 最高水位线，write()开始返回 false 的 <code>缓冲大小</code> 。缺省为 16kb</li>
+<li>-highWaterMark 最高水位线，write()开始返回 false 的 <code>缓冲大小</code> (其实就是一次写入的内容大小，默认是 16kb，当一次写入数据的内容小于这个值，write() 方法会返回 true，否则返回 false)。缺省为 16kb</li>
 </ul>
 </li>
 </ul>
