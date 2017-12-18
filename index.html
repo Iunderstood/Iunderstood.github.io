@@ -262,6 +262,277 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/Node-js之流-stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/18/Node-js之流-stream/" itemprop="url">Node.js之流_stream</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T19:40:22+08:00">
+                2017-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="fs-模块读写方法"><a href="#fs-模块读写方法" class="headerlink" title="fs 模块读写方法"></a><code>fs</code> 模块读写方法</h1><p><img src="/img/stream_fs.png" alt="stream_fs.png" title="stream_fs.png"></p>
+<h1 id="流的概念"><a href="#流的概念" class="headerlink" title="流的概念"></a>流的概念</h1><ul>
+<li>流是一组 <code>有序</code> 的，有 <code>起点</code> 和 <code>终点</code> 的 <code>字节数据传输</code> 手段</li>
+<li>不关心文件的整体内容，只关注是否从文件中 <code>读</code> 到了数据，以及读到数据之后的 <code>处理</code></li>
+<li>流是一个 <code>抽象接口</code> ，被 Node 中的很多对象所实现。比如对一个HTTP 服务器的请求对象request是一个流，stdout 也是一个流</li>
+</ul>
+<h1 id="stream-Readable-可读流"><a href="#stream-Readable-可读流" class="headerlink" title="stream.Readable 可读流"></a>stream.Readable 可读流</h1><p>使用实现了stream.Readable接口的对象来将对象数据读取为流数据,在<br>您表明您 <code>准备好</code> 接收之前，Readable 流并不会开始发射数据</p>
+<h1 id="ReadStream-文件可读流"><a href="#ReadStream-文件可读流" class="headerlink" title="ReadStream 文件可读流"></a>ReadStream 文件可读流</h1><pre><code>fs.createReadStream(path,[options]);
+</code></pre><ul>
+<li>path: 读取的 <code>文件路径</code></li>
+<li>options:<ul>
+<li>-flags 对文件采取何种操作,默认为 ‘r’</li>
+<li>-encoding 指定 <code>编码</code> ，默认为null</li>
+<li>-autoClose 读完数据后是否关闭文件描述符</li>
+<li>-start 用整数表示文件 <code>开始</code> 读取的字节数的索引位置</li>
+<li>-end 用整数表示文件 <code>结束</code> 读取的字节数的索引位置( 包括end位置 )</li>
+<li>highWaterMark 最高水位线，停止从底层资源读取前内部缓冲区最多能存放的字节数。缺省为 64kb</li>
+</ul>
+</li>
+</ul>
+<h1 id="可读流触发的-事件"><a href="#可读流触发的-事件" class="headerlink" title="可读流触发的 事件"></a>可读流触发的 事件</h1><p><img src="/img/readstream_events.png" alt="readstream_events.png" title="readstream_events.png"></p>
+<h1 id="可读流的方法"><a href="#可读流的方法" class="headerlink" title="可读流的方法"></a>可读流的方法</h1><p><img src="/img/readstream_funcs.png" alt="readstream_funcs.png" title="readstream_funcs.png"></p>
+<p>可读流示例：</p>
+<pre><code>var fs  = require(&apos;fs&apos;);
+//创建可读流
+var rs = fs.createReadStream(&apos;./index.txt&apos;,{
+    start:3,
+    end:8,
+    highWaterMark:4
+});
+
+//设置编码
+rs.setEncoding(&apos;utf8&apos;);
+//监听data事件，当读到数据的时候会触发data事件
+// pause 通知对象 停止 触发data 事件(停止喂)
+// resume 通知对象 恢复 触发data 事件(恢复接着喂)
+rs.on(&apos;data&apos;,function(data){
+    //吃一口先要求暂停
+    rs.pause();
+   setTimeout(function(){
+        console.log(data);
+       //要求接着喂
+       rs.resume();
+   },1000)
+})
+//从文件中读取完毕之后会触发end事件
+rs.on(&apos;end&apos;,function(){
+    console.log(&apos;end&apos;);
+})
+//当读取文件出错的时候会触发error事件
+rs.on(&apos;error&apos;,function(err){
+    console.error(err);
+})
+/**
+ * 处理错误的方式：    
+ * 1. 同步方法 try catch
+ * 2. 异步 判断回调函数里的error对象是否有值
+ * 3. 在流里判断错误，监听 它的 error事件
+ **/
+</code></pre><h1 id="Writable-可写流"><a href="#Writable-可写流" class="headerlink" title="Writable 可写流"></a>Writable 可写流</h1><p>使用各种实现stream.Writable接口的对象来将流数据 <code>写入</code> 到对象中</p>
+<h1 id="可写流的方法"><a href="#可写流的方法" class="headerlink" title="可写流的方法"></a>可写流的方法</h1><p><img src="/img/writable_funcs.png" alt="writable_funcs.png" title="writable_funcs.png"></p>
+<h1 id="WriteStream"><a href="#WriteStream" class="headerlink" title="WriteStream"></a>WriteStream</h1><p>在fs模块中使用 <code>createWriteStream</code> 方法创建一个将流数据写入文件中的 <code>WriteStream</code> 对象</p>
+<pre><code>fs.createWriteStream(path,[options]);
+</code></pre><ul>
+<li>path: 读取的文件路径</li>
+<li>options:<ul>
+<li>-flags 对文件采取何种 <code>操作</code> ,默认为 ‘w’</li>
+<li>-encoding 指定 <code>编码</code> ，默认为null</li>
+<li>-autoClose 是否 <code>关闭</code> 文件描述符</li>
+<li>-start 用整数表示文件 <code>开始</code> 字节数的写入位置</li>
+<li>-highWaterMark 最高水位线，write()开始返回 false 的 <code>缓冲大小</code> 。缺省为 16kb</li>
+</ul>
+</li>
+</ul>
+<h1 id="write-方法"><a href="#write-方法" class="headerlink" title="write 方法"></a>write 方法</h1><pre><code>writable.write(chunk,[encoding],[callback]);
+</code></pre><ul>
+<li>参数<ul>
+<li>-chunk 要 <code>写入</code> 的数据，Buffer或字符串对象，必须指定</li>
+<li>-encoding 写入 <code>编码</code> ，chunk为字符串时有用，可选</li>
+<li>callback 写入成功后的 <code>回调</code></li>
+</ul>
+</li>
+<li>返回值为布尔值，系统缓存区定满时为false,未满时为true</li>
+</ul>
+<h1 id="end-方法"><a href="#end-方法" class="headerlink" title="end 方法"></a>end 方法</h1><p>在写入文件时，当不再需要写入数据时可调用该方法关闭文件。 迫使系统缓存区的数据立即写入文件中</p>
+<p>可写流示例：</p>
+<pre><code>writable.end(chunk,[encoding],[callback]);
+
+var fs = require(&apos;fs&apos;);
+
+var ws = fs.createWriteStream(&apos;./write.txt&apos;,{});
+//写入
+ws.write(&apos;好&apos;,&apos;utf8&apos;,function(err){
+    console.log(1);
+})
+ws.write(&apos;好&apos;,&apos;utf8&apos;,function(err){
+    console.log(2);
+})
+ws.write(&apos;好&apos;,&apos;utf8&apos;,function(err){
+    console.log(3);
+})
+//写入并且关闭
+ws.end(&apos;学习&apos;,&apos;utf8&apos;);
+</code></pre><h1 id="通过-可读流-和-可写流-实现-copy-方法"><a href="#通过-可读流-和-可写流-实现-copy-方法" class="headerlink" title="通过 可读流 和 可写流 实现 copy 方法"></a>通过 可读流 和 可写流 实现 <code>copy</code> 方法</h1><pre><code>function copy(src,target){
+    var rs = fs.createReadStream(src);
+    var ws = fs.createWriteStream(target);
+    rs.on(&apos;data&apos;, function (data) {
+        ws.write(data);
+    });
+
+    rs.on(&apos;end&apos;, function (data) {
+        ws.end();
+    });
+}
+</code></pre><h1 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h1><p>流，尤其是 pipe() 方法的初衷，是将数据的 <code>滞留量</code> 限制到一个可接受的水平，以使得不同速度的来源和目标不会 <code>淹没</code> 可用内存</p>
+<pre><code>readStream.pipe(writeStream,[options]);
+</code></pre><ul>
+<li>readStream可读流对象</li>
+<li>writeStream可写流对象</li>
+<li>options<ul>
+<li>end 为true时表示数据读取完毕后立刻将缓存区中的数据写入目标文件并 <code>关闭</code> 文件</li>
+</ul>
+</li>
+</ul>
+<p>pipe 示例：</p>
+<pre><code>var fs = require(&apos;fs&apos;);
+function copy(src,target){
+    var rs = fs.createReadStream(src);
+    var ws = fs.createWriteStream(target);
+    //对文件写和读的时候
+    //要先打开文件，然后读写文件，然后关闭文件
+    rs.pipe(ws,{end:true});
+
+}
+function pipe(source,dest){
+    //先监听可流的data事件，
+    source.on(&apos;data&apos;, function(chunk) {
+        //写成功就是true,写失败就是false
+        if(false === dest.write(chunk)){
+            //停止触发data事件
+            source.pause();
+        }
+    });
+
+    //监听目标可写流的 drain 事件，当目标可写流里所有需要缓冲的写入操作都完毕后，将流重新切换回流动模式(当全部咽下之后，调用回调函数)
+    dest.on(&apos;drain&apos;, function(){
+        //重新开始触发data事件
+        source.resume();
+    });
+
+}
+copy(&apos;./index.txt&apos;,&apos;./write.txt&apos;);
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/17/Node-js之跨域请求-jsonp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3061,7 +3332,7 @@ A backtick-delimited string in a code span: `` `foo` ``
 
 &lt;1245204973@qq.com&gt;
 </code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
-<p><a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x31;&#x32;&#52;&#x35;&#x32;&#x30;&#x34;&#x39;&#55;&#51;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#x31;&#x32;&#52;&#x35;&#x32;&#x30;&#x34;&#x39;&#55;&#51;&#64;&#x71;&#x71;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p><a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x31;&#50;&#52;&#53;&#x32;&#48;&#52;&#57;&#x37;&#51;&#x40;&#113;&#x71;&#x2e;&#x63;&#111;&#x6d;">&#x31;&#50;&#52;&#53;&#x32;&#48;&#52;&#57;&#x37;&#51;&#x40;&#113;&#x71;&#x2e;&#x63;&#111;&#x6d;</a></p>
 <p>Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人</p>
 <h1 id="反斜杠"><a href="#反斜杠" class="headerlink" title="反斜杠"></a>反斜杠</h1><h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><pre><code>\   反斜线
 `   反引号
@@ -3436,7 +3707,7 @@ _   底线
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
