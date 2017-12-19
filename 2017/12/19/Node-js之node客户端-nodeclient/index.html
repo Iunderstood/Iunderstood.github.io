@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Node.js," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="创建 http 客户端request 方法可以向其他网站请求数据  options  host    域名或目标主机IP  hostname    域名或目标主机，优先级比 host 高  port    端口号  method    请求方法  path   请求的路径，默认为 /  headers   客户端请求头对象  auth   认证信息，如 “username:password”">
+<meta name="keywords" content="Node.js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2017/12/08/hello-world/index.html">
+<meta property="og:title" content="Node.js之node客户端_nodeclient">
+<meta property="og:url" content="http://yoursite.com/2017/12/19/Node-js之node客户端-nodeclient/index.html">
 <meta property="og:site_name" content="newlife&#39;s blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="创建 http 客户端request 方法可以向其他网站请求数据  options  host    域名或目标主机IP  hostname    域名或目标主机，优先级比 host 高  port    端口号  method    请求方法  path   请求的路径，默认为 /  headers   客户端请求头对象  auth   认证信息，如 “username:password”">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-08T03:06:32.048Z">
+<meta property="og:updated_time" content="2017-12-19T11:06:15.660Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="Node.js之node客户端_nodeclient">
+<meta name="twitter:description" content="创建 http 客户端request 方法可以向其他网站请求数据  options  host    域名或目标主机IP  hostname    域名或目标主机，优先级比 host 高  port    端口号  method    请求方法  path   请求的路径，默认为 /  headers   客户端请求头对象  auth   认证信息，如 “username:password”">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/12/08/hello-world/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/19/Node-js之node客户端-nodeclient/"/>
 
 
 
 
 
-  <title>Hello World | newlife's blog</title>
+  <title>Node.js之node客户端_nodeclient | newlife's blog</title>
   
 
 
@@ -262,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/08/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/19/Node-js之node客户端-nodeclient/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="newlife">
@@ -279,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">Node.js之node客户端_nodeclient</h1>
         
 
         <div class="post-meta">
@@ -291,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-08T11:06:32+08:00">
-                2017-12-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-19T17:56:57+08:00">
+                2017-12-19
               </time>
             
 
@@ -329,15 +330,77 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h1 id="创建-http-客户端"><a href="#创建-http-客户端" class="headerlink" title="创建 http 客户端"></a>创建 http 客户端</h1><p><code>request</code> 方法可以向其他网站请求数据</p>
+<ul>
+<li><p>options</p>
+<ul>
+<li><p>host </p>
+<p>  <strong>域名</strong>或目标主机IP</p>
+</li>
+<li><p>hostname </p>
+<p>  <strong>域名</strong>或目标主机，优先级比 host 高</p>
+</li>
+<li><p>port </p>
+<p>  <strong>端口</strong>号</p>
+</li>
+<li><p>method </p>
+<p>  请求<strong>方法</strong></p>
+</li>
+<li><p>path</p>
+<p>  请求的<strong>路径</strong>，默认为 <code>/</code></p>
+</li>
+<li><p>headers</p>
+<p>  客户端请求<strong>头对象</strong></p>
+</li>
+<li><p>auth</p>
+<p>  <strong>认证</strong>信息，如 “username:password”</p>
+</li>
+</ul>
+</li>
+<li>callback = function(response) {}<br>当<strong>获取</strong>到目标网站所返回的<strong>响应流</strong>时调用的回调函数<ul>
+<li><code>response</code> 是一个 http.IncomingMessage 对象，可以从中 <code>读</code></li>
+</ul>
+</li>
+</ul>
+<p>示例：</p>
+<pre><code>var http = require(&apos;http&apos;);
+//指定请求的参数
+var options = {
+    host:&apos;localhost&apos;,
+    port:8080,
+    path:&apos;/post&apos;,
+    method:&apos;POST&apos;,
+    //headers:{&apos;Content-Type&apos;:&apos;application/json&apos;}
+    //headers:{&apos;Content-Type&apos;:&apos;application/x-www-form-urlencoded&apos;}
+    headers:{&apos;Content-Type&apos;:&apos;application/zfpx&apos;}// 当服务端判断编码格式时，其实只要客户端和服务端约定好让服务端能够识别这种编码格式就行，
+    // 所以你可以甚至使用这样的一种编码格式: application/zfpx;
+    // 但是服务端一定要能明确知道这种编码是什么意思(即自定义格式)；但是 http 提供的格式最好按规范书写，不要随意篡改
+}
+//向服务器发送请求
+var request = http.request(options,function(res){
+     console.log(res.statusCode);//读取响应状态码
+     console.log(res.headers);//读取响应头
+    var result = &apos;&apos;;
+    res.on(&apos;data&apos;,function(data){
+        result+=data;
+    })
+    res.on(&apos;end&apos;,function(){
+        var users = JSON.parse(result);
+        console.log(users);
+    });
+})
+// 有些对象既可以是 可读流，也可以是 可写流；
+// 在 http 创建的服务端中 request 可读，response 可写； 在 http 创建的客户端中 response 可读，request 可写
+// request也是一个流，是一个可写流
+/*request.write(&apos;{&quot;name&quot;:&quot;zfpx&quot;&apos;);
+request.write(&apos;,&quot;age&quot;:6}&apos;);*/
+//request.write(&apos;name=zfpx&amp;age=6&apos;);
+request.write(&apos;name@zfpx|age@6&apos;);
+request.end();
+</code></pre><h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
 
       
     </div>
@@ -353,6 +416,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
 
       
       
@@ -362,15 +431,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/12/18/Node-js之流-stream/" rel="next" title="Node.js之流_stream">
+                <i class="fa fa-chevron-left"></i> Node.js之流_stream
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/09/test/" rel="prev" title="test">
-                test <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -522,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建-http-客户端"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x521B;&#x5EFA;-http-&#x5BA2;&#x6237;&#x7AEF;" class="headerlink" title="&#x521B;&#x5EFA; http &#x5BA2;&#x6237;&#x7AEF;"></a>&#x521B;&#x5EFA; http &#x5BA2;&#x6237;&#x7AEF;</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Node-js-v8-9-0-文档"><span class="nav-number">1.0.0.0.0.1.</span> <span class="nav-text"><a href="#Node-js-v8-9-0-&#x6587;&#x6863;" class="headerlink" title="Node.js v8.9.0 &#x6587;&#x6863;"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 &#x6587;&#x6863;" target="_blank" rel="noopener">Node.js v8.9.0 &#x6587;&#x6863;</a></span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
