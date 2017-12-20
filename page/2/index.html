@@ -262,6 +262,442 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/10/markdown-grammar-markdown语法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/10/markdown-grammar-markdown语法/" itemprop="url">markdown_grammar(markdown语法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-10T16:36:36+08:00">
+                2017-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/标记语言/" itemprop="url" rel="index">
+                    <span itemprop="name">标记语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>教程网址：<a href="http://wowubuntu.com/markdown/" target="_blank" rel="noopener">http://wowubuntu.com/markdown/</a></p>
+<h1 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h1><pre><code># 这是 H1
+## 这是 H2
+### 这是 H3
+#### 这是 H4
+##### 这是 H5
+###### 这是 H6
+</code></pre><h1 id="这是-H1"><a href="#这是-H1" class="headerlink" title="这是 H1"></a>这是 H1</h1><h2 id="这是-H2"><a href="#这是-H2" class="headerlink" title="这是 H2"></a>这是 H2</h2><h3 id="这是-H3"><a href="#这是-H3" class="headerlink" title="这是 H3"></a>这是 H3</h3><h4 id="这是-H4"><a href="#这是-H4" class="headerlink" title="这是 H4"></a>这是 H4</h4><h5 id="这是-H5"><a href="#这是-H5" class="headerlink" title="这是 H5"></a>这是 H5</h5><h6 id="这是-H6"><a href="#这是-H6" class="headerlink" title="这是 H6"></a>这是 H6</h6><h1 id="区块引用-Blockquotes"><a href="#区块引用-Blockquotes" class="headerlink" title="区块引用 Blockquotes"></a>区块引用 Blockquotes</h1><pre><code>&gt; This is a blockquote
+
+&gt; This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+&gt; This is the first level of quoting.
+&gt;
+&gt; &gt; This is nested blockquote.
+&gt;
+&gt; Back to the first level.
+</code></pre><blockquote>
+<p>This is a blockquote</p>
+<p>This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,<br>consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.<br>Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.</p>
+<p>This is the first level of quoting.</p>
+<blockquote>
+<p>This is nested blockquote.</p>
+</blockquote>
+<p>Back to the first level.</p>
+</blockquote>
+<h3 id="引用的区块内也可以使用其他的-Markdown-语法，包括标题、列表、代码区块等"><a href="#引用的区块内也可以使用其他的-Markdown-语法，包括标题、列表、代码区块等" class="headerlink" title="引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等"></a>引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等</h3><pre><code>&gt; ## 这是一个标题
+&gt; 1. 这是第一行列表项
+&gt; 2. 这是第二行列表项
+&gt;
+&gt; 给出一些例子代码：
+&gt; 
+&gt; return shell_exec(&quot;echo $input | $markdown_script&quot;);
+</code></pre><blockquote>
+<h2 id="这是一个标题"><a href="#这是一个标题" class="headerlink" title="这是一个标题"></a>这是一个标题</h2><ol>
+<li>这是第一行列表项</li>
+<li>这是第二行列表项</li>
+</ol>
+<p>给出一些例子代码：</p>
+<p>return shell_exec(“echo $input | $markdown_script”);</p>
+</blockquote>
+<h1 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h1><h3 id="无序列表使用星号、加号或是减号作为列表标记"><a href="#无序列表使用星号、加号或是减号作为列表标记" class="headerlink" title="无序列表使用星号、加号或是减号作为列表标记"></a>无序列表使用星号、加号或是减号作为列表标记</h3><h4 id="无序列表："><a href="#无序列表：" class="headerlink" title="无序列表："></a>无序列表：</h4><h5 id="列表1"><a href="#列表1" class="headerlink" title="列表1"></a>列表1</h5><pre><code>* Red
+* Green
+* Blue
+</code></pre><ul>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ul>
+<h5 id="列表2"><a href="#列表2" class="headerlink" title="列表2"></a>列表2</h5><pre><code>+ Red
++ Green
++ Blue
+</code></pre><ul>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ul>
+<h5 id="列表3"><a href="#列表3" class="headerlink" title="列表3"></a>列表3</h5><pre><code>- Red
+- Green
+- Blue
+</code></pre><ul>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ul>
+<h4 id="有序列表-很重要的一点是，你在列表标记上使用的数字并不会影响输出的-HTML-结果"><a href="#有序列表-很重要的一点是，你在列表标记上使用的数字并不会影响输出的-HTML-结果" class="headerlink" title="有序列表(很重要的一点是，你在列表标记上使用的数字并不会影响输出的 HTML 结果)"></a>有序列表(很重要的一点是，你在列表标记上使用的数字并不会影响输出的 HTML 结果)</h4><h5 id="列表1-1"><a href="#列表1-1" class="headerlink" title="列表1"></a>列表1</h5><pre><code>1. Red
+2. Green
+3. Blue
+</code></pre><ol>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ol>
+<h5 id="列表2-1"><a href="#列表2-1" class="headerlink" title="列表2"></a>列表2</h5><pre><code>1. Red
+2. Green
+3. Blue
+</code></pre><ol>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ol>
+<h5 id="列表3-1"><a href="#列表3-1" class="headerlink" title="列表3"></a>列表3</h5><pre><code>3. Red
+4. Green
+5. Blue
+</code></pre><ol>
+<li>Red</li>
+<li>Green</li>
+<li>Blue</li>
+</ol>
+<h4 id="列表项缩进"><a href="#列表项缩进" class="headerlink" title="列表项缩进"></a>列表项缩进</h4><h5 id="未缩进格式"><a href="#未缩进格式" class="headerlink" title="未缩进格式"></a>未缩进格式</h5><pre><code>* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+</code></pre><ul>
+<li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,<br>viverra nec, fringilla in, laoreet vitae, risus.</li>
+</ul>
+<h5 id="使用-amp-ensp-缩进"><a href="#使用-amp-ensp-缩进" class="headerlink" title="使用&amp;ensp;缩进"></a>使用<code>&amp;ensp;</code>缩进</h5><pre><code>* &amp;ensp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+</code></pre><ul>
+<li>&ensp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,<br>viverra nec, fringilla in, laoreet vitae, risus.</li>
+</ul>
+<h5 id="使用两个-amp-ensp-缩进"><a href="#使用两个-amp-ensp-缩进" class="headerlink" title="使用两个&amp;ensp;缩进"></a>使用两个<code>&amp;ensp;</code>缩进</h5><pre><code>* &amp;ensp;&amp;ensp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+</code></pre><ul>
+<li>&ensp;&ensp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,<br>viverra nec, fringilla in, laoreet vitae, risus.</li>
+</ul>
+<h5 id="使用-amp-emsp-缩进"><a href="#使用-amp-emsp-缩进" class="headerlink" title="使用&amp;emsp;缩进"></a>使用<code>&amp;emsp;</code>缩进</h5><pre><code>* &amp;emsp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+</code></pre><ul>
+<li>&emsp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,<br>viverra nec, fringilla in, laoreet vitae, risus.</li>
+</ul>
+<h5 id="使用-amp-nbsp-缩进"><a href="#使用-amp-nbsp-缩进" class="headerlink" title="使用&amp;nbsp;缩进"></a>使用<code>&amp;nbsp;</code>缩进</h5><pre><code>* &amp;nbsp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+</code></pre><ul>
+<li>&nbsp;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,<br>viverra nec, fringilla in, laoreet vitae, risus.</li>
+</ul>
+<h6 id="输入法切换到全角，双击空格键缩进"><a href="#输入法切换到全角，双击空格键缩进" class="headerlink" title="输入法切换到全角，双击空格键缩进"></a>输入法切换到全角，双击空格键缩进</h6><pre><code>* 　　Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+viverra nec, fringilla in, laoreet vitae, risus.
+</code></pre><ul>
+<li>　　Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,<br>viverra nec, fringilla in, laoreet vitae, risus.</li>
+</ul>
+<h6 id="列表项包含多个段落，每个项目下的段落都必须缩进-4-个空格或是-1-个制表符"><a href="#列表项包含多个段落，每个项目下的段落都必须缩进-4-个空格或是-1-个制表符" class="headerlink" title="列表项包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符"></a>列表项包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符</h6><pre><code>1. This is a list item with two paragraphs. Lorem ipsum dolor
+sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+mi posuere lectus.
+
+    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
+sit amet velit.
+</code></pre><ol>
+<li><p>This is a list item with two paragraphs. Lorem ipsum dolor<br>sit amet, consectetuer adipiscing elit. Aliquam hendrerit<br>mi posuere lectus.</p>
+<p> Vestibulum enim wisi, viverra nec, fringilla in, laoreet<br>vitae, risus. Donec sit amet nisl. Aliquam semper ipsum<br>sit amet velit.</p>
+</li>
+</ol>
+<h6 id="如果要在列表项目内放进引用，那-gt-就需要缩进"><a href="#如果要在列表项目内放进引用，那-gt-就需要缩进" class="headerlink" title="如果要在列表项目内放进引用，那 &gt; 就需要缩进"></a>如果要在列表项目内放进引用，那 &gt; 就需要缩进</h6><pre><code>* A list item with a blockquote:
+    &gt; This is a blockquote
+    &gt; inside a list item.
+</code></pre><ul>
+<li>A list item with a blockquote:<blockquote>
+<p>This is a blockquote<br>inside a list item.</p>
+</blockquote>
+</li>
+</ul>
+<h6 id="如果要放代码区块的话，该区块就需要缩进两次，也就是-8-个空格或是-2-个制表符"><a href="#如果要放代码区块的话，该区块就需要缩进两次，也就是-8-个空格或是-2-个制表符" class="headerlink" title="如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符"></a>如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符</h6><pre><code>* 一列表项包含一个列表区块：
+
+        &lt;代码写在这&gt;
+</code></pre><ul>
+<li><p>一列表项包含一个列表区块：</p>
+<pre><code>&lt;代码写在这&gt;
+</code></pre></li>
+</ul>
+<h6 id="在行首出现数字-句点-空白"><a href="#在行首出现数字-句点-空白" class="headerlink" title="在行首出现数字-句点-空白"></a>在行首出现数字-句点-空白</h6><pre><code>1986. What a great season.
+</code></pre><ol>
+<li>What a great season.</li>
+</ol>
+<h6 id="避免这样的状况，你可以在句点前面加上反斜杠"><a href="#避免这样的状况，你可以在句点前面加上反斜杠" class="headerlink" title="避免这样的状况，你可以在句点前面加上反斜杠"></a>避免这样的状况，你可以在句点前面加上反斜杠</h6><pre><code>1986\. What a great season.
+</code></pre><p>1986. What a great season.</p>
+<h1 id="代码区块"><a href="#代码区块" class="headerlink" title="代码区块"></a>代码区块</h1><pre><code>这是一个普通段落：
+
+    这是一个代码区块
+Here is an example of AppleScript:
+
+    tell application &quot;Foo&quot;
+        beep
+    end tell
+</code></pre><p>这是一个普通段落：</p>
+<pre><code>这是一个代码区块
+</code></pre><p>Here is an example of AppleScript:</p>
+<pre><code>tell application &quot;Foo&quot;
+    beep
+end tell
+</code></pre><h1 id="分隔线"><a href="#分隔线" class="headerlink" title="分隔线"></a>分隔线</h1><h3 id="你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线"><a href="#你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线" class="headerlink" title="你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线"></a>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线</h3><pre><code>* * *
+
+***
+
+* *  *
+
+****
+
+---
+
+___
+</code></pre><hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<h1 id="区段元素"><a href="#区段元素" class="headerlink" title="区段元素"></a>区段元素</h1><h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><h4 id="两种形式的链接语法：-行内式和参考式两种形式"><a href="#两种形式的链接语法：-行内式和参考式两种形式" class="headerlink" title="两种形式的链接语法： 行内式和参考式两种形式"></a>两种形式的链接语法： 行内式和参考式两种形式</h4><h5 id="行内式"><a href="#行内式" class="headerlink" title="行内式"></a>行内式</h5><pre><code>[百度](http://www.baidu.com/ &quot;title&quot;)
+</code></pre><p><a href="http://www.baidu.com/" title="title" target="_blank" rel="noopener">百度</a></p>
+<h5 id="参考式"><a href="#参考式" class="headerlink" title="参考式"></a>参考式</h5><pre><code>[百度][0]
+[0]: http://www.baidu.com/
+</code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">百度</a></p>
+<h6 id="下面这三种链接的定义都是相同"><a href="#下面这三种链接的定义都是相同" class="headerlink" title="下面这三种链接的定义都是相同"></a>下面这三种链接的定义都是相同</h6><pre><code>[newlife&apos;sBlog][Iunderstood]
+[Iunderstood]: http://Iunderstood.github.io/ &apos;newlife&apos;sBlog&apos;
+[Iunderstood]: http://Iunderstood.github.io/ &quot;newlife&apos;sBlog&quot;
+[Iunderstood]: http://Iunderstood.github.io/ (newlife&apos;sBlog)
+[Iunderstood]: &lt;http://Iunderstood.github.io/&gt; &quot;newlife&apos;sBlog&quot;
+[Iunderstood]: http://Iunderstood.github.io/ 
+&quot;newlife&apos;sBlog&quot;
+</code></pre><p><a href="http://Iunderstood.github.io/" title="newlife&#39;sBlog" target="_blank" rel="noopener">newlife’sBlog</a></p>
+<h6 id="链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的"><a href="#链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的" class="headerlink" title="链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的"></a>链接辨别标签可以有字母、数字、空白和标点符号，但是并不区分大小写，因此下面两个链接是一样的</h6><pre><code>[小米][m]
+
+[小米][M]
+[m]: http://www.mi.com/
+</code></pre><p><a href="http://www.mi.com/" target="_blank" rel="noopener">小米</a></p>
+<p><a href="http://www.mi.com/" target="_blank" rel="noopener">小米</a></p>
+<h6 id="隐式链接标记功能-链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号"><a href="#隐式链接标记功能-链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号" class="headerlink" title="隐式链接标记功能:链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号"></a>隐式链接标记功能:链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号</h6><pre><code>[baidu][]
+[baidu]: http://www.baidu.com/
+</code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">baidu</a></p>
+<h6 id="由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词"><a href="#由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词" class="headerlink" title="由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词"></a>由于链接文字可能包含空白，所以这种简化型的标记内也许包含多个单词</h6><pre><code>[baidu website][]
+[baidu website]: http://www.baidu.com/
+</code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">baidu website</a></p>
+<h6 id="链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样"><a href="#链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样" class="headerlink" title="链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样"></a>链接的定义可以放在文件中的任何一个地方，我比较偏好直接放在链接出现段落的后面，你也可以把它放在文件最后面，就像是注解一样</h6><pre><code>下面是一个参考式链接的范例：
+
+I get 10 times more traffic from [Google] [1] than from [Yahoo] [2] or [MSN] [3].
+
+  [1]: http://google.com/        &quot;Google&quot;
+  [2]: http://search.yahoo.com/  &quot;Yahoo Search&quot;
+  [3]: http://search.msn.com/    &quot;MSN Search&quot;
+
+如果改成用链接名称的方式写：
+
+I get 10 times more traffic from [Google][] than from [Yahoo][] or [MSN][].
+
+  [google]: http://google.com/        &quot;Google&quot;
+  [yahoo]:  http://search.yahoo.com/  &quot;Yahoo Search&quot;
+  [msn]:    http://search.msn.com/    &quot;MSN Search&quot;
+
+下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：
+
+I get 10 times more traffic from [Google](http://google.com/ &quot;Google&quot;) than from [Yahoo](http://search.yahoo.com/ &quot;Yahoo Search&quot;) or [MSN](http://search.msn.com/ &quot;MSN Search&quot;).
+</code></pre><p>下面是一个参考式链接的范例：</p>
+<p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a> than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
+<p>如果改成用链接名称的方式写：</p>
+<p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a> than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
+<p>下面是用行内式写的同样一段内容的 Markdown 文件，提供作为比较之用：</p>
+<p>I get 10 times more traffic from <a href="http://google.com/" title="Google" target="_blank" rel="noopener">Google</a> than from <a href="http://search.yahoo.com/" title="Yahoo Search" target="_blank" rel="noopener">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search" target="_blank" rel="noopener">MSN</a>.</p>
+<h1 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h1><h3 id="被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗"><a href="#被-或-包围的字词会被转成用-lt-em-gt-标签包围-斜体-，用两个-或-包起来的话，则会被转成-lt-strong-gt-加粗" class="headerlink" title="被 * 或 _ 包围的字词会被转成用 &lt;em&gt; 标签包围(斜体)，用两个 * 或 _ 包起来的话，则会被转成 &lt;strong&gt;(加粗)"></a>被 <code>*</code> 或 <code>_</code> 包围的字词会被转成用 <code>&lt;em&gt;</code> 标签包围(斜体)，用两个 <code>*</code> 或 <code>_</code> 包起来的话，则会被转成 <code>&lt;strong&gt;</code>(加粗)</h3><pre><code>*single asterisks*
+
+_single underscores_
+
+**double asterisks**
+
+__double underscores__
+</code></pre><p><em>single asterisks</em></p>
+<p><em>single underscores</em></p>
+<p><strong>double asterisks</strong></p>
+<p><strong>double underscores</strong></p>
+<h4 id="如果你的-和-两边都有空白的话，它们就只会被当成普通的符号"><a href="#如果你的-和-两边都有空白的话，它们就只会被当成普通的符号" class="headerlink" title="如果你的 * 和 _ 两边都有空白的话，它们就只会被当成普通的符号"></a>如果你的 <code>*</code> 和 <code>_</code> 两边都有空白的话，它们就只会被当成普通的符号</h4><p>如果要在文字前后直接插入普通的星号或底线，你可以用反斜线：</p>
+<pre><code>\*this text is surrounded by literal asterisks\*
+</code></pre><p>*this text is surrounded by literal asterisks*</p>
+<h1 id="代码-标记一小段行内代码"><a href="#代码-标记一小段行内代码" class="headerlink" title="代码(标记一小段行内代码)"></a>代码(标记一小段行内代码)</h1><pre><code>Use the `printf()` function.
+</code></pre><p>Use the <code>printf()</code> function.</p>
+<h3 id="如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段"><a href="#如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段" class="headerlink" title="如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段"></a>如果要在代码区段内插入反引号，你可以用多个反引号来开启和结束代码区段</h3><pre><code>``There is a literal backtick (`) here.``
+</code></pre><p><code>There is a literal backtick (`) here.</code></p>
+<h3 id="代码区段的起始和结束端都可以放入一个空白，起始端后面一个，结束端前面一个，这样你就可以在区段的一开始就插入反引号"><a href="#代码区段的起始和结束端都可以放入一个空白，起始端后面一个，结束端前面一个，这样你就可以在区段的一开始就插入反引号" class="headerlink" title="代码区段的起始和结束端都可以放入一个空白，起始端后面一个，结束端前面一个，这样你就可以在区段的一开始就插入反引号"></a>代码区段的起始和结束端都可以放入一个空白，起始端后面一个，结束端前面一个，这样你就可以在区段的一开始就插入反引号</h3><pre><code>A single backtick in a code span: `` ` ``
+
+A backtick-delimited string in a code span: `` `foo` ``
+</code></pre><p>A single backtick in a code span: <code>` </code></p>
+<p>A backtick-delimited string in a code span: <code>`foo` </code></p>
+<h1 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h1><h3 id="行内式和参考式"><a href="#行内式和参考式" class="headerlink" title="行内式和参考式"></a>行内式和参考式</h3><h4 id="行内式-gt-Alt-text-path-to-img-jpg-quot-Optional-title-quot"><a href="#行内式-gt-Alt-text-path-to-img-jpg-quot-Optional-title-quot" class="headerlink" title="行内式-&gt;![Alt text](/path/to/img.jpg &quot;Optional title&quot;)"></a>行内式-&gt;<code>![Alt text](/path/to/img.jpg &quot;Optional title&quot;)</code></h4><pre><code>![image](/img/boy.png &quot;boy.png&quot;)
+</code></pre><p><img src="/img/boy.png" alt="image" title="boy.png"></p>
+<h4 id="参考式-gt-Alt-text-id-id-url-to-image-quot-Optional-title-attribute-quot"><a href="#参考式-gt-Alt-text-id-id-url-to-image-quot-Optional-title-attribute-quot" class="headerlink" title="参考式-&gt;![Alt text][id] [id]: url/to/image  &quot;Optional title attribute&quot;"></a>参考式-&gt;<code>![Alt text][id] [id]: url/to/image  &quot;Optional title attribute&quot;</code></h4><pre><code>![image][boy]
+[boy]: /img/boy.png &quot;boy.png&quot;
+</code></pre><p><img src="/img/boy.png" alt="image" title="boy.png"></p>
+<p>Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <code>&lt;img&gt;</code> 标签</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h1 id="自动链接"><a href="#自动链接" class="headerlink" title="自动链接"></a>自动链接</h1><h3 id="处理网址和电子邮件信箱"><a href="#处理网址和电子邮件信箱" class="headerlink" title="处理网址和电子邮件信箱"></a>处理网址和电子邮件信箱</h3><h3 id="只要是用尖括号包起来，-Markdown-就会自动把它转成链接-网址的链接文字就和链接地址一样"><a href="#只要是用尖括号包起来，-Markdown-就会自动把它转成链接-网址的链接文字就和链接地址一样" class="headerlink" title="只要是用尖括号包起来， Markdown 就会自动把它转成链接(网址的链接文字就和链接地址一样)"></a>只要是用尖括号包起来， Markdown 就会自动把它转成链接(网址的链接文字就和链接地址一样)</h3><pre><code>&lt;http://www.baidu.com/&gt;
+
+&lt;1245204973@qq.com&gt;
+</code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
+<p><a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x31;&#50;&#x34;&#x35;&#x32;&#x30;&#x34;&#x39;&#55;&#x33;&#64;&#113;&#x71;&#46;&#99;&#x6f;&#109;">&#x31;&#50;&#x34;&#x35;&#x32;&#x30;&#x34;&#x39;&#55;&#x33;&#64;&#113;&#x71;&#46;&#99;&#x6f;&#109;</a></p>
+<p>Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人</p>
+<h1 id="反斜杠"><a href="#反斜杠" class="headerlink" title="反斜杠"></a>反斜杠</h1><h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><pre><code>\   反斜线
+`   反引号
+*   星号
+_   底线
+{}  花括号
+[]  方括号
+()  括弧
+#   井字号
++   加号
+-   减号
+.   英文句点
+!   惊叹号
+</code></pre><h2 id="第一次写博客的经验"><a href="#第一次写博客的经验" class="headerlink" title="第一次写博客的经验"></a>第一次写博客的经验</h2><h3 id="本人使用的是hexo博客框架"><a href="#本人使用的是hexo博客框架" class="headerlink" title="本人使用的是hexo博客框架"></a>本人使用的是hexo博客框架</h3><p>1.开始写文章时应该先用<code>hexo new [layout] &lt;title&gt;</code>命令来创建一篇新的文章(有时候就是因为没有执行这条命令而直接手动在<code>.../blog/source/_posts</code>目录下创建一个<code>.md</code>文件，就会在生成并部署时发生一些错误的报错–即本身没有错，它却给你报错了)</p>
+<p>2.使用上述命令解决了创建问题，接下来是部署的问题，部署的时候有可能不能一次性成功，哪怕上一次还成功部署了(或许是上一次我运气好吧)；后来看控制台报错得知好像是邮箱<code>private</code>的问题，看到这里我好像记起来在上一次成功部署之后有点得意，便在<code>github</code>上逛了一下，就是那时我把邮箱改成了<code>private</code>，见截图：<img src="/img/email_private.png" alt="email_private" title="email_private.png"><br>接下来我改回来，问题果然就解决了    –记得在部署前一定要先生成静态文件(<code>hexo generate</code>)，之后再部署，不然服务器上的内容不会发生变化(原因是你本次部署上去的public内容和上次是一样的)，可以使用<code>hexo generate --deploy</code>命令实现生成完毕后自动部署，而且部署前应该先在本地测试正常后再部署到服务器上，避免重复部署不需要的内容</p>
+<p>3.还有一点就是在文章中添加图片，方法是在<code>.../blog/source</code>目录下创建一个<code>img</code>文件(其他的也可以)，文章中这样写：<code>![Alt text](/path/to/img.jpg &quot;Optional title&quot;)</code>，这是例子：<code>![image](/img/boy.png &quot;boy.png&quot;)</code></p>
+<p>4.当部署完成后登陆网站查看文章时，会发现发布内容的排版和本地编辑器的预览有出入，这时可能是缓存问题，就需要在生成部署前执行命令<code>hexo clean</code>清除缓存，再者还是不行的话，就继续更改<code>.md</code>源文件，比如说在一些列表和引用处使用换行将每项分隔开，这样应该就能得到解决了</p>
+<p>还有，markdown里面的空格和换行好磨人，要养成使用空格和换行的好习惯<code>(っ•̀ω•́)っ✎⁾⁾</code>我爱学习</p>
+<p>目前就记这么多吧，后面学习过程中再慢慢积累~~~</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/09/test/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -573,7 +1009,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
