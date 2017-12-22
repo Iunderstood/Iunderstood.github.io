@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是对象？ 函数和对象的关系 对象都是通过函数创建的 函数是对象的一种   判断变量类型几种方法 typeof 基本类型和function instanceof 原型链来判断 判断不同的对象类型 Object.prototype.toString.call(fn); //[object Function] 判断不同的对象类型 通过这个变量的一些特征来判断 通过constructor来判断(con">
+<meta name="keywords" content="Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js之JS高级">
+<meta property="og:url" content="http://yoursite.com/2017/12/22/Node-js之JS高级/index.html">
+<meta property="og:site_name" content="newlife&#39;s blog">
+<meta property="og:description" content="什么是对象？ 函数和对象的关系 对象都是通过函数创建的 函数是对象的一种   判断变量类型几种方法 typeof 基本类型和function instanceof 原型链来判断 判断不同的对象类型 Object.prototype.toString.call(fn); //[object Function] 判断不同的对象类型 通过这个变量的一些特征来判断 通过constructor来判断(con">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/js高级/对象是属性的集合.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/函数和对象的关系.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/prototype.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/instanceof.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/proto1.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/proto2.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/proto3.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/proto4.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/继承和原型链.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/原型链完整图例.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/执行上下文.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/上下文中的变量对象.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/函数内的预解释额外的变量.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/this.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/作用域.png">
+<meta property="og:image" content="http://yoursite.com/img/js高级/作用域和执行上下文.png">
+<meta property="og:updated_time" content="2017-12-22T09:16:43.216Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js之JS高级">
+<meta name="twitter:description" content="什么是对象？ 函数和对象的关系 对象都是通过函数创建的 函数是对象的一种   判断变量类型几种方法 typeof 基本类型和function instanceof 原型链来判断 判断不同的对象类型 Object.prototype.toString.call(fn); //[object Function] 判断不同的对象类型 通过这个变量的一些特征来判断 通过constructor来判断(con">
+<meta name="twitter:image" content="http://yoursite.com/img/js高级/对象是属性的集合.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/22/Node-js之JS高级/"/>
+
+
+
+
+
+  <title>Node.js之JS高级 | newlife's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">newlife's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/22/Node-js之JS高级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node.js之JS高级</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-22T15:29:42+08:00">
+                2017-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是对象？"><a href="#什么是对象？" class="headerlink" title="什么是对象？"></a>什么是对象？</h1><p><img src="/img/js高级/对象是属性的集合.png" alt="对象是属性的集合" title="对象是属性的集合.png"></p>
+<h1 id="函数和对象的关系"><a href="#函数和对象的关系" class="headerlink" title="函数和对象的关系"></a>函数和对象的关系</h1><ul>
+<li>对象都是通过函数创建的</li>
+<li>函数是对象的一种</li>
+</ul>
+<p><img src="/img/js高级/函数和对象的关系.png" alt="函数和对象的关系" title="函数和对象的关系.png"></p>
+<h4 id="判断变量类型几种方法"><a href="#判断变量类型几种方法" class="headerlink" title="判断变量类型几种方法"></a>判断变量类型几种方法</h4><ol>
+<li>typeof 基本类型和function</li>
+<li>instanceof 原型链来判断 判断不同的对象类型</li>
+<li>Object.prototype.toString.call(fn); //[object Function] 判断不同的对象类型</li>
+<li>通过这个变量的一些特征来判断</li>
+<li>通过constructor来判断(constructor可以被 修改，所以有可能不准确)</li>
+</ol>
+<h4 id="JS提供给我们的语法糖-其实下面的字面量定义方式其实都是通过-new-关键字来实现的"><a href="#JS提供给我们的语法糖-其实下面的字面量定义方式其实都是通过-new-关键字来实现的" class="headerlink" title="JS提供给我们的语法糖(其实下面的字面量定义方式其实都是通过 new 关键字来实现的)"></a>JS提供给我们的语法糖(其实下面的字面量定义方式其实都是通过 new 关键字来实现的)</h4><blockquote>
+<p>语法糖:它意指那些没有给计算机语言添加新功能，而只是对人类来说更“甜蜜”的语法。语法糖往往给程序员提供了更实用的编码方式，有益于更好的编码风格，更易读。不过其并没有给语言添加什么新东西。</p>
+</blockquote>
+<pre><code>var obj = new Object();
+var arr = new Array();
+var obj2 = {};
+var arr2 = [,,];
+function fn(a,b){
+    console.log(a+b);
+}
+/**
+ * 1.函数名 fn
+ * 2. 函数参数
+ * 3. 函数体 最后一个参数
+ */
+var fn2 = new Function(&apos;a&apos;,&apos;b&apos;,&apos;console.log(a+b)&apos;);
+fn(1,3);
+</code></pre><h1 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h1><p><img src="/img/js高级/prototype.png" alt="prototype" title="prototype.png"></p>
+<p><img src="/img/js高级/instanceof.png" alt="instanceof" title="instanceof.png"></p>
+<h4 id="proto"><a href="#proto" class="headerlink" title="proto"></a><strong>proto</strong></h4><p><img src="/img/js高级/proto1.png" alt="__proto__1" title="__proto__1.png"></p>
+<p><img src="/img/js高级/proto2.png" alt="__proto__2" title="__proto__2.png"></p>
+<p><img src="/img/js高级/proto3.png" alt="__proto__3" title="__proto__3.png"></p>
+<p><img src="/img/js高级/proto4.png" alt="__proto__4" title="__proto__4.png"></p>
+<p>代码示例：</p>
+<pre><code>//通过调用new Function来创建一个函数的对象
+var Foo = new Function(&apos;a&apos;,&apos;b&apos;,&apos;return a+b;&apos;);
+//2.当创建add函数的时候，会自动送一个Add.prototype对象
+var o1 = new Object();
+//3.创建的对象的__proto__等于构造函数的prototype
+console.log(o1.__proto__ === Object.prototype);
+
+/**
+ * 1. prototype叫原理 构造函数的属性
+ * 2. __proto__叫隐式原型 通过构造函数构造出来的对象的属性
+ **/
+var f1 = new Foo();
+console.log(f1 instanceof Foo);
+// 左侧是对象实例 ，右侧是构造 函数
+console.log(f1 instanceof Object);
+</code></pre><h1 id="继承和原型链"><a href="#继承和原型链" class="headerlink" title="继承和原型链"></a>继承和原型链</h1><p><img src="/img/js高级/继承和原型链.png" alt="继承和原型链" title="继承和原型链.png"></p>
+<p><img src="/img/js高级/原型链完整图例.png" alt="原型链完整图例" title="原型链完整图例.png"></p>
+<p>代码示例：</p>
+<pre><code>var Person = function(){
+    //仅有的放在里面
+    this.name = &apos;zfpx&apos;;
+    this.age = 100;
+}
+//公用的放在外面
+Person.prototype.getName = function(){
+    console.log(this.name);
+}
+
+var p = new Person();
+//找属性的时候是沿着__proto__这条线来找的
+p.getName();
+console.log(p.hasOwnProperty(&apos;name&apos;));//true
+console.log(p.hasOwnProperty(&apos;getName&apos;));//false
+</code></pre><h1 id="执行上下文"><a href="#执行上下文" class="headerlink" title="执行上下文"></a>执行上下文</h1><p><img src="/img/js高级/执行上下文.png" alt="执行上下文" title="执行上下文.png"></p>
+<p><img src="/img/js高级/上下文中的变量对象.png" alt="上下文中的变量对象" title="上下文中的变量对象.png"></p>
+<p>代码示例：</p>
+<pre><code>/**
+ * 全局代码执行时会产生一个执行上下文环境对象
+ */
+/*{
+    this:&quot;上下文对象&quot;,
+    a: var变量 预解释，但不赋值
+    hello:函数表达式
+    say:函数声明 预解释，并且赋值
+    全局函数：
+    alert
+    Math
+}*/
+var a = 10;
+say();
+// 函数声明会预解释，会提取到最前面执行
+function say(){}
+//函数表达式，var会提前声明，但是不会赋值
+var hello = function(){}
+console.log(this.a);
+console.log(a);
+say();
+// 自执行函数中的this永远是window
+(function(){
+
+})()
+</code></pre><h1 id="函数的上下文环境"><a href="#函数的上下文环境" class="headerlink" title="函数的上下文环境"></a>函数的上下文环境</h1><p><img src="/img/js高级/函数内的预解释额外的变量.png" alt="函数内的预解释额外的变量" title="函数内的预解释额外的变量.png"></p>
+<p>代码示例：</p>
+<pre><code>var c =1;
+/**
+ * arguments 形参类数组  length callee caller 类数组
+ * caller返回一个函数的引用，这个函数调用了当前的函数;callee返回正在执行的函数本身的引用，
+ * 它是arguments的一个属性，这在函数的名称是未知时很有用，例如在没有名称的函数表达式 (也称为“匿名函数”)内
+ */
+
+function fn1(){
+    var a =10;
+    function fn2(){
+        var b =5;
+ // VO = var 函数声明 arguments
+//先从当前的上下文环境中的VO中找，
+//如果当前VO里没有，会从作用域链中找
+        console.log(b);
+        console.log(a);
+        console.log(c);
+    }
+   fn2();
+}
+fn1();
+</code></pre><blockquote>
+<p>取值问题：</p>
+</blockquote>
+<pre><code>var a = 10;
+function fn(){
+    // fn 定义时它的父作用域是全局作用域
+    console.log(a);//a的取值是在定义时确定的，而非运行时确定
+}
+
+function bar(f){
+    var a = 20;
+    // fn 运行时它的父作用域是 bar
+    f();
+}
+bar(fn); // 这里的 a 取值为10
+</code></pre><h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><p><img src="/img/js高级/this.png" alt="this" title="this.png"></p>
+<p>代码示例：</p>
+<pre><code>/**
+ * 1. 当函数没有返回值的时候，new的时候返回this
+ * 2.当函数有返回值的时候
+ */
+function Person(){
+    this.name = &apos;zfpx&apos;;
+    //console.log(this);
+    //当return的是一个非对象类型的话，那么也返回this
+    //如果返回的是一个对象类型的话
+    //return {age:10};
+}
+var p = new Person();
+console.log(p)
+
+Person.prototype.getName = function(){
+    console.log(this.name);
+}
+p.getName(); 
+</code></pre><blockquote>
+<p>this 的取值问题:</p>
+</blockquote>
+<ol>
+<li>函数执行，首先看函数名前是否有“.”，有的话，“.”前面是谁this就是谁，没有的话，this就是window(非严格模式下)</li>
+<li>自执行函数中的this永远是window</li>
+<li>给元素的某一个事件绑定方法，当事件触发的时候，执行对应的方法，方法中的this是当前的元素</li>
+</ol>
+<blockquote>
+<p>改变 this 的指向：call apply bind</p>
+</blockquote>
+<p>代码示例：</p>
+<pre><code>function say(city,word){
+    console.log(this.name,city,word);
+}
+say(&apos;乐乐&apos;,&apos;你好&apos;);
+var person = {name:&apos;zfpx&apos;};
+// apply第一个参数指定了函数运行时的this对象
+say.apply(person,[&apos;乐乐&apos;,&apos;你好&apos;]);
+say.call(person,&apos;乐乐&apos;,&apos;你好&apos;);
+
+var newSay = say.bind(person,&apos;city&apos;);
+newSay(&apos;word&apos;);
+</code></pre><h1 id="作用域-scope"><a href="#作用域-scope" class="headerlink" title="作用域 scope"></a>作用域 scope</h1><p><img src="/img/js高级/作用域.png" alt="作用域" title="作用域.png"></p>
+<p><img src="/img/js高级/作用域和执行上下文.png" alt="作用域和执行上下文" title="作用域和执行上下文.png"></p>
+<p>代码示例：</p>
+<pre><code>function one(){
+    var a = Math.random();
+    return function(){
+        return a;
+    }
+}
+var s = one();
+var s2 = one(); // a 被 s,s2 占用，当前作用域不能被销毁，除非 s,s2 不再占用 a,那么该作用域会被浏览器销毁
+console.log(s(),s2());
+///没有块级作用域，es6可通过 let 声明块级作用域变量
+var a = 100;
+if(true){
+    // &apos;use strict&apos; // 严格模式下依然没有块级作用域
+    var a = 200;
+}
+console.log(a); // 200
+
+
+for(var i=0;i&lt;10;i++){
+
+}
+console.log(i); // i 依然能被访问到
+</code></pre><blockquote>
+<p>百度百科：闭包就是能够读取其他函数内部变量的函数。由于在javascript中，只有函数内部的子函数才能读取局部变量，所以闭包可以理解成“定义在一个函数内部的函数“。在本质上，闭包是将函数内部和函数外部连接起来的桥梁</p>
+</blockquote>
+<h1 id="once-方法的源代码实现"><a href="#once-方法的源代码实现" class="headerlink" title="once 方法的源代码实现"></a>once 方法的源代码实现</h1><p>代码：</p>
+<pre><code>var EventEmiiter = require(&apos;events&apos;);
+var e = new EventEmiiter();
+e.once()
+EventEmitter.prototype.once = function once(type, listener) {;
+    //是否已经触发过
+var fired = false;
+    //声明了一个新的函数
+    function g() {
+        //移除监听
+        this.removeListener(type, g);
+        //如果没有触发过的话
+        if (!fired) {
+            fired = true;//状态改为已触发
+            //调用一下原始的监听函数
+            listener.apply(this, arguments);
+        }
+    }
+
+    //其实绑定的是此函数内部声明的一个函数
+    this.on(type, g);
+};
+
+// 精简代码：
+EventEmitter.prototype.once = function once(type, listener) {;
+    function g() {
+        this.removeListener(type, g);
+        listener.apply(this, arguments);
+    }
+    this.on(type, g);
+};
+</code></pre><h1 id="对象销毁"><a href="#对象销毁" class="headerlink" title="对象销毁"></a>对象销毁</h1><p>代码示例：</p>
+<pre><code>function City(){}
+function one(){
+    var a = new City;
+    return function(){
+        return a;
+    }
+}
+var s = one();
+var s2 = one();
+// 在浏览器中执行测试代码时，可以查看当前内存中的数据情况；方式： F12-&gt;Profiles-&gt;选择 Take Heap Snapshot-&gt;点击 Take Snapshot 按钮
+// 可以在这个快照中通过搜索框快速找到某个类所包含的实例的个数等
+// 销毁对象：给这个对象赋值为 null(原理：当没有任何东西能引用它时，它就会被销毁掉，谷歌的 v8 引擎也是这个原理)
+</code></pre><h1 id="模块之间调用问题"><a href="#模块之间调用问题" class="headerlink" title="模块之间调用问题"></a>模块之间调用问题</h1><p>代码示例：</p>
+<pre><code>// a.js
+// console.log(&apos;a1&apos;);
+// require(&apos;./b&apos;);
+// console.log(&apos;a2&apos;);
+// exports.num = 1;
+// 结果：a1,b1,b2,a2
+
+// b.js
+// console.log(&apos;b1&apos;);
+// //在requirea的时候返回一个临时的引用，未初始化完成的对象
+// var a = require(&apos;./a&apos;);
+// console.log(a);
+// console.log(&apos;b2&apos;);
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/20/Node-js之express框架/" rel="next" title="Node.js之express框架">
+                <i class="fa fa-chevron-left"></i> Node.js之express框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="newlife" />
+            
+              <p class="site-author-name" itemprop="name">newlife</p>
+              <p class="site-description motion-element" itemprop="description">newlife means newborn</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/newlife201702" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:1245204973@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是对象？"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4EC0;&#x4E48;&#x662F;&#x5BF9;&#x8C61;&#xFF1F;" class="headerlink" title="&#x4EC0;&#x4E48;&#x662F;&#x5BF9;&#x8C61;&#xFF1F;"></a>&#x4EC0;&#x4E48;&#x662F;&#x5BF9;&#x8C61;&#xFF1F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数和对象的关系"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x51FD;&#x6570;&#x548C;&#x5BF9;&#x8C61;&#x7684;&#x5173;&#x7CFB;" class="headerlink" title="&#x51FD;&#x6570;&#x548C;&#x5BF9;&#x8C61;&#x7684;&#x5173;&#x7CFB;"></a>&#x51FD;&#x6570;&#x548C;&#x5BF9;&#x8C61;&#x7684;&#x5173;&#x7CFB;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#判断变量类型几种方法"><span class="nav-number">2.0.0.1.</span> <span class="nav-text"><a href="#&#x5224;&#x65AD;&#x53D8;&#x91CF;&#x7C7B;&#x578B;&#x51E0;&#x79CD;&#x65B9;&#x6CD5;" class="headerlink" title="&#x5224;&#x65AD;&#x53D8;&#x91CF;&#x7C7B;&#x578B;&#x51E0;&#x79CD;&#x65B9;&#x6CD5;"></a>&#x5224;&#x65AD;&#x53D8;&#x91CF;&#x7C7B;&#x578B;&#x51E0;&#x79CD;&#x65B9;&#x6CD5;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS提供给我们的语法糖-其实下面的字面量定义方式其实都是通过-new-关键字来实现的"><span class="nav-number">2.0.0.2.</span> <span class="nav-text"><a href="#JS&#x63D0;&#x4F9B;&#x7ED9;&#x6211;&#x4EEC;&#x7684;&#x8BED;&#x6CD5;&#x7CD6;-&#x5176;&#x5B9E;&#x4E0B;&#x9762;&#x7684;&#x5B57;&#x9762;&#x91CF;&#x5B9A;&#x4E49;&#x65B9;&#x5F0F;&#x5176;&#x5B9E;&#x90FD;&#x662F;&#x901A;&#x8FC7;-new-&#x5173;&#x952E;&#x5B57;&#x6765;&#x5B9E;&#x73B0;&#x7684;" class="headerlink" title="JS&#x63D0;&#x4F9B;&#x7ED9;&#x6211;&#x4EEC;&#x7684;&#x8BED;&#x6CD5;&#x7CD6;(&#x5176;&#x5B9E;&#x4E0B;&#x9762;&#x7684;&#x5B57;&#x9762;&#x91CF;&#x5B9A;&#x4E49;&#x65B9;&#x5F0F;&#x5176;&#x5B9E;&#x90FD;&#x662F;&#x901A;&#x8FC7; new &#x5173;&#x952E;&#x5B57;&#x6765;&#x5B9E;&#x73B0;&#x7684;)"></a>JS&#x63D0;&#x4F9B;&#x7ED9;&#x6211;&#x4EEC;&#x7684;&#x8BED;&#x6CD5;&#x7CD6;(&#x5176;&#x5B9E;&#x4E0B;&#x9762;&#x7684;&#x5B57;&#x9762;&#x91CF;&#x5B9A;&#x4E49;&#x65B9;&#x5F0F;&#x5176;&#x5B9E;&#x90FD;&#x662F;&#x901A;&#x8FC7; new &#x5173;&#x952E;&#x5B57;&#x6765;&#x5B9E;&#x73B0;&#x7684;)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#prototype"><span class="nav-number">3.</span> <span class="nav-text"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#proto"><span class="nav-number">3.0.0.1.</span> <span class="nav-text"><a href="#proto" class="headerlink" title="proto"></a><strong>proto</strong></span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#继承和原型链"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x7EE7;&#x627F;&#x548C;&#x539F;&#x578B;&#x94FE;" class="headerlink" title="&#x7EE7;&#x627F;&#x548C;&#x539F;&#x578B;&#x94FE;"></a>&#x7EE7;&#x627F;&#x548C;&#x539F;&#x578B;&#x94FE;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行上下文"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x6267;&#x884C;&#x4E0A;&#x4E0B;&#x6587;" class="headerlink" title="&#x6267;&#x884C;&#x4E0A;&#x4E0B;&#x6587;"></a>&#x6267;&#x884C;&#x4E0A;&#x4E0B;&#x6587;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数的上下文环境"><span class="nav-number">6.</span> <span class="nav-text"><a href="#&#x51FD;&#x6570;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;" class="headerlink" title="&#x51FD;&#x6570;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;"></a>&#x51FD;&#x6570;&#x7684;&#x4E0A;&#x4E0B;&#x6587;&#x73AF;&#x5883;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#this"><span class="nav-number">7.</span> <span class="nav-text"><a href="#this" class="headerlink" title="this"></a>this</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#作用域-scope"><span class="nav-number">8.</span> <span class="nav-text"><a href="#&#x4F5C;&#x7528;&#x57DF;-scope" class="headerlink" title="&#x4F5C;&#x7528;&#x57DF; scope"></a>&#x4F5C;&#x7528;&#x57DF; scope</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#once-方法的源代码实现"><span class="nav-number">9.</span> <span class="nav-text"><a href="#once-&#x65B9;&#x6CD5;&#x7684;&#x6E90;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;" class="headerlink" title="once &#x65B9;&#x6CD5;&#x7684;&#x6E90;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;"></a>once &#x65B9;&#x6CD5;&#x7684;&#x6E90;&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象销毁"><span class="nav-number">10.</span> <span class="nav-text"><a href="#&#x5BF9;&#x8C61;&#x9500;&#x6BC1;" class="headerlink" title="&#x5BF9;&#x8C61;&#x9500;&#x6BC1;"></a>&#x5BF9;&#x8C61;&#x9500;&#x6BC1;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模块之间调用问题"><span class="nav-number">11.</span> <span class="nav-text"><a href="#&#x6A21;&#x5757;&#x4E4B;&#x95F4;&#x8C03;&#x7528;&#x95EE;&#x9898;" class="headerlink" title="&#x6A21;&#x5757;&#x4E4B;&#x95F4;&#x8C03;&#x7528;&#x95EE;&#x9898;"></a>&#x6A21;&#x5757;&#x4E4B;&#x95F4;&#x8C03;&#x7528;&#x95EE;&#x9898;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">newlife</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

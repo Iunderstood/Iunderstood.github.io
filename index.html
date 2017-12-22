@@ -262,6 +262,390 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/22/Node-js之JS高级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/22/Node-js之JS高级/" itemprop="url">Node.js之JS高级</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-22T15:29:42+08:00">
+                2017-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是对象？"><a href="#什么是对象？" class="headerlink" title="什么是对象？"></a>什么是对象？</h1><p><img src="/img/js高级/对象是属性的集合.png" alt="对象是属性的集合" title="对象是属性的集合.png"></p>
+<h1 id="函数和对象的关系"><a href="#函数和对象的关系" class="headerlink" title="函数和对象的关系"></a>函数和对象的关系</h1><ul>
+<li>对象都是通过函数创建的</li>
+<li>函数是对象的一种</li>
+</ul>
+<p><img src="/img/js高级/函数和对象的关系.png" alt="函数和对象的关系" title="函数和对象的关系.png"></p>
+<h4 id="判断变量类型几种方法"><a href="#判断变量类型几种方法" class="headerlink" title="判断变量类型几种方法"></a>判断变量类型几种方法</h4><ol>
+<li>typeof 基本类型和function</li>
+<li>instanceof 原型链来判断 判断不同的对象类型</li>
+<li>Object.prototype.toString.call(fn); //[object Function] 判断不同的对象类型</li>
+<li>通过这个变量的一些特征来判断</li>
+<li>通过constructor来判断(constructor可以被 修改，所以有可能不准确)</li>
+</ol>
+<h4 id="JS提供给我们的语法糖-其实下面的字面量定义方式其实都是通过-new-关键字来实现的"><a href="#JS提供给我们的语法糖-其实下面的字面量定义方式其实都是通过-new-关键字来实现的" class="headerlink" title="JS提供给我们的语法糖(其实下面的字面量定义方式其实都是通过 new 关键字来实现的)"></a>JS提供给我们的语法糖(其实下面的字面量定义方式其实都是通过 new 关键字来实现的)</h4><blockquote>
+<p>语法糖:它意指那些没有给计算机语言添加新功能，而只是对人类来说更“甜蜜”的语法。语法糖往往给程序员提供了更实用的编码方式，有益于更好的编码风格，更易读。不过其并没有给语言添加什么新东西。</p>
+</blockquote>
+<pre><code>var obj = new Object();
+var arr = new Array();
+var obj2 = {};
+var arr2 = [,,];
+function fn(a,b){
+    console.log(a+b);
+}
+/**
+ * 1.函数名 fn
+ * 2. 函数参数
+ * 3. 函数体 最后一个参数
+ */
+var fn2 = new Function(&apos;a&apos;,&apos;b&apos;,&apos;console.log(a+b)&apos;);
+fn(1,3);
+</code></pre><h1 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h1><p><img src="/img/js高级/prototype.png" alt="prototype" title="prototype.png"></p>
+<p><img src="/img/js高级/instanceof.png" alt="instanceof" title="instanceof.png"></p>
+<h4 id="proto"><a href="#proto" class="headerlink" title="proto"></a><strong>proto</strong></h4><p><img src="/img/js高级/proto1.png" alt="__proto__1" title="__proto__1.png"></p>
+<p><img src="/img/js高级/proto2.png" alt="__proto__2" title="__proto__2.png"></p>
+<p><img src="/img/js高级/proto3.png" alt="__proto__3" title="__proto__3.png"></p>
+<p><img src="/img/js高级/proto4.png" alt="__proto__4" title="__proto__4.png"></p>
+<p>代码示例：</p>
+<pre><code>//通过调用new Function来创建一个函数的对象
+var Foo = new Function(&apos;a&apos;,&apos;b&apos;,&apos;return a+b;&apos;);
+//2.当创建add函数的时候，会自动送一个Add.prototype对象
+var o1 = new Object();
+//3.创建的对象的__proto__等于构造函数的prototype
+console.log(o1.__proto__ === Object.prototype);
+
+/**
+ * 1. prototype叫原理 构造函数的属性
+ * 2. __proto__叫隐式原型 通过构造函数构造出来的对象的属性
+ **/
+var f1 = new Foo();
+console.log(f1 instanceof Foo);
+// 左侧是对象实例 ，右侧是构造 函数
+console.log(f1 instanceof Object);
+</code></pre><h1 id="继承和原型链"><a href="#继承和原型链" class="headerlink" title="继承和原型链"></a>继承和原型链</h1><p><img src="/img/js高级/继承和原型链.png" alt="继承和原型链" title="继承和原型链.png"></p>
+<p><img src="/img/js高级/原型链完整图例.png" alt="原型链完整图例" title="原型链完整图例.png"></p>
+<p>代码示例：</p>
+<pre><code>var Person = function(){
+    //仅有的放在里面
+    this.name = &apos;zfpx&apos;;
+    this.age = 100;
+}
+//公用的放在外面
+Person.prototype.getName = function(){
+    console.log(this.name);
+}
+
+var p = new Person();
+//找属性的时候是沿着__proto__这条线来找的
+p.getName();
+console.log(p.hasOwnProperty(&apos;name&apos;));//true
+console.log(p.hasOwnProperty(&apos;getName&apos;));//false
+</code></pre><h1 id="执行上下文"><a href="#执行上下文" class="headerlink" title="执行上下文"></a>执行上下文</h1><p><img src="/img/js高级/执行上下文.png" alt="执行上下文" title="执行上下文.png"></p>
+<p><img src="/img/js高级/上下文中的变量对象.png" alt="上下文中的变量对象" title="上下文中的变量对象.png"></p>
+<p>代码示例：</p>
+<pre><code>/**
+ * 全局代码执行时会产生一个执行上下文环境对象
+ */
+/*{
+    this:&quot;上下文对象&quot;,
+    a: var变量 预解释，但不赋值
+    hello:函数表达式
+    say:函数声明 预解释，并且赋值
+    全局函数：
+    alert
+    Math
+}*/
+var a = 10;
+say();
+// 函数声明会预解释，会提取到最前面执行
+function say(){}
+//函数表达式，var会提前声明，但是不会赋值
+var hello = function(){}
+console.log(this.a);
+console.log(a);
+say();
+// 自执行函数中的this永远是window
+(function(){
+
+})()
+</code></pre><h1 id="函数的上下文环境"><a href="#函数的上下文环境" class="headerlink" title="函数的上下文环境"></a>函数的上下文环境</h1><p><img src="/img/js高级/函数内的预解释额外的变量.png" alt="函数内的预解释额外的变量" title="函数内的预解释额外的变量.png"></p>
+<p>代码示例：</p>
+<pre><code>var c =1;
+/**
+ * arguments 形参类数组  length callee caller 类数组
+ * caller返回一个函数的引用，这个函数调用了当前的函数;callee返回正在执行的函数本身的引用，
+ * 它是arguments的一个属性，这在函数的名称是未知时很有用，例如在没有名称的函数表达式 (也称为“匿名函数”)内
+ */
+
+function fn1(){
+    var a =10;
+    function fn2(){
+        var b =5;
+ // VO = var 函数声明 arguments
+//先从当前的上下文环境中的VO中找，
+//如果当前VO里没有，会从作用域链中找
+        console.log(b);
+        console.log(a);
+        console.log(c);
+    }
+   fn2();
+}
+fn1();
+</code></pre><blockquote>
+<p>取值问题：</p>
+</blockquote>
+<pre><code>var a = 10;
+function fn(){
+    // fn 定义时它的父作用域是全局作用域
+    console.log(a);//a的取值是在定义时确定的，而非运行时确定
+}
+
+function bar(f){
+    var a = 20;
+    // fn 运行时它的父作用域是 bar
+    f();
+}
+bar(fn); // 这里的 a 取值为10
+</code></pre><h1 id="this"><a href="#this" class="headerlink" title="this"></a>this</h1><p><img src="/img/js高级/this.png" alt="this" title="this.png"></p>
+<p>代码示例：</p>
+<pre><code>/**
+ * 1. 当函数没有返回值的时候，new的时候返回this
+ * 2.当函数有返回值的时候
+ */
+function Person(){
+    this.name = &apos;zfpx&apos;;
+    //console.log(this);
+    //当return的是一个非对象类型的话，那么也返回this
+    //如果返回的是一个对象类型的话
+    //return {age:10};
+}
+var p = new Person();
+console.log(p)
+
+Person.prototype.getName = function(){
+    console.log(this.name);
+}
+p.getName(); 
+</code></pre><blockquote>
+<p>this 的取值问题:</p>
+</blockquote>
+<ol>
+<li>函数执行，首先看函数名前是否有“.”，有的话，“.”前面是谁this就是谁，没有的话，this就是window(非严格模式下)</li>
+<li>自执行函数中的this永远是window</li>
+<li>给元素的某一个事件绑定方法，当事件触发的时候，执行对应的方法，方法中的this是当前的元素</li>
+</ol>
+<blockquote>
+<p>改变 this 的指向：call apply bind</p>
+</blockquote>
+<p>代码示例：</p>
+<pre><code>function say(city,word){
+    console.log(this.name,city,word);
+}
+say(&apos;乐乐&apos;,&apos;你好&apos;);
+var person = {name:&apos;zfpx&apos;};
+// apply第一个参数指定了函数运行时的this对象
+say.apply(person,[&apos;乐乐&apos;,&apos;你好&apos;]);
+say.call(person,&apos;乐乐&apos;,&apos;你好&apos;);
+
+var newSay = say.bind(person,&apos;city&apos;);
+newSay(&apos;word&apos;);
+</code></pre><h1 id="作用域-scope"><a href="#作用域-scope" class="headerlink" title="作用域 scope"></a>作用域 scope</h1><p><img src="/img/js高级/作用域.png" alt="作用域" title="作用域.png"></p>
+<p><img src="/img/js高级/作用域和执行上下文.png" alt="作用域和执行上下文" title="作用域和执行上下文.png"></p>
+<p>代码示例：</p>
+<pre><code>function one(){
+    var a = Math.random();
+    return function(){
+        return a;
+    }
+}
+var s = one();
+var s2 = one(); // a 被 s,s2 占用，当前作用域不能被销毁，除非 s,s2 不再占用 a,那么该作用域会被浏览器销毁
+console.log(s(),s2());
+///没有块级作用域，es6可通过 let 声明块级作用域变量
+var a = 100;
+if(true){
+    // &apos;use strict&apos; // 严格模式下依然没有块级作用域
+    var a = 200;
+}
+console.log(a); // 200
+
+
+for(var i=0;i&lt;10;i++){
+
+}
+console.log(i); // i 依然能被访问到
+</code></pre><blockquote>
+<p>百度百科：闭包就是能够读取其他函数内部变量的函数。由于在javascript中，只有函数内部的子函数才能读取局部变量，所以闭包可以理解成“定义在一个函数内部的函数“。在本质上，闭包是将函数内部和函数外部连接起来的桥梁</p>
+</blockquote>
+<h1 id="once-方法的源代码实现"><a href="#once-方法的源代码实现" class="headerlink" title="once 方法的源代码实现"></a>once 方法的源代码实现</h1><p>代码：</p>
+<pre><code>var EventEmiiter = require(&apos;events&apos;);
+var e = new EventEmiiter();
+e.once()
+EventEmitter.prototype.once = function once(type, listener) {;
+    //是否已经触发过
+var fired = false;
+    //声明了一个新的函数
+    function g() {
+        //移除监听
+        this.removeListener(type, g);
+        //如果没有触发过的话
+        if (!fired) {
+            fired = true;//状态改为已触发
+            //调用一下原始的监听函数
+            listener.apply(this, arguments);
+        }
+    }
+
+    //其实绑定的是此函数内部声明的一个函数
+    this.on(type, g);
+};
+
+// 精简代码：
+EventEmitter.prototype.once = function once(type, listener) {;
+    function g() {
+        this.removeListener(type, g);
+        listener.apply(this, arguments);
+    }
+    this.on(type, g);
+};
+</code></pre><h1 id="对象销毁"><a href="#对象销毁" class="headerlink" title="对象销毁"></a>对象销毁</h1><p>代码示例：</p>
+<pre><code>function City(){}
+function one(){
+    var a = new City;
+    return function(){
+        return a;
+    }
+}
+var s = one();
+var s2 = one();
+// 在浏览器中执行测试代码时，可以查看当前内存中的数据情况；方式： F12-&gt;Profiles-&gt;选择 Take Heap Snapshot-&gt;点击 Take Snapshot 按钮
+// 可以在这个快照中通过搜索框快速找到某个类所包含的实例的个数等
+// 销毁对象：给这个对象赋值为 null(原理：当没有任何东西能引用它时，它就会被销毁掉，谷歌的 v8 引擎也是这个原理)
+</code></pre><h1 id="模块之间调用问题"><a href="#模块之间调用问题" class="headerlink" title="模块之间调用问题"></a>模块之间调用问题</h1><p>代码示例：</p>
+<pre><code>// a.js
+// console.log(&apos;a1&apos;);
+// require(&apos;./b&apos;);
+// console.log(&apos;a2&apos;);
+// exports.num = 1;
+// 结果：a1,b1,b2,a2
+
+// b.js
+// console.log(&apos;b1&apos;);
+// //在requirea的时候返回一个临时的引用，未初始化完成的对象
+// var a = require(&apos;./a&apos;);
+// console.log(a);
+// console.log(&apos;b2&apos;);
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/20/Node-js之express框架/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3278,531 +3662,6 @@ var queryStr = querystring.stringify(obj,[sep],[eq]); //对象转字符串
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/11/Node-js模块之Buffer与文件操作/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="newlife">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="newlife's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/11/Node-js模块之Buffer与文件操作/" itemprop="url">Node.js模块之Buffer与文件操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-11T22:49:30+08:00">
-                2017-12-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><h2 id="模块化的原理"><a href="#模块化的原理" class="headerlink" title="模块化的原理"></a>模块化的原理</h2><pre><code>// 模块化的原理：
-function t(__filename, __dirname, module, require) {
-    var exports = {};
-    ///....
-    console.log(__filename);
-    ///----------
-    return exports;
-}
-</code></pre><h2 id="模块的分类"><a href="#模块的分类" class="headerlink" title="模块的分类"></a>模块的分类</h2><ul>
-<li><em>核心</em>(内置)模块</li>
-<li><em>文件</em>模块<ul>
-<li>后缀名为.js的文件</li>
-<li>后缀名为.json 的JSON文件</li>
-<li>后缀名为.node 的经过编译后的二进制模块文件</li>
-</ul>
-</li>
-<li><em>第三方</em>模块</li>
-</ul>
-<h2 id="文件模块"><a href="#文件模块" class="headerlink" title="文件模块"></a>文件模块</h2><h3 id="js-模块"><a href="#js-模块" class="headerlink" title="js 模块"></a>js 模块</h3><ul>
-<li>使用exports对象导出<strong>成员</strong></li>
-<li>模块定义为<strong>类</strong></li>
-<li>定义<strong>类变量</strong></li>
-</ul>
-<h3 id="json-模块"><a href="#json-模块" class="headerlink" title="json 模块"></a>json 模块</h3><ul>
-<li>fs读入内存，并且转化成json对象</li>
-</ul>
-<h3 id="二进制模块"><a href="#二进制模块" class="headerlink" title="二进制模块"></a>二进制模块</h3><ul>
-<li>node编译后的二进制文件 不需要再编译，可以直接使用</li>
-</ul>
-<h2 id="第三方模块"><a href="#第三方模块" class="headerlink" title="第三方模块"></a>第三方模块</h2><p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookmodule.jpg" class="img-responsive"></p>
-<h2 id="查找文件模块"><a href="#查找文件模块" class="headerlink" title="查找文件模块"></a>查找文件模块</h2><h3 id="当没有以’-‘或者’-‘来指向一个文件时，这个模块要么是核心模块，要么就是从node-modules文件夹加载的"><a href="#当没有以’-‘或者’-‘来指向一个文件时，这个模块要么是核心模块，要么就是从node-modules文件夹加载的" class="headerlink" title="当没有以’/‘或者’./‘来指向一个文件时，这个模块要么是核心模块，要么就是从node_modules文件夹加载的"></a>当没有以’/‘或者’./‘来指向一个文件时，这个模块要么是<strong>核心模块</strong>，要么就是从<strong>node_modules</strong>文件夹加载的</h3><p><img src="http://7xjf2l.com2.z0.glb.qiniucdn.com/lookfile.jpg" class="img-responsive"></p>
-<ol>
-<li><p>从<strong>module.paths</strong>中取出第一个目录开始</p>
-</li>
-<li><p>直接从目录中查找该文件，存在结束，不存在执行下一条</p>
-</li>
-<li><p>尝试添加.js .json .node<strong>后缀</strong>查找</p>
-</li>
-<li><p>尝试将require()的参数作为一个<strong>包</strong>来查找，读取package.json，找到<strong>main</strong>指定的文件，不存在进行 3</p>
-</li>
-<li><p>查询查找该目录下的<strong>index</strong>(.js/.node)</p>
-</li>
-<li><p>继续失败查看<strong>下一个</strong>目录，很像<strong>作用域链</strong>查找，<strong>同步阻塞式</strong>的查找，很慢。幸亏有<strong>缓存</strong></p>
-</li>
-</ol>
-<h2 id="module-属性和方法"><a href="#module-属性和方法" class="headerlink" title="module 属性和方法"></a>module 属性和方法</h2><h3 id="module-对象"><a href="#module-对象" class="headerlink" title="module 对象"></a>module 对象</h3><pre><code>Object module {
-  id: String, // 模块的ID,模块标识，为该模块文件在系统中的**绝对路径**
-  exports: Object, // 该模块的**导出对象**
-  parent: Object | undefined, // 引用该模块的**父模块**,即调用当前模块的模块对象
-  filename: String | null, // 模块文件名,最终解析的文件名称，模块的**绝对路径**, 与__filename相同。
-  loaded: Boolean, // 该模块是否**加载完成**(属性值为布尔值)
-  children: Array, // 该模块的引用列表，**子模块**对象，即当前模块require的模块对象
-  paths: Array // 模块的**查找路径**(加载路径)
-}
-</code></pre><h2 id="require"><a href="#require" class="headerlink" title="require"></a>require</h2><blockquote>
-<p>引入模块</p>
-</blockquote>
-<h3 id="引入三种模块的方式："><a href="#引入三种模块的方式：" class="headerlink" title="引入三种模块的方式："></a>引入三种模块的方式：</h3><ol>
-<li>内置模块 ——&gt; 指定名字</li>
-<li>文件模块 -&gt; 路径</li>
-<li>第三方模块 -&gt; 指定名字</li>
-</ol>
-<h3 id="require-函数"><a href="#require-函数" class="headerlink" title="require 函数"></a>require 函数</h3><pre><code>Function require {
-  [Function], // 函数体
-  resolve: Function, // 根据模块标识解析模块，使用内部的 require() 机制查询模块的位置,返回绝对路径,此操作只返回解析后的文件名，不会加载该模块
-  main: undefined | Object, // 应用的主(main)模块
-  extensions: {&apos;.js&apos;:Function, &apos;.json&apos;:Function, &apos;.node&apos;:Function}, // 指示 require 怎样处理特定的文件扩展名(废弃的 )
-
-  例如：把 .sjs 文件当做 .js 文件处理：
-  require.extensions[&apos;.sjs&apos;] = require.extensions[&apos;.js&apos;];
-
-  cache: Object // 模块缓存，被引入的模块将被缓存在这个对象中，以模块的绝对路径为key
-  delete require.cache[key] // 清除require缓存，其中key为模块的绝对路径
-}
-</code></pre><h2 id="exports-和-module-exports-的区别"><a href="#exports-和-module-exports-的区别" class="headerlink" title="exports 和 module.exports 的区别"></a>exports 和 module.exports 的区别</h2><p>参考地址:</p>
-<blockquote>
-<p><a href="http://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="noopener">http://cnodejs.org/topic/5231a630101e574521e45ef8</a></p>
-<p><a href="http://cnodejs.org/topic/52308842101e574521c16e06" target="_blank" rel="noopener">http://cnodejs.org/topic/52308842101e574521c16e06</a></p>
-</blockquote>
-<h3 id="先来看一个例子"><a href="#先来看一个例子" class="headerlink" title="先来看一个例子"></a>先来看一个例子</h3><p>test.js</p>
-<pre><code>var a = {name: 1};
-var b = a;
-
-console.log(a);
-console.log(b);
-
-b.name = 2;
-console.log(a);
-console.log(b);
-
-var b = {name: 3};
-console.log(a);
-console.log(b);
-</code></pre><p>运行 test.js 结果为：</p>
-<pre><code>{ name: 1 }
-{ name: 1 }
-{ name: 2 }
-{ name: 2 }
-{ name: 2 }
-{ name: 3 }
-</code></pre><p>解释：a 是一个对象，b 是对 a 的引用，即 a 和 b 指向同一块内存，所以前两个输出一样。当对 b 作修改时，即 a 和 b 指向同一块内存地址的内容发生了改变，所以 a 也会体现出来，所以第三四个输出一样。当 b 被覆盖时，b 指向了一块新的内存，a 还是指向原来的内存，所以最后两个输出不一样</p>
-<h3 id="下面说明两者的区别"><a href="#下面说明两者的区别" class="headerlink" title="下面说明两者的区别"></a>下面说明两者的区别</h3><p>每一个node.js执行文件，都自动创建一个module对象，同时，module对象会创建一个叫exports的属性</p>
-<ol>
-<li>module.exports 初始值为一个空对象 {}</li>
-<li>exports 是指向的 module.exports 的引用</li>
-<li>require() 返回的是 module.exports 而不是 exports</li>
-</ol>
-<h4 id="现在我们来看-Node-js-官方文档的截图"><a href="#现在我们来看-Node-js-官方文档的截图" class="headerlink" title="现在我们来看 Node.js 官方文档的截图:"></a>现在我们来看 Node.js 官方文档的截图:</h4><p><img src="/img/exports.png" alt="exports" title="exports.png"></p>
-<h4 id="我们经常看到这样的写法："><a href="#我们经常看到这样的写法：" class="headerlink" title="我们经常看到这样的写法："></a>我们经常看到这样的写法：</h4><p><code>exports = module.exports = somethings</code></p>
-<p>上面的代码等价于:</p>
-<p><code>module.exports = somethings
-exports = module.exports</code></p>
-<p>原理很简单，即 module.exports 指向新的对象时，exports 断开了与 module.exports 的引用，那么通过 exports = module.exports 让 exports 重新指向 module.exports 即可</p>
-<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><h3 id="在-node-js-中通过包来对具有相互依赖关系的模块进行统一管理；一个包就是一个目录"><a href="#在-node-js-中通过包来对具有相互依赖关系的模块进行统一管理；一个包就是一个目录" class="headerlink" title="在 node.js 中通过包来对具有相互依赖关系的模块进行统一管理；一个包就是一个目录"></a>在 node.js 中通过包来对具有<strong>相互依赖</strong>关系的模块进行统一管理；一个包就是一个<strong>目录</strong></h3><ul>
-<li>package.json 包描述文件</li>
-<li>bin 用于存放可执行二进制文件的目录</li>
-<li>lib 用于存放JavaScript代码的目录</li>
-<li>doc 用于存放文档(说明文档)的目录</li>
-<li>test 用于存放单元测试和其它测试用例的代码</li>
-</ul>
-<h2 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h2><pre><code>{
-&quot;name&quot;:&quot;包的名称，必须是唯一的，由小写英文字母、数字和下划线组成，不能包含空格。&quot;,
-&quot;description&quot;：&quot;包的简要说明。&quot;,
-&quot;version&quot;:&quot;符合语义化八本识别规范的版本字符串。&quot;,
-&quot;keywords&quot;：&quot;关键字数组，通常用于搜索。&quot;,
-&quot;maintainers&quot;:&quot;维护者数组，每个元素要包含name、email（可选）、web（可选）字段。&quot;,
-&quot;contributors&quot;：&quot;贡献者数组，格式与maintainers相同。包的作者应该是贡献者数组的第一个元素。&quot;,
-&quot;bugs&quot;：&quot;提交bug的地址，可以是网址或者电子邮件地址。&quot;.,
-&quot;licenses&quot;:&quot;许可证数组，每个元素要包含type(许可证的名称)和url(链接到许可证文本的地址)字段。&quot;,
-&quot;repositories&quot;：&quot;仓库托管地址数组。每个元素要包含type(许可证的名称)和url(链接到许可证文本的地址)字段。&quot;,
-&quot;dependencies&quot;:&quot;包的依赖，一个关联数组，由包名称和版本组成。&quot;
-}
-</code></pre><h2 id="npm-包管理工具"><a href="#npm-包管理工具" class="headerlink" title="npm 包管理工具"></a>npm 包管理工具</h2><ul>
-<li>npm <strong>search</strong> gulp 查找包</li>
-<li><strong>npmview</strong> gulp 查看包</li>
-<li>npm <strong>install</strong> gulp 安装包</li>
-<li>npm <strong>install -g</strong> express-generator 全局安装包</li>
-<li>npm <strong>root -g</strong> 查看全局安装路径</li>
-<li>npm config <strong>set prefix</strong> “d:\global” 修改全局路径</li>
-<li><strong>npmlist</strong> 显示当前目录下所有的包</li>
-<li><strong>npmlist -g</strong> 显示全局下所有包</li>
-<li>npm <strong>uninstall</strong> gulp 卸载本地的包</li>
-<li>npm <strong>uninstall</strong> gulp <strong>-g</strong> 卸载全局下的包</li>
-<li>npm <strong>update</strong> gulp 更新本地的gulp</li>
-<li>npm <strong>update</strong> <strong>-g</strong> gulp 更新全局下的gulp</li>
-<li>npm <strong>update</strong> 更新当前目录下所有的包</li>
-<li>npm <strong>update -g</strong> 更新全局下所有的包</li>
-</ul>
-<h2 id="发布一个-包-到-npmjs-org-网站上-项目管理"><a href="#发布一个-包-到-npmjs-org-网站上-项目管理" class="headerlink" title="发布一个 包 到 npmjs.org 网站上(项目管理)"></a>发布一个 <code>包</code> 到 <code>npmjs.org</code> 网站上(项目管理)</h2><ul>
-<li><p>初始化项目</p>
-<p>  <code>npm init</code></p>
-<p>  配置项：<br>  name: 不能有大写字母，不能有中文，而且不能是别人已经注册的名称<br>  …</p>
-</li>
-<li><p>安装第三方模块(这时安装的模块会自动被加入到package.json文件的依赖[dependencies]字段中去)</p>
-<p>  <code>npm install [package name]</code></p>
-</li>
-<li><p>注册用户</p>
-<p>  <code>npm adduser</code> -&gt; 输入用户名、密码和邮箱</p>
-</li>
-<li><p>发布项目</p>
-<p>  <code>npm publish</code></p>
-<p>  (如果注册失败的话可能是因为改了镜像地址了，需要改回来：npm config set registry “<a href="http://regidtry.npmjs.org/" target="_blank" rel="noopener">http://regidtry.npmjs.org/</a>“)</p>
-</li>
-</ul>
-<blockquote>
-<p>可参考地址：<a href="https://segmentfault.com/a/1190000006250554" target="_blank" rel="noopener">https://segmentfault.com/a/1190000006250554</a></p>
-</blockquote>
-<h1 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h1><h2 id="什么是-Buffer"><a href="#什么是-Buffer" class="headerlink" title="什么是 Buffer"></a>什么是 Buffer</h2><ul>
-<li>缓冲区Buffer是暂时存放输入输出数据的一段<strong>内存</strong>。 {:&amp;.moveIn}</li>
-<li>JS语言自身只有字符串数据类型，没有<strong>二进制</strong>数据类型，而在处理TCP和文件流的时候，必须要处理二进制数据。</li>
-<li>NodeJS提供了一个Buffer对象来提供对二进制数据的操作</li>
-<li>是一个表示<strong>固定</strong>内存分配的全局对象，也就是说要放到缓存区中的字节数需要<strong>提前确定</strong></li>
-<li>Buffer好比由一个<strong>八位字节</strong>元素(每个元素都是一个字节，并且每个字节为8位)组成的数组，可以有效的在javascript中表示二进制数据</li>
-</ul>
-<h3 id="什么是字节"><a href="#什么是字节" class="headerlink" title="什么是字节"></a>什么是字节</h3><ul>
-<li>字节(Byte)是计算机存储时的一种<em>计量</em>单位，一个字节等于<em>8位(bit)</em>二进制数</li>
-<li>字节是通过网络传输信息的单位</li>
-<li>一个字节最大值十进制数是255</li>
-</ul>
-<h3 id="ASCII-码"><a href="#ASCII-码" class="headerlink" title="ASCII 码"></a>ASCII 码</h3><ul>
-<li>ASCII 码使用指定的7位或者8位二进制数组合来表示128或256种可能的字<br><img src="/img/ascii.png" alt="ascii" title="ascii.png"></li>
-</ul>
-<h2 id="创建-Buffer"><a href="#创建-Buffer" class="headerlink" title="创建 Buffer"></a>创建 Buffer</h2><ul>
-<li>new Buffer(size) // 指定大小</li>
-<li>new Buffer(array) // 通过数组来创建</li>
-<li>new Buffer(str,[encoding]) // 通过字符串来创建</li>
-</ul>
-<h2 id="Buffer-操作"><a href="#Buffer-操作" class="headerlink" title="Buffer 操作"></a>Buffer 操作</h2><p>Node.js 中文网地址: <a href="http://nodejs.cn/api/buffer.html" target="_blank" rel="noopener">http://nodejs.cn/api/buffer.html</a></p>
-<ul>
-<li><p>Buffer和字符串长度</p>
-<p>  <code>buf.length</code> 返回 buf 在字节数上分配的内存量</p>
-<p>  <code>length</code> 属性表示一个字符串的长度</p>
-</li>
-<li><p>Buffer和字符串的转换</p>
-<p>  Buffer 转字符串</p>
-<p>  <code>buf.toString([encoding],[start],[end])</code> 包含 start,不包含 end,默认值:<code>&#39;utf8&#39;</code>,<code>0</code>,<code>buf.length</code></p>
-<p>  字符串转 Buffer</p>
-<p>  <code>new Buffer(string, [encoding])</code> (废弃的) 使用 <code>Buffer.from(string, [encoding])</code> 替代</p>
-</li>
-<li><p>Buffer和数值对象转换</p>
-<p>  <code>buf.readInt8(offset, [noAssert])</code></p>
-<p>  从 buf 中指定的 offset 读取一个有符号的8位整数值</p>
-<ul>
-<li>offset <code>&lt;integer&gt;</code> 开始读取前要跳过的字节数，必须满足：0 &lt;= offset &lt;= buf.length - 1</li>
-<li>noAssert <code>&lt;boolean&gt;</code> 是否跳过 offset 检验？默认: false</li>
-<li>返回: <code>&lt;integer&gt;</code></li>
-<li>设置 noAssert 为 true 则 offset 可超出 buf 的最后一位字节，但后果是不确定的</li>
-<li><p>还有其他的转换成其他数值格式的方法…</p>
-<p><code>buf.writeInt8(value, offset[, noAssert])</code></p>
-<p>写入 value 到 buf 中指定的 offset 位置 value 应当是一个有效的有符号的8位整数。 当 value * 不是一个有符号的8位整数时，反应是不确定的</p>
-</li>
-<li>value <code>&lt;integer&gt;</code> 要写入 buf 的数值</li>
-<li>offset <code>&lt;integer&gt;</code> 开始写入前要跳过的字节数，必须满足：0 &lt;= offset &lt;= buf.length - 1</li>
-<li>noAssert <code>&lt;boolean&gt;</code> 是否跳过 value 和 offset 检验？默认: false</li>
-<li>返回: <code>&lt;integer&gt;</code> offset 加上写入的字节数</li>
-</ul>
-</li>
-<li><p>Buffer 和 JSON 对象转换</p>
-<p>  <code>http://nodejs.cn/api/buffer.html</code></p>
-<ul>
-<li><p>返回 buf 的 JSON 格式。 当使用<code>JSON.stringify()</code>字符串化一个 Buffer 实例时，JSON.stringify() 会隐式地调用该函数</p>
-</li>
-<li><p>返回: <code>&lt;Object&gt;</code></p>
-</li>
-</ul>
-</li>
-<li><p>复制 Buffer</p>
-<pre><code>`buf.copy(targetBuffer,[targetStart],[sourceStart],[sourceEnd]);`
-</code></pre></li>
-</ul>
-<h2 id="Buffer-常用方法"><a href="#Buffer-常用方法" class="headerlink" title="Buffer 常用方法"></a>Buffer 常用方法</h2><ul>
-<li>合并 Buffer: <code>Buffer.concat([buf1,buf2],length)</code></li>
-<li>复制 Buffer: <code>buf.copy(targetBuffer,[targetStart],[sourceStart],[sourceEnd]);</code></li>
-<li>判断是否是 Buffer: <code>Buffer.isBuffer</code></li>
-<li>获取字节长度: <code>Buffer.byteLength</code></li>
-<li>检查字符编码:<code>Buffer.isEncoding(encoding)</code>(如果 encoding 是一个支持的字符编码则返回 true，否则返回 false)</li>
-</ul>
-<h1 id="file-system-文件系统"><a href="#file-system-文件系统" class="headerlink" title="file system(文件系统)"></a>file system(文件系统)</h1><h2 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h2><h3 id="异步读取"><a href="#异步读取" class="headerlink" title="异步读取"></a>异步读取</h3><pre><code>/**
- * 1.异步方法需要把回调函数传入
- * 2. 回调函数会在同步方法执行完毕之后才执行异步回调
- * 3.异步方法不能阻塞主线程，不会影响后续代码的执行
- */
-</code></pre><p><code>readFile</code></p>
-<h3 id="同步读取"><a href="#同步读取" class="headerlink" title="同步读取"></a>同步读取</h3><pre><code>/**
- * 1. 每一个同步方法和异步方法都是成对出现的
- * 2. 同步方法会阻塞主线程的执行，在数据没有返回之间不能执行后续代码
- * 3. 它不需要传递回调函数，通过函数返回值接收结果
- */
-</code></pre><p><code>readFileSync</code></p>
-<blockquote>
-<p>try catch只能捕获同步方法的异常，异步方法的异常无法捕获，异步异常只能通过方法内部的回调函数来捕获</p>
-</blockquote>
-<h2 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h2><h3 id="异步写入"><a href="#异步写入" class="headerlink" title="异步写入"></a>异步写入</h3><p><code>writeFile</code></p>
-<pre><code>/**
- * 异步操作
- * flag 是表示要对此文件做何种类型的操作
- *   w 清空并写入
- *   a 在原有基础上追加
- */
-fs.writeFile(&apos;./write.txt&apos;, &apos;node读写&apos;, {flag: &apos;a&apos;}, function (err) {
-    if (err) {
-        console.log(err);
-    }
-});
-
-fs.appendFile(&apos;./write.txt&apos;,&apos;node&apos;);
-</code></pre><h3 id="同步写入"><a href="#同步写入" class="headerlink" title="同步写入"></a>同步写入</h3><p><code>writeFileSync</code></p>
-<blockquote>
-<p>回调里面的 err data 是由fs.readFile决定的</p>
-</blockquote>
-<h3 id="运用-fs-的读取和写入方法实现-copy-功能"><a href="#运用-fs-的读取和写入方法实现-copy-功能" class="headerlink" title="运用 fs 的读取和写入方法实现 copy 功能"></a>运用 fs 的<code>读取</code>和<code>写入</code>方法实现 copy 功能</h3><blockquote>
-<p>（注意点：当数据内容本身是 utf8 编码时才能在方法中加上 “utf8” 编码，否则就会转换错误，例如图片就是二进制数据，使用 utf8 编码不能正常处理）</p>
-</blockquote>
-<pre><code>/**
- * 1. 把src里的文件内容，写入到target文件里
- * 2.写入时要先清空再写入
- */
-
-&apos;use strict&apos;;
-
-var fs = require(&apos;fs&apos;);
-
-function copy(src, target) {
-    fs.readFile(src, function (err, data) {
-        fs.writeFile(target, data, function (err) {
-            console.log(&quot;copy success from &quot; + src + &quot;to &quot; + target);
-        });
-    });
-}
-copy(&quot;./atm.jpg&quot;, &apos;./atm2.jpg&apos;);
-
-copy(&apos;./name.txt&apos;, &apos;./name.bak.txt&apos;);
-</code></pre><h4 id="回调函数的嵌套"><a href="#回调函数的嵌套" class="headerlink" title="回调函数的嵌套"></a>回调函数的嵌套</h4><pre><code>//1.回调函数嵌套实现多个异步操作完成之后执行的回调
-//1. 需要的时间长，m+n
-//2. 代码可读性非常差
-fs.readFile(&apos;./name.txt&apos;, &apos;utf8&apos;, function (err, name) {
-    fs.readFile(&apos;./age.txt&apos;, &apos;utf8&apos;, function (err, age) {
-        console.log(name, age);
-    });
-});
-</code></pre><h1 id="操作目录"><a href="#操作目录" class="headerlink" title="操作目录"></a>操作目录</h1><ol>
-<li><p>创建目录</p>
-<blockquote>
-<p>创建目录 的时候要求父目录必须存在</p>
-</blockquote>
-<pre><code>fs.mkdir(&apos;test/t1/t2&apos;, function (err) {
-    if (err) {
-        console.log(err);
-        console.log(&apos;目录创建失败&apos;);
-    } else {
-        console.log(&apos;目录创建成功&apos;);
-    }
-});
-</code></pre></li>
-<li><p>读取目录下面所有的文件</p>
-<pre><code>fs.readdir(&apos;./book&apos;, function (err, files) {
-    console.log(files);
-});
-</code></pre></li>
-<li><p>获取一个文件或目录详情</p>
-<pre><code>fs.readdir(&apos;./book&apos;, function (err, files) {
-    //循环文件列表
-    files.forEach(function (file) {
-        //获取文件的详情
-        fs.stat(&apos;./book/&apos; + file, function (err, state) {
-            console.log(state.isDirectory());//是否是目录
-            console.log(state.isFile());//是否是文件
-            console.log(state.size);
-            // state是一个对象，里面有许多字段；其中 atime,mtime,birthtime,ctime都是 Date 对象的实例
-            // 但是atime表示最后一次读取文件的时间，mtime(modify)表示最后一次修改文件的时间（当打开文件最后结果却没有变化时时间是不会变的），
-birthtime表示文件创建时间，ctime表示最后一次修改文件的时间（当打开文件结果却没有变化时时间也会变）
-        });
-    });
-});
-</code></pre></li>
-<li><p>判断一个文件(或文件夹)是否存在</p>
-<pre><code>fs.exists(&apos;./book&apos;, function (exists) {
-    console.log(exists);
-});
-</code></pre></li>
-</ol>
-<h1 id="处理路径"><a href="#处理路径" class="headerlink" title="处理路径"></a>处理路径</h1><pre><code>var path = require(&apos;path&apos;);
-
-//合并 连接路径
-console.log(path.join(&apos;book&apos;, &apos;mysql.json&apos;));
-//seperator 分隔符
-console.log(path.sep);
-console.log(__filename);//获取当前模块的绝地路径
-console.log(__dirname);//获取 当前模块所在的绝对目录
-//获取一个路径里文件的名
-console.log(path.basename(&apos;7.path.js&apos;, &apos;.js&apos;));
-//获取一个路径里文件的扩展名
-console.log(path.extname(&apos;7.path.js&apos;));
-//从一个相对路径解析出一个绝对路径
-//以应用程序的所在目录为根起
-console.log(path.resolve(&apos;book&apos;, &apos;node.json&apos;, &apos;..&apos;, &apos;mysql.json&apos;));
-</code></pre><h3 id="path-resolve-绝对路径"><a href="#path-resolve-绝对路径" class="headerlink" title="path.resolve 绝对路径"></a><code>path.resolve</code> 绝对路径</h3><blockquote>
-<p>参考链接: <a href="https://www.cnblogs.com/52cik/p/learn-node-path.html" target="_blank" rel="noopener">https://www.cnblogs.com/52cik/p/learn-node-path.html</a></p>
-</blockquote>
-<p>这个绝对路径操作，跟上面的不太一样，如果你懂命令行 cd 命令，那就秒懂了，否则需要花点时间多跑几个例子才能理解。这次直接上官方例子</p>
-<pre><code>path.resolve(&apos;foo/bar&apos;, &apos;/tmp/file/&apos;, &apos;..&apos;, &apos;a/../subfile&apos;);
-// 返回 /tmp/subfile
-</code></pre><p>相当于命令行下的</p>
-<pre><code>cd foo/bar
-cd /tmp/file/
-cd ..
-cd a/../subfile
-pwd
-</code></pre><p>他的解析不是在是简单的拼接关系，而是类似 cd 命令的解析了</p>
-<h1 id="webstorm-的设置及一些使用技巧"><a href="#webstorm-的设置及一些使用技巧" class="headerlink" title="webstorm 的设置及一些使用技巧"></a>webstorm 的设置及一些使用技巧</h1><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
-<li><p>配置字体和大小</p>
-<p>  <code>File</code> -&gt; <code>Settings</code> -&gt; <code>Editor</code> -&gt; <code>Colors &amp; Fonts</code> -&gt; <code>Font</code></p>
-</li>
-<li><p>配置 智能提示<br><img src="/img/code_assistant.png" alt="code_assistant" title="code_assistant.png">  </p>
-<blockquote>
-<p>此外，还需要点击 <code>enable</code> 按钮来允许，以及点击 <code>Usage scope</code> 来勾选你所需要的提示类型</p>
-</blockquote>
-</li>
-<li><p>乱码问题：</p>
-<pre><code>1. 在 Settings 中搜索 File Encoding 来找到编码：
-2. IDE Encoding-&gt;针对于整个 IDE,就是所有的项目
-3. Project Encoding-&gt;针对当前项目
-4. 而且还要注意当前文件的编码-&gt;代码编码区右下角显示的编码是否为你所需要的
-</code></pre></li>
-<li><p>查看node相关方法的源码实现：</p>
-<pre><code>ctrl+鼠标左键点击，即可进入node源码
-</code></pre></li>
-<li><p>编辑文件的模板：</p>
-<pre><code>1. 任意一个目录右键-&gt;Edit File Template,即可进入编辑模板页面
-2. File页面-&gt;点击&quot;+&quot;新建模板-&gt;&quot;Name&quot;:名称;&quot;Extension&quot;:扩展名-&gt;Apply-&gt;Ok
-3. 中间空白区域可以写模板，直接写就行，记得最后也要Apply-&gt;Ok
-</code></pre></li>
-<li><p>当卸载了原来使用 node 安装程序安装的 node,而使用 nvm 来重新安装 node 时，这时你的 webstorm 环境就需要重新配置 node 环境了，而且在配置好之后如果执行 node 命令错误的话，先退出然后再打开，应该就能使用 node 命令了(前提是你在电脑的任意盘下执行node命令都是正确的，否则就是node的环境变量配有配置正确)</p>
-</li>
-<li><p>临时解决项目运行时总是报找不到模块的错误 -&gt; 在当前项目位置安装报错中指明的找不到的模块</p>
-</li>
-<li><p>当在 webstorm 调试时遇到 js 文件的路径问题，可以先将对应的 js 文件整个拷贝到 html 页面中去调试功能，最后再来琢磨路径问题</p>
-</li>
-</ul>
-<blockquote>
-<p>本文所用资料来自于<strong>珠峰培训</strong>和一些网上摘录(一些引用没有一一给出地址，望原作者见谅)</p>
-</blockquote>
-<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
-<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
-<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3857,7 +3716,7 @@ pwd
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
