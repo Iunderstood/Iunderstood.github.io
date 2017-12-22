@@ -262,6 +262,452 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/12/Node-js之http/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/12/Node-js之http/" itemprop="url">Node.js之http</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-12T23:09:02+08:00">
+                2017-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="命令行中执行"><a href="#命令行中执行" class="headerlink" title="命令行中执行"></a>命令行中执行</h1><ul>
+<li>命令行窗口中： <code>netstat</code> 命令用于显示各种网络相关信息</li>
+<li><p>也可以通过 git bash 命令行窗口来访问服务器</p>
+<p>  输入命令： curl <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> / curl -v <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>  (可以是任意可访问的地址)</p>
+<p>  可以看到请求和响应的内容</p>
+<p>  User-Agent: 代表客户端的代理（每种浏览器的代理都不一样，服务器用这个来判断客户端类型），此时命令行中的代理就是 curl</p>
+<p>  Accept: 代表可以接接收的结果类型(可以指定是接收html还是js，<em>/</em>代表任意)</p>
+<p>  Transfer-Encoding: chunked -&gt; 传输的编码(chunked:分块传输)</p>
+</li>
+</ul>
+<p><img src="/img/http_curl.png" alt="http_curl" title="http_curl.png"></p>
+<ul>
+<li>利用“ping”命令可以检查网络是否连通，可以很好地帮助我们分析和判定网络故障；应用格式：Ping空格IP地址。该命令还可以加许多参数使用，具体是键入Ping按回车即可看到详细说明</li>
+</ul>
+<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><ul>
+<li>服务器可以是<strong>专业</strong>服务器也可以是<strong>个人</strong>电脑</li>
+<li>能在<strong>特定(IP)服务器</strong>的<strong>特定端口</strong>上监听客户端的请求，并根据请求的路径返回相应结果都叫服务器</li>
+</ul>
+<h1 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h1><ul>
+<li>只要能向<strong>特定(IP)服务器</strong>的<strong>特定端口</strong>发起请求并接受响应的都叫客户端</li>
+</ul>
+<h1 id="数据在服务器和客户端之间传递"><a href="#数据在服务器和客户端之间传递" class="headerlink" title="数据在服务器和客户端之间传递"></a>数据在服务器和客户端之间传递</h1><ul>
+<li>可以把服务器硬盘上的<strong>已经有的静态文件</strong>发送给客户端</li>
+<li>也可以由服务器经过逻辑处理生成的<strong>动态内容</strong>返回给客户端，比如<strong>当前时间</strong></li>
+<li>一个 http 事务由一条(从客户端发往服务器的)请求命令和一个(从服务器发回客户端的)响应结果组成</li>
+</ul>
+<h1 id="http"><a href="#http" class="headerlink" title="http"></a>http</h1><ul>
+<li>人与人之间通信，需要一种<strong>传输手段</strong>(声波)和一种彼此抖动的语言(比如普通话)</li>
+<li>要让这些形形色色的机器能够通过网络进行交互，我们就需要指明一种<strong>协议</strong>(比如 HTTP/HTTPS)和一种<strong>数据封装格式</strong>(比如 HTML/JSON)</li>
+<li>http 指的就是这种协议 + 数据格式的交流体系<br><img src="/img/http.png" alt="http" title="http.png"></li>
+</ul>
+<h1 id="一个普通网站访问的过程-1"><a href="#一个普通网站访问的过程-1" class="headerlink" title="一个普通网站访问的过程(1)"></a>一个普通网站访问的过程(1)</h1><h2 id="过程-1"><a href="#过程-1" class="headerlink" title="过程(1)"></a>过程(1)</h2><ul>
+<li>浏览器(或其他客户端，如：微信)向服务器发起一个<strong>HTTP请求</strong></li>
+<li>先把<strong>域名解析为IP地址</strong>(chrome 缓存1分钟(chrome://net-internals/#dns) -&gt; 搜索操作系统缓存 -&gt; 读取本地 host 文件 -&gt; 打气 DNS 系统调用 -&gt; 运营商 DNS 缓存 -&gt; 找根域 -&gt; com 域)</li>
+<li>哭护短通过随机端口向服务器发起 TCP 三次握手，建立了 <strong>TCP 连接</strong></li>
+<li>连接建立后浏览器就可以 <strong>发送HTTP请求</strong>了</li>
+<li>服务器接收到 HTTP 请求，解析请求的路径和参数，经过后台的一些处理之后<strong>生成完整响应</strong>页面</li>
+<li>服务器将生成的页面作为 HTTP 响应体，根据不同的处理结果生成 响应头，发回给客户端</li>
+</ul>
+<h2 id="过程-2"><a href="#过程-2" class="headerlink" title="过程(2)"></a>过程(2)</h2><ul>
+<li>客户端(浏览器)接收到 HTTP 响应，从请求中得到的 HTTP 响应体里是 HTML 代码，于是对 HTML 代码开始解析</li>
+<li>解析过程中遇到<strong>引用的服务器上的资源</strong>(额外的CSS、JS代码、图片、音视频、附件等等)，再向服务器发送请求</li>
+<li>浏览器解析 HTML 包含的内容，用得到的 CSS 代码进行外观上的进一步<strong>渲染</strong>，JS 代码也可能会对外观进行一定的<strong>处理</strong></li>
+<li>当客户与<strong>页面交互</strong>(点击、悬停等等)时，JS 代码对此作出一定的反应，添加特效与动画</li>
+<li>交互的过程中可能需要向服务器索取或提交额外的数据(局部的刷新)，一般不是通过跳转就是通过 JS 代码(响应某个动作或者定时)向服务器发送<strong>AJAX</strong>请求</li>
+<li>服务器再把客户端需要的资源返回，客户端用得到的资源来实现动态效果或者<strong>修改 DOM 结构</strong></li>
+</ul>
+<h1 id="请求的方式"><a href="#请求的方式" class="headerlink" title="请求的方式"></a>请求的方式</h1><ul>
+<li><code>GET</code></li>
+</ul>
+<p>从服务器获取资源，比如请求一张空白的注册表单</p>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<p>向服务器提交数据，比如提交注册表单</p>
+<h1 id="请求的-URL"><a href="#请求的-URL" class="headerlink" title="请求的 URL"></a>请求的 <code>URL</code></h1><p><img src="/img/http_url.png" alt="http_url" title="http_url.png"></p>
+<h1 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h1><ul>
+<li>每条 http 请求报文都包括一个方法表示本次将要进行何种类型的操作，如入去一个页面，删除一个资源</li>
+<li>GET 是用来从服务器获取数据，没有请求体，不会影响服务器端的数据</li>
+<li>POST 是用来将数据发送到服务器，post 会把要发送的数据放到请求体中，可能会影响到服务器端的数据<br>简单说明:<br><img src="/img/http_method1.png" alt="http_method1" title="method_method1.png"><br>详细说明(来源于<a href="http://www.runoob.com/http/http-methods.html" title="菜鸟教程" target="_blank" rel="noopener">菜鸟教程</a>):<br><img src="/img/http_method2.png" alt="http_method2" title="method_method2.png"></li>
+</ul>
+<h1 id="常见请求头信息"><a href="#常见请求头信息" class="headerlink" title="常见请求头信息"></a>常见请求头信息</h1><h3 id="从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息"><a href="#从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息" class="headerlink" title="从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息"></a>从客户端发往服务器发送请求报文所使用的字段，用于补充请求的附加信息</h3><ul>
+<li><p><code>host</code></p>
+<p>  请求的服务主机；HTTP/1.1 请求必须包含主机头，否则会返回 <code>404</code> 状态码</p>
+</li>
+<li><p><code>connection</code></p>
+<p>  客户端和服务器<strong>连接</strong>选项</p>
+</li>
+<li><p><code>accept</code></p>
+<p>  告诉服务器客户端能够处理的<strong>内容类型</strong>和<strong>优先级</strong><br>  q=表示权重，用分号隔开<code>;</code>,范围是0-1，不指定时权重默认为1</p>
+</li>
+<li><p><code>user-agent</code></p>
+<p>  <strong>用户代理</strong>，是指浏览器，它的信息包括硬件平台，系统软件，应用软件和用户个人偏好</p>
+</li>
+<li><p><code>accept-encoding</code></p>
+<p>  告诉服务器哭护短支持的<strong>内容编码</strong>及内容编码的<strong>优先级</strong>顺序</p>
+</li>
+<li><p><code>accept-language</code></p>
+<p>  告诉服务器能够处理的<strong>语言</strong>以及优先级</p>
+</li>
+</ul>
+<h1 id="报文"><a href="#报文" class="headerlink" title="报文"></a>报文</h1><h2 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h2><p><img src="/img/http_message_request.png" alt="http_message_request" title="http_message_request.png"></p>
+<h2 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h2><p><img src="/img/http_message_response.png" alt="http_message_response" title="http_message_response.png"></p>
+<h1 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h1><ul>
+<li>状态码是一个三单位数字的代码，告知响应结果的类型</li>
+<li>伴随着每个数字状态码，http 还会发送一条解释性的原因短语文本</li>
+</ul>
+<h2 id="状态码类型"><a href="#状态码类型" class="headerlink" title="状态码类型"></a>状态码类型</h2><ul>
+<li><p>1xx</p>
+<p>  请求正在处理</p>
+</li>
+<li><p>2xx</p>
+<p>  请求处理完成</p>
+<ul>
+<li><code>200 OK</code> 请求成功</li>
+</ul>
+</li>
+<li><p>3xx</p>
+<p>  重定向</p>
+<ul>
+<li><code>301 Moved Permanently</code> 永久重定向</li>
+<li><code>302 Found</code> 临时重定向</li>
+</ul>
+</li>
+<li><p>4xx</p>
+<p>  客户端错误</p>
+<ul>
+<li><code>400 Bad request</code> 语法错误</li>
+<li><code>401 Unauthorized</code> 权限未认证</li>
+<li><code>403 Forbidden</code> 禁止访问</li>
+<li><code>404 Not Found</code> 资源未找到</li>
+</ul>
+</li>
+<li><p>5xx</p>
+<p>  服务器端错误</p>
+</li>
+</ul>
+<h1 id="MIME-媒体类型"><a href="#MIME-媒体类型" class="headerlink" title="MIME 媒体类型"></a>MIME 媒体类型</h1><ul>
+<li>MIME 类型就是告诉浏览器用什么方式来处理这个数据</li>
+<li>MIME 类型是一种文本标记，表示一种主要的对象类型和一个特定的子类型，中间由一条杠来分隔，如 <code>text/html</code></li>
+<li>MIME 类型在 HTTP 协议中表现为 Request Header 或者 Response Header 中的 <code>Content-Type</code><br><img src="/img/http_mime.png" alt="http_mime" title="http_mime.png"></li>
+</ul>
+<p>更多类型: <a href="http://tool.oschina.net/commons" target="_blank" rel="noopener">http://tool.oschina.net/commons</a></p>
+<h1 id="http-模块-http-模块主要用于搭建-HTTP-服务"><a href="#http-模块-http-模块主要用于搭建-HTTP-服务" class="headerlink" title="http 模块(http 模块主要用于搭建 HTTP 服务)"></a>http 模块(http 模块主要用于搭建 HTTP 服务)</h1><h2 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h2><ul>
+<li><p>创建 HTTP 服务并<strong>动态响应</strong>当前时间</p>
+<p>  <code>server.listen(port,[host],[backlog],[callback])</code></p>
+<ul>
+<li><code>port</code> 端口</li>
+<li><code>host</code>    主机</li>
+<li><code>backlog</code>    <strong>等待</strong>中的队列数量，默认值是 511</li>
+<li><code>callback</code> server(服务)监听成功(<strong>请求</strong>到来)的时候服务器调用的回调函数</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/http_createServer.png" alt="http_createServer" title="http_createServer.png"></p>
+<ul>
+<li><p>将上面这几行代码保存成 app.js，然后用 node 调用这个文件，服务器就开始运行了</p>
+<p>  <code>$ node app.js</code></p>
+</li>
+<li><p>命令行窗口将显示一行提示: “Server running on port 8080.”<br>打开浏览器，访问 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> 网页显示: 2015-12-23 18:07:00</p>
+</li>
+</ul>
+<blockquote>
+<p>当通过 webstorm 开启了一个服务(server)之后，没有关闭服务就退出了，这时就没有 Terminal 那个红色方块的停止按钮了，但是可以通过在 任务管理器 的进程中输入 ‘n’来找到 node.exe 进程，右键”结束进程”即可</p>
+</blockquote>
+<h2 id="响应头信息"><a href="#响应头信息" class="headerlink" title="响应头信息"></a>响应头信息</h2><p><code>response.writeHead(statusCode,[reasonPhrase],[headers])</code></p>
+<ul>
+<li><p><code>statusCode</code></p>
+<p>  <strong>状态码</strong></p>
+</li>
+<li><p><code>reasonPhrase</code></p>
+<p>  状态码<strong>描述</strong>信息</p>
+</li>
+<li><p><code>headers</code></p>
+<p>  响应头对象</p>
+<ul>
+<li>content-type <strong>内容类型</strong>    </li>
+<li>location <strong>重定向</strong>到的URL地址</li>
+<li>content-disposition    下载的<strong>文件名</strong></li>
+<li>content-length 响应内容的<strong>字节数</strong></li>
+<li>set-cookie 写入客户端<strong>cookie</strong></li>
+<li>content-encoding 响应内容的<strong>编码</strong>方式</li>
+<li>Cache-Control <strong>缓存</strong></li>
+<li>Expires 指定缓存<strong>过期时间</strong></li>
+<li>Etag 服务器响应<strong>内容没有发生变化</strong>时不重新下载数据</li>
+<li>connection 默认是 <code>keep-alive</code> <strong>保持连接</strong>，想断开连接用 <code>close</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="设置响应头"><a href="#设置响应头" class="headerlink" title="设置响应头"></a>设置响应头</h2><ul>
+<li><p><code>setHeader</code> 方法可以单独设置响应头</p>
+<pre><code>response,setHeader(name,value);
+</code></pre></li>
+<li><p>如果多个响应头的话可以使用数组</p>
+<pre><code>response,setHeader(&quot;Set-cookie&quot;,[&quot;name=newlife&quot;,&quot;age=23&quot;]);
+</code></pre></li>
+</ul>
+<h2 id="其他响应设置"><a href="#其他响应设置" class="headerlink" title="其他响应设置"></a>其他响应设置</h2><ul>
+<li><code>getHeader</code> <strong>获取</strong>响应头</li>
+<li><code>removeHeader</code> <strong>移除</strong>响应头</li>
+<li><code>headerSent</code> 响应头是否<strong>已经发送</strong></li>
+<li><code>sendData</code> 是否发送<em>响应时间**</em></li>
+<li><code>statusCode</code> 设置<strong>响应码</strong></li>
+</ul>
+<h2 id="使用-url-模块处理-url"><a href="#使用-url-模块处理-url" class="headerlink" title="使用 url 模块处理 url"></a>使用 <code>url</code> 模块处理 <code>url</code></h2><p><code>var url = require(&quot;url&quot;);</code><br><code>var urlObj = url.parse(&quot;原始的url&quot;);</code></p>
+<p><code>urlObj</code> 的属性</p>
+<ul>
+<li><p>href</p>
+<p>  被转换的<strong>原URL</strong>字符串</p>
+</li>
+<li><p>protocal</p>
+<p>  客户端请求时的<strong>协议</strong></p>
+</li>
+<li><p>slashes</p>
+<p>  在协议与路径中间是否使用<strong>//</strong>分隔符</p>
+</li>
+<li><p>host</p>
+<p>  字符串中完整的<strong>地址及端口号</strong>，可能为IP也可能为主机名</p>
+</li>
+<li><p>auth</p>
+<p>  <strong>认证</strong>部分</p>
+</li>
+<li><p>hostname</p>
+<p>  <strong>主机名或IP</strong></p>
+</li>
+<li><p>port</p>
+<p>  <strong>端口</strong>号</p>
+</li>
+<li><p>pathname</p>
+<p>  <strong>路径</strong>不包含查询字符串</p>
+</li>
+<li><p>query</p>
+<p>  不包含起始字符<code>?</code>的<strong>查询字符串</strong>，或根据该查询字符串转换而成的对象(由 parse 方法的第二个参数决定，true 就会转成对象)</p>
+<pre><code>var url = require(&quot;url&quot;);
+var str = &quot;http://192.168.155.1:80/index.html?name=zhufeng&amp;age=7#bbs&quot;;
+console.log(url.parse(str));
+
+/*
+ Url {
+ protocol: &apos;http:&apos;,传输协议
+ slashes: true,
+ auth: null,
+ host: &apos;192.168.155.1:80&apos;,域名+端口号
+ port: null,端口号
+ hostname: &apos;192.168.155.1&apos;,域名(IP)
+ hash: &apos;#bbs&apos;,哈希值
+ search: &apos;?name=zhufeng&amp;age=7&apos;,?+传递进来的数据
+ query: &apos;name=zhufeng&amp;age=7&apos;,传递进来的数据（不加？）
+ pathname: &apos;/index.html&apos;,请求文件的路径及名称
+ path: &apos;/index.html?name=zhufeng&amp;age=7&apos;,路径名称+传递的数据
+ href: &apos;http://192.168.155.1/index.html?name=zhufeng&amp;age=7&apos; 初始地址（包含所有）
+ }
+ */
+
+console.log(url.parse(str, true));//增加true后，query中存储的是经过处理解析后的结果：把传递进来的多组数据以键值对的方式进行存储
+/*
+ ...
+ query: {name：&apos;zhufeng&apos;，age：&apos;7&apos;},
+ ...
+ **/
+</code></pre></li>
+</ul>
+<h2 id="查询字符串"><a href="#查询字符串" class="headerlink" title="查询字符串"></a>查询字符串</h2><p><code>querystring</code> 用来对查询字符串进行转换</p>
+<pre><code>var queryObj = querystring.parse(str,[sep],[eq],[options]); //字符串转对象
+var queryStr = querystring.stringify(obj,[sep],[eq]); //对象转字符串
+</code></pre><ul>
+<li><p><code>str</code></p>
+<p>  需要被转换的<strong>查询字符串</strong></p>
+</li>
+<li><p><code>sep</code></p>
+<p>  查询字符串中的<strong>分隔</strong>字符，默认为 <code>&amp;</code></p>
+</li>
+<li><p><code>eq</code></p>
+<p>  查询字符串中的<strong>分配</strong>字符，默认参数为 <code>=</code></p>
+</li>
+<li><p><code>options</code></p>
+<p>  为对象参数，可以指定 maxKeys 属性指明转换后的<strong>属性个数</strong>，0 为不限定</p>
+</li>
+</ul>
+<h2 id="写入请求并发送请求"><a href="#写入请求并发送请求" class="headerlink" title="写入请求并发送请求"></a>写入请求并发送请求</h2><ul>
+<li><p><code>write</code> 方法向目标服务器<strong>发送数据</strong>，write 方法可以多次调用</p>
+<pre><code>request.write(chunk,[encoding]);
+</code></pre><ul>
+<li><p>chunk 要发送的<strong>数据</strong>，可以是 <code>Buffer</code> 或 字符串</p>
+<blockquote>
+<ul>
+<li><p>response.write(66);</p>
+<p>  会报错： first must be a string or Buffer(只能是这两种，其他的都不行)</p>
+</li>
+<li><p>在响应头发出以后不能再发送响应头</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>encoding <strong>编码</strong>，不指定时默认是 <code>utf8</code></li>
+</ul>
+</li>
+<li><p><code>end</code> 方法用来<strong>结束</strong>本次请求</p>
+<pre><code>request.end(chunk,[encoding]);
+</code></pre></li>
+</ul>
+<h2 id="读取静态资源文件并返回"><a href="#读取静态资源文件并返回" class="headerlink" title="读取静态资源文件并返回"></a>读取静态资源文件并返回</h2><p><img src="/img/http_file.png" alt="http_file" title="http_file.png"></p>
+<h2 id="根据不同的请求进行不同的响应-路由"><a href="#根据不同的请求进行不同的响应-路由" class="headerlink" title="根据不同的请求进行不同的响应(路由)"></a>根据不同的请求进行不同的响应(路由)</h2><p><img src="/img/http_router.png" alt="http_router" title="http_router.png"></p>
+<h2 id="处理-POST-请求"><a href="#处理-POST-请求" class="headerlink" title="处理 POST 请求"></a>处理 <code>POST</code> 请求</h2><ul>
+<li>当客户端采用 POST 发送数据时，服务器端可以监听<code>request</code>对象的<code>data</code>和<code>end</code>两个事件<br><img src="/img/http_post.png" alt="http_post" title="http_post.png"></li>
+<li><code>data</code>事件会在数据接收过程中，<strong>每收到一段数据</strong>就触发一次，接收到的数据被传入回调函数</li>
+<li><code>end</code>事件则是在<strong>所有数据</strong>接收完成后触发</li>
+</ul>
+<h1 id="创建-http-客户端"><a href="#创建-http-客户端" class="headerlink" title="创建 http 客户端"></a>创建 http 客户端</h1><p><code>request</code> 方法可以向其他网站请求数据</p>
+<ul>
+<li><p>options</p>
+<ul>
+<li><p>host </p>
+<p>  <strong>域名</strong>或目标主机IP</p>
+</li>
+<li><p>hostname </p>
+<p>  <strong>域名</strong>或目标主机，优先级比 host 高</p>
+</li>
+<li><p>port </p>
+<p>  <strong>端口</strong>号</p>
+</li>
+<li><p>method </p>
+<p>  请求<strong>方法</strong></p>
+</li>
+<li><p>path</p>
+<p>  请求的<strong>路径</strong>，默认为 <code>/</code></p>
+</li>
+<li><p>headers</p>
+<p>  客户端请求<strong>头对象</strong></p>
+</li>
+<li><p>auth</p>
+<p>  <strong>认证</strong>信息，如 “username:password”</p>
+</li>
+</ul>
+</li>
+<li>callback = function(response) {}<br>当<strong>获取</strong>到目标网站所返回的<strong>响应流</strong>时调用的回调函数<ul>
+<li><code>response</code> 是一个 http.IncomingMessage 对象，可以从中 <code>读</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>方法说明及示例：<br><a href="https://www.cnblogs.com/liyinghao/p/6180591.html" target="_blank" rel="noopener">https://www.cnblogs.com/liyinghao/p/6180591.html</a></p>
+</blockquote>
+<p>引用说明</p>
+<blockquote>
+<p>本文资料来源于<strong>珠峰培训</strong><br>链接: <a href="http://www.zhufengpeixun.cn" target="_blank" rel="noopener">http://www.zhufengpeixun.cn</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/11/Node-js模块之Buffer与文件操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1155,7 +1601,7 @@ A backtick-delimited string in a code span: `` `foo` ``
 
 &lt;1245204973@qq.com&gt;
 </code></pre><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
-<p><a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x31;&#50;&#x34;&#x35;&#x32;&#48;&#52;&#x39;&#x37;&#51;&#x40;&#x71;&#x71;&#x2e;&#99;&#x6f;&#x6d;">&#x31;&#50;&#x34;&#x35;&#x32;&#48;&#52;&#x39;&#x37;&#51;&#x40;&#x71;&#x71;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+<p><a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x31;&#50;&#52;&#53;&#x32;&#48;&#x34;&#57;&#x37;&#x33;&#64;&#113;&#113;&#46;&#x63;&#x6f;&#x6d;">&#x31;&#50;&#52;&#53;&#x32;&#48;&#x34;&#57;&#x37;&#x33;&#64;&#113;&#113;&#46;&#x63;&#x6f;&#x6d;</a></p>
 <p>Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人</p>
 <h1 id="反斜杠"><a href="#反斜杠" class="headerlink" title="反斜杠"></a>反斜杠</h1><h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><pre><code>\   反斜线
 `   反引号
@@ -1534,7 +1980,7 @@ _   底线
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="REST RESTful 架构是一种架构风格，全称是 表现层状态转移，以 资源 为中心，通过调用 API接口，使这个资源从一个状态迁移到另一个状态 统一的接口形式 不在URL中包含动词，URI就是资源的唯一标识 CRUD(新增、读取、更新、删除) 对应于POST GET PUT DELETE四大HTTP方法  RESTful API设计 无状态化 资源表现有足够信息让客户端进行后续操作 REST要">
+<meta name="keywords" content="Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js之RESTful">
+<meta property="og:url" content="http://yoursite.com/2017/12/22/Node-js之RESTful/index.html">
+<meta property="og:site_name" content="newlife&#39;s blog">
+<meta property="og:description" content="REST RESTful 架构是一种架构风格，全称是 表现层状态转移，以 资源 为中心，通过调用 API接口，使这个资源从一个状态迁移到另一个状态 统一的接口形式 不在URL中包含动词，URI就是资源的唯一标识 CRUD(新增、读取、更新、删除) 对应于POST GET PUT DELETE四大HTTP方法  RESTful API设计 无状态化 资源表现有足够信息让客户端进行后续操作 REST要">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/restful/1REST.png">
+<meta property="og:image" content="http://yoursite.com/img/restful/2RESTfulAPI.png">
+<meta property="og:updated_time" content="2017-12-22T16:29:06.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js之RESTful">
+<meta name="twitter:description" content="REST RESTful 架构是一种架构风格，全称是 表现层状态转移，以 资源 为中心，通过调用 API接口，使这个资源从一个状态迁移到另一个状态 统一的接口形式 不在URL中包含动词，URI就是资源的唯一标识 CRUD(新增、读取、更新、删除) 对应于POST GET PUT DELETE四大HTTP方法  RESTful API设计 无状态化 资源表现有足够信息让客户端进行后续操作 REST要">
+<meta name="twitter:image" content="http://yoursite.com/img/restful/1REST.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/22/Node-js之RESTful/"/>
+
+
+
+
+
+  <title>Node.js之RESTful | newlife's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">newlife's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/22/Node-js之RESTful/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node.js之RESTful</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-22T23:54:56+08:00">
+                2017-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h1><p><img src="/img/restful/1REST.png" alt="REST" title="REST.png"></p>
+<h1 id="RESTful-架构"><a href="#RESTful-架构" class="headerlink" title="RESTful 架构"></a>RESTful 架构</h1><p>是一种架构风格，全称是 <strong>表现层状态转移</strong>，以 <code>资源</code> 为中心，通过调用 <code>API接口</code>，使这个资源从一个状态迁移到另一个状态</p>
+<h1 id="统一的接口形式"><a href="#统一的接口形式" class="headerlink" title="统一的接口形式"></a>统一的接口形式</h1><ul>
+<li>不在URL中包含动词，URI就是资源的唯一标识</li>
+<li>CRUD(新增、读取、更新、删除) 对应于POST GET PUT DELETE四大HTTP方法</li>
+</ul>
+<h1 id="RESTful-API设计"><a href="#RESTful-API设计" class="headerlink" title="RESTful API设计"></a>RESTful API设计</h1><p><img src="/img/restful/2RESTfulAPI.png" alt="RESTful" title="RESTful.png"></p>
+<h1 id="无状态化"><a href="#无状态化" class="headerlink" title="无状态化"></a>无状态化</h1><ul>
+<li>资源表现有足够信息让客户端进行后续操作</li>
+<li>REST要求状态信息保存在客户端</li>
+</ul>
+<h1 id="前后端分离"><a href="#前后端分离" class="headerlink" title="前后端分离"></a>前后端分离</h1><ul>
+<li>前端可以简单模拟服务器</li>
+</ul>
+<h1 id="标准restful接口形式"><a href="#标准restful接口形式" class="headerlink" title="标准restful接口形式"></a>标准restful接口形式</h1><ul>
+<li>请求全部 /books</li>
+<li>请求一条 /books/id</li>
+<li>增加一条 /books data</li>
+<li>修改一条 /books/id data</li>
+<li>删除一条 /books/id data</li>
+</ul>
+<p>代码示例：RESTful API设计实例</p>
+<pre><code>var express = require(&apos;express&apos;);
+var app = express();
+var path = require(&apos;path&apos;);
+var bodyParser = require(&apos;body-parser&apos;);
+app.set(&apos;view engine&apos;,&apos;ejs&apos;);
+//path.resolve  取当前目录的绝对路径
+app.set(&apos;views&apos;,path.resolve());
+app.use(bodyParser.urlencoded({extended:true}));
+/*app.use(bodyParser.raw({
+    type:&apos;application/!*&apos;
+}));
+app.use(bodyParser.text({
+    type:&apos;text/!*&apos;
+}));*/
+app.use(function(err,req,res,next){
+    console.error(err);
+    next();
+});
+/*app.post(&apos;/raw&apos;,function(req,res){
+    res.send(req.body);
+});*/
+var users = [{id: 1, name: &apos;zfpx1&apos;,mny:100}, {id: 2, name: &apos;zfpx2&apos;,mny:100}];
+/**
+ * 1. 获取所有的用户 curl -v -H &apos;accept:text/html&apos;  http://localhost:8080/users
+ */
+//1.获取所有的用户
+app.get(&apos;/users&apos;, function (req, res) {
+    //Accept:text/html,application/xml;q=0.9,image/webp,*/*;q=0.8
+    var accept = req.headers[&apos;accept&apos;];
+    var acceptType = accept.split(&apos;,&apos;).map(function (item) {
+        var values = item.split(&apos;;&apos;);
+        return {
+            type: values[0],//需要的文件类型
+            q: values[1] ? values[1].split(&apos;=&apos;)[1] : 1 //权重 默认是1
+        }
+        //用优先级进行排序，取排名最高那个
+    }).sort(function (a, b) {
+        return b.q - a.q; // 降序
+    })[0].type;
+    console.log(acceptType);
+    if(acceptType == &apos;text/plain&apos;){
+        res.setHeader(&apos;Content-Type&apos;,acceptType);
+        res.send(users);
+    }else if(acceptType == &apos;text/html&apos;){
+        //设置响应类型
+      res.setHeader(&apos;Content-Type&apos;,acceptType);
+        //渲染模板
+       res.render(&apos;users.ejs&apos;,{
+           users:users
+       });
+    }else{
+        res.send(users);
+    }
+});
+
+//返回某个用户信息
+//curl  http://localhost:8080/users/1
+app.get(&apos;/users/:id&apos;, function (req, res) {
+     var id = req.params.id;
+    var filteredUsers = users.filter(function(user){
+        return user.id == id;
+    });
+   res.send(filteredUsers.length&gt;0?filteredUsers[0]:&apos;此用户不存在&apos;);
+});
+
+//新增加用户
+// -X 指定请求方法 --data 指定请求体的数据
+//curl -X POST --data &quot;name=zfpx3&quot;  http://localhost:8080/users
+app.post(&apos;/users&apos;, function (req, res) {
+  var addedUser = req.body;
+    if(addedUser){
+        //为增加的用户赋一个最大的ID
+        addedUser.id = users[users.length-1].id+1;
+        users.push(addedUser);
+        //当新增加一个资源的时候要返回新生成的资源完整对象
+        res.send(addedUser);
+    }else{
+        res.send({msg:&apos;增加资源失败&apos;});
+    }
+});
+//整体更新全部属性
+// curl -X PUT --data &quot;id=2&amp;name=zfpx20&quot;  http://localhost:8080/users/2
+app.put(&apos;/users/:id&apos;,function(req,res){
+    var putUser = req.body;
+    if(putUser){
+        for(var i=0;i&lt;users.length;i++){
+            //判断当前用户和用户传进来要更新的用户ID是否一致
+            if(users[i].id == req.params.id){
+                users[i] = putUser;//把老的对象整体替换成新的对象
+               break;
+            }
+        }
+        res.send(putUser);
+    }else{
+        res.send({msg:&apos;更新资源失败&apos;});
+    }
+});
+//局部更新 请求体里只传要更新的字段
+//curl -X PATCH --data &quot;name=zfpx200&quot;  http://localhost:8080/users/2
+app.patch(&apos;/users/:id&apos;,function(req,res){
+    var updatedFields = req.body;
+    if(updatedFields){
+        for(var i=0;i&lt;users.length;i++){
+            //判断当前用户和用户传进来要更新的用户ID是否一致
+            if(users[i].id == req.params.id){
+              for(var attr in updatedFields){
+                  //用新的值替换旧的值
+                  if(updatedFields.hasOwnProperty(attr))
+                    users[i][attr] = updatedFields[attr];
+              }
+                res.send(users[i]);
+                break;
+            }
+        }
+
+    }else{
+        res.send({msg:&apos;更新资源失败&apos;});
+    }
+});
+//删除
+//curl -X DELETE   http://localhost:8080/users/2
+app.delete(&apos;/users/:id&apos;,function(req,res){
+    /*for(var i=0;i&lt;users.length;i++){
+        if(users[i].id == req.params.id){
+            users.splice(i,1);
+            res.send({});
+            return;
+        }
+    }*/
+    // addedUser.id = users.length // 这种方式不行，举例说明：当原先有两个用户了，这时候再添加一个用户，它的id为3；假如删除了1或者2那个用户，这时候再添加一个用户，它的id又会是3，所以就和上一个id为3的用户冲突了，所以不行
+    users  = users.filter(function(user){
+           return user.id != req.params.id;
+    });
+    res.send({msg:&apos;删除失败&apos;});
+});
+//以资源为中心 URL里不要包含动词
+app.post(&apos;/transaction/:fromId/:toId&apos;,function(){
+  var money = req.body.money;
+
+});
+
+app.listen(8080);
+
+
+
+//users.ejs
+
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;ul&gt;
+  &lt;%
+   for(var i=0;i&lt;users.length;i++){
+       %&gt;
+        &lt;li&gt;&lt;%=users[i].name%&gt;&lt;/li&gt;
+      &lt;%
+   }
+    %&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="es5-中数组的新方法"><a href="#es5-中数组的新方法" class="headerlink" title="es5 中数组的新方法"></a>es5 中数组的新方法</h1><ul>
+<li>map 替换所有的元素</li>
+<li>filter 过滤数组中的元素</li>
+<li>reduce 聚合</li>
+<li>reduceRight 从右往左聚合</li>
+<li>some 有一个满足就可以</li>
+<li>every 全部满足条件</li>
+<li>indexOf 第一个索引</li>
+<li>lastIndexOf 最后索引</li>
+</ul>
+<p>reduce 方法示例：</p>
+<pre><code>var nums = [1,2,3,1,6,4];
+/**
+ *  会依次把数组中的每一元素传入next
+ *  每次返回值会传入下一次的current
+ *  最后得到一个最终值
+ */
+// 获取元素最大值
+var s = nums.reduce(function(current,next){
+    return current&gt;next?current:next;
+},0);
+console.log(s);
+</code></pre><blockquote>
+<p>注意点：</p>
+</blockquote>
+<ul>
+<li>Accept代表发送端（客户端）希望接受的数据类型。<br>比如：Accept：text/xml;<br>代表客户端希望接受的数据类型是xml类型</li>
+<li>Content-Type代表发送端（客户端|服务器）发送的实体数据的数据类型(浏览器如何渲染以此为据)。<br>比如：Content-Type：text/html;<br>代表发送端发送的数据格式是html</li>
+</ul>
+<blockquote>
+<p>插件介绍：</p>
+<ul>
+<li>postman 一款 google 定制发送的请求的插件(在 gitbash 通过命令：curl -v -H ‘accept:text/html’ <a href="http://localhost:8080/users" target="_blank" rel="noopener">http://localhost:8080/users</a> 来达到类似插件访问的效果-&gt;-v：显示详细信息； -H：指定请求头)</li>
+</ul>
+</blockquote>
+<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/22/Node-js之JS高级/" rel="next" title="Node.js之JS高级">
+                <i class="fa fa-chevron-left"></i> Node.js之JS高级
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="newlife" />
+            
+              <p class="site-author-name" itemprop="name">newlife</p>
+              <p class="site-description motion-element" itemprop="description">newlife means newborn</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/newlife201702" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:1245204973@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#REST"><span class="nav-number">1.</span> <span class="nav-text"><a href="#REST" class="headerlink" title="REST"></a>REST</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RESTful-架构"><span class="nav-number">2.</span> <span class="nav-text"><a href="#RESTful-&#x67B6;&#x6784;" class="headerlink" title="RESTful &#x67B6;&#x6784;"></a>RESTful &#x67B6;&#x6784;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#统一的接口形式"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x7EDF;&#x4E00;&#x7684;&#x63A5;&#x53E3;&#x5F62;&#x5F0F;" class="headerlink" title="&#x7EDF;&#x4E00;&#x7684;&#x63A5;&#x53E3;&#x5F62;&#x5F0F;"></a>&#x7EDF;&#x4E00;&#x7684;&#x63A5;&#x53E3;&#x5F62;&#x5F0F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RESTful-API设计"><span class="nav-number">4.</span> <span class="nav-text"><a href="#RESTful-API&#x8BBE;&#x8BA1;" class="headerlink" title="RESTful API&#x8BBE;&#x8BA1;"></a>RESTful API&#x8BBE;&#x8BA1;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#无状态化"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x65E0;&#x72B6;&#x6001;&#x5316;" class="headerlink" title="&#x65E0;&#x72B6;&#x6001;&#x5316;"></a>&#x65E0;&#x72B6;&#x6001;&#x5316;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前后端分离"><span class="nav-number">6.</span> <span class="nav-text"><a href="#&#x524D;&#x540E;&#x7AEF;&#x5206;&#x79BB;" class="headerlink" title="&#x524D;&#x540E;&#x7AEF;&#x5206;&#x79BB;"></a>&#x524D;&#x540E;&#x7AEF;&#x5206;&#x79BB;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标准restful接口形式"><span class="nav-number">7.</span> <span class="nav-text"><a href="#&#x6807;&#x51C6;restful&#x63A5;&#x53E3;&#x5F62;&#x5F0F;" class="headerlink" title="&#x6807;&#x51C6;restful&#x63A5;&#x53E3;&#x5F62;&#x5F0F;"></a>&#x6807;&#x51C6;restful&#x63A5;&#x53E3;&#x5F62;&#x5F0F;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#es5-中数组的新方法"><span class="nav-number">8.</span> <span class="nav-text"><a href="#es5-&#x4E2D;&#x6570;&#x7EC4;&#x7684;&#x65B0;&#x65B9;&#x6CD5;" class="headerlink" title="es5 &#x4E2D;&#x6570;&#x7EC4;&#x7684;&#x65B0;&#x65B9;&#x6CD5;"></a>es5 &#x4E2D;&#x6570;&#x7EC4;&#x7684;&#x65B0;&#x65B9;&#x6CD5;</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Node-js-v8-9-0-文档"><span class="nav-number">8.0.0.0.0.1.</span> <span class="nav-text"><a href="#Node-js-v8-9-0-&#x6587;&#x6863;" class="headerlink" title="Node.js v8.9.0 &#x6587;&#x6863;"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 &#x6587;&#x6863;" target="_blank" rel="noopener">Node.js v8.9.0 &#x6587;&#x6863;</a></span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">newlife</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
