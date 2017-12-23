@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Node.js," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="http 特点 web应用是基于HTTP协议的，而HTTP协议恰恰是一种无状态协议  cookie cookie是网站为了辩别用户身份，进行会话跟踪而存储在客户端的数据 通过响应头向客户端设置cookie res.writeHead(200,{     &amp;apos;Set-Cookie&amp;apos;:&amp;apos;age=6; path=/; Expires=&amp;apos;+time });  读取客户">
+<meta name="keywords" content="Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js之cookie&#x2F;session">
+<meta property="og:url" content="http://yoursite.com/2017/12/23/Node-js之cookie-session/index.html">
+<meta property="og:site_name" content="newlife&#39;s blog">
+<meta property="og:description" content="http 特点 web应用是基于HTTP协议的，而HTTP协议恰恰是一种无状态协议  cookie cookie是网站为了辩别用户身份，进行会话跟踪而存储在客户端的数据 通过响应头向客户端设置cookie res.writeHead(200,{     &amp;apos;Set-Cookie&amp;apos;:&amp;apos;age=6; path=/; Expires=&amp;apos;+time });  读取客户">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/img/cookie_session/res_cookie.png">
+<meta property="og:updated_time" content="2017-12-23T14:54:15.776Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js之cookie&#x2F;session">
+<meta name="twitter:description" content="http 特点 web应用是基于HTTP协议的，而HTTP协议恰恰是一种无状态协议  cookie cookie是网站为了辩别用户身份，进行会话跟踪而存储在客户端的数据 通过响应头向客户端设置cookie res.writeHead(200,{     &amp;apos;Set-Cookie&amp;apos;:&amp;apos;age=6; path=/; Expires=&amp;apos;+time });  读取客户">
+<meta name="twitter:image" content="http://yoursite.com/img/cookie_session/res_cookie.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/23/Node-js之cookie-session/"/>
+
+
+
+
+
+  <title>Node.js之cookie/session | newlife's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">newlife's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/23/Node-js之cookie-session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node.js之cookie/session</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-23T21:16:09+08:00">
+                2017-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="http-特点"><a href="#http-特点" class="headerlink" title="http 特点"></a>http 特点</h1><ul>
+<li>web应用是基于HTTP协议的，而HTTP协议恰恰是一种无状态协议</li>
+</ul>
+<h1 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h1><ul>
+<li>cookie是网站为了辩别用户身份，进行会话跟踪而存储在客户端的数据</li>
+<li><p>通过响应头向客户端设置cookie</p>
+<pre><code>res.writeHead(200,{
+    &apos;Set-Cookie&apos;:&apos;age=6; path=/; Expires=&apos;+time
+});
+</code></pre></li>
+<li><p>读取客户端过来的cookie</p>
+<pre><code>req.headers.cookie:&apos;key1=value1; key2=value2&apos;
+</code></pre></li>
+</ul>
+<p>代码示例：</p>
+<p>1.httpcookie.js</p>
+<pre><code>var http = require(&apos;http&apos;);
+http.createServer(function (req, res) {
+    if (req.url == &apos;/write&apos;) {
+        //响应头 实体头 扩展头自定义头
+        var time = new Date(new Date().getTime() + 10 * 1000).toGMTString();
+        res.writeHead(200, {
+            &apos;Set-Cookie&apos;: &apos;age=6; path=/; Expires=&apos; + time
+        });
+        //第一次
+        res.end(&apos;ok&apos;);
+    } else if (req.url == &apos;/read&apos;) {
+        console.log(req.headers.cookie);
+        //第二次
+        res.end(&apos;hello&apos;);
+    }
+}).listen(8080);
+</code></pre><h1 id="express中cookie的使用"><a href="#express中cookie的使用" class="headerlink" title="express中cookie的使用"></a>express中cookie的使用</h1><ol>
+<li><p>cookie的创建</p>
+<pre><code>res.cookie(name,value,[,options]);
+</code></pre></li>
+</ol>
+<p><img src="/img/cookie_session/res_cookie.png" alt="res_cookie.png" title="res_cookie.png"></p>
+<ol>
+<li>获取cookie<ul>
+<li>使用req.cookie/req.singedCookies得到cookies值</li>
+<li>解析后的unsigned cookie(未使用签名功能)保存在req.cookies中，而解析后的signed cookie(使用了签名功能)只保存在req.signedCookies中</li>
+<li>req.cookies:对req.headers.cookie中的cookie进行解析，返回的是一个对象</li>
+<li>req.signedCookies:保存的是解析后的cookie的真实值，但是可能还会被JSONCookie进行处理</li>
+</ul>
+</li>
+</ol>
+<p>代码示例：</p>
+<p>2.expresscookie.js</p>
+<pre><code>var express = require(&apos;express&apos;);
+var cookieParser = require(&apos;cookie-parser&apos;);
+
+var app = express();
+app.use(cookieParser());
+// req.headers.cookie= name=zfpx; age=6
+app.get(&apos;/&apos;, function (req, res) {
+    // 如果请求中的 cookie 存在 visited, 则输出 cookie
+    // 否则，设置 cookie 字段 visited, 并设置过期时间为10分钟
+    if (req.cookies.visited) {
+        res.send(&quot;欢迎老朋友&quot;);
+    } else {
+        res.cookie(&apos;visited&apos;, 1, {maxAge: 10 * 1000});
+        res.send(&quot;欢迎新朋友&quot;);
+    }
+});
+app.listen(80);
+</code></pre><p>3.expresscookie.js</p>
+<pre><code>var express = require(&apos;express&apos;);
+var cookieParser = require(&apos;cookie-parser&apos;);
+
+var app = express();
+app.use(cookieParser());
+// req.headers.cookie= name=zfpx; age=6
+app.get(&apos;/write&apos;, function (req, res) {
+    // 默认设置
+    //res.cookie(&apos;name&apos;,&apos;zfpx&apos;);
+
+    //设置域名 只有再次访问指定域名的时候客户端才会向服务器端发送cookie
+    //res.cookie(&apos;name&apos;,&apos;zfpx&apos;,{
+    //    domain:&apos;.zfpx.cn&apos;.
+    //});
+
+    //指定路径 只有当下次客户端 向服务器发送请求时，如果path=/read1的时候，才会向服务器发送，否则 不发送
+    /* res.cookie(&apos;name&apos;,&apos;zfpx&apos;,{
+     path:&apos;/read1&apos;
+     });*/
+    //指定有效期
+    res.cookie(&apos;name&apos;, &apos;zfpx&apos;, {
+        expires: new Date(Date.now() + 10 * 1000),
+        maxAge: 10 * 1000
+    });
+    res.end(&apos;ok&apos;);
+});
+
+app.get(&apos;/read&apos;, function (req, res) {
+    console.log(req.cookies);
+    res.send(req.cookies);
+});
+app.get(&apos;/read1&apos;, function (req, res) {
+    console.log(req.cookies);
+    res.send(req.cookies);
+});
+app.listen(80);
+</code></pre><p>4.login.js(登录的例子)</p>
+<pre><code>var express = require(&apos;express&apos;);
+var cookieParser = require(&apos;cookie-parser&apos;);
+var path = require(&apos;path&apos;);
+var bodyParser = require(&apos;body-parser&apos;);
+var app = express();
+app.set(&apos;view engine&apos;, &apos;ejs&apos;);
+app.set(&apos;views&apos;, path.resolve());
+app.use(cookieParser());
+
+function checkLogin(req, res, next) {
+    if (req.cookies &amp;&amp; req.cookies.username) {
+        next();
+    } else {
+        res.redirect(&apos;/&apos;);
+    }
+}
+
+//进入登录页
+app.get(&apos;/&apos;, function (req, res) {
+    res.render(&apos;login&apos;, {});
+});
+
+// 登录
+app.get(&apos;/login&apos;, function (req, res) {
+    var username = req.query.username;
+    res.cookie(&apos;username&apos;, username);
+    //重定向，让客户端重向新求参数指定的路径
+    res.redirect(&apos;/user&apos;);
+});
+
+//用户主页
+app.get(&apos;/user&apos;, checkLogin, function (req, res) {
+    res.send(req.cookies.username);
+});
+
+app.listen(80);
+
+
+// login.ejs
+
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;/login&quot; method=&quot;get&quot;&gt;
+    用户名&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;登陆&quot;&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="cookie-使用注意事项"><a href="#cookie-使用注意事项" class="headerlink" title="cookie 使用注意事项"></a>cookie 使用注意事项</h1><ul>
+<li>可能被客户端 <code>篡改</code>，使用前验证合法性</li>
+<li>不要存储 <code>敏感</code> 数据，比如用户密码，账户余额</li>
+<li>使用 <code>HttpOnly</code> 保证安全</li>
+<li>尽量减少cookie的 <code>体积</code></li>
+<li>设置正确的 <code>domain</code> 和 <code>path</code>，减少数据传输</li>
+</ul>
+<h1 id="通过-document-cookie-进行设置-cookie-的原理"><a href="#通过-document-cookie-进行设置-cookie-的原理" class="headerlink" title="通过 document.cookie 进行设置 cookie 的原理"></a>通过 document.cookie 进行设置 cookie 的原理</h1><pre><code>var document = {};
+Object.defineProperty(document, &apos;cookies&apos;, {
+    value: []
+})
+
+Object.defineProperty(document, &apos;cookie&apos;, {
+    set: function (cookie) {
+        this.cookies.push(cookie);
+    },
+    get: function () {
+        return this.cookies;
+    }
+})
+
+document.cookie = &apos;name=zfpx&apos;;
+document.cookie = &apos;age=6&apos;;
+console.log(document.cookie);
+</code></pre><h1 id="cookie-的小知识点"><a href="#cookie-的小知识点" class="headerlink" title="cookie 的小知识点"></a>cookie 的小知识点</h1><ul>
+<li>设置 cookie 的失效时间有两种方式：设置绝对时间(expires)和相对时间(maxAge)；设置相对时间能够补充设置绝对时间的缺陷，因为客户端能够自主修改时间，有可能导致 cookie 永远不失效，但是设计了相对时间就好比是倒计时，到了时间总会失效的，设置相对时间以客户端时间为准，在客户端进行倒计时</li>
+<li>在 express 中通过 app.use 使用 cookie-parser 模块之后，会在 req 对象上增加一个 cookies 属性(是个对象)</li>
+<li>一般 cookie 应该是由服务器端向客户端设置的</li>
+<li>当服务器端向客户端设置 cookie 时，cookie 内容后面的条件都是用来配置向服务器端发送请求时是否发送 cookie 的条件</li>
+<li>在谷歌浏览器的开发者工具中查看 cookie 时，只有域名、请求路径 …这些都匹配才能看到相应的 cookie;在 Network 中也能通过请求头查看 cookie</li>
+<li>为什么只有在服务器端向客户端发送 cookie 时才需要设置那些条件，而客户端向服务器端发送时就不需要？-&gt;因为客户端自己会按照条件逐个进行判断，只有满足条件的才会最终发送给服务器端</li>
+<li>当需要多个页面都需要使用这个 cookie 时，可以给域名条件项设置通配符，让多个页面都能访问到该 cookie</li>
+<li>在express 中，可以把中间件函数插在请求的路径和最终的业务处理之间，在匹配了路径之后和进行最终的业务处理之前，会先去执行中间件函数，只有中间件函数中执行了 next() 才会继续执行最后的业务处理，否则不会执行</li>
+<li>当通过 document.cookie 进行设置 cookie 时，发现给同一个对象的同一属性设置值并不会覆盖，原因是因为它采用了属性设置器</li>
+<li>HttpOnly: 不能通过 document.cookie 读取和写入</li>
+<li>expires 单位是秒；maxAge 单位是毫秒</li>
+</ul>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><ul>
+<li>会话跟踪，数据存放在 <code>服务器</code></li>
+<li>需要借助 <code>cookie</code> 存储一个 <code>会话ID</code>，服务器可以根据会话ID来查询出详细的session数据</li>
+</ul>
+<h1 id="session-步骤"><a href="#session-步骤" class="headerlink" title="session 步骤"></a>session 步骤</h1><ul>
+<li>在服务器端生成全局唯一标识符(session_id<sid>)</sid></li>
+<li>在服务器内存里开辟此session_id对应的数据存储空间</li>
+<li>session_id作为全局唯一标示符发送给客户端</li>
+<li>以后客户端再次访问服务器时会把session_id返回</li>
+</ul>
+<h1 id="express中session的使用"><a href="#express中session的使用" class="headerlink" title="express中session的使用"></a>express中session的使用</h1><p>代码示例：</p>
+<pre><code>var express = require(&apos;express&apos;);
+var session = require(&apos;express-session&apos;);
+var app = express();
+app.use(session({
+    secret: &apos;zfpx&apos;, //secret的值建议使用随机字符串
+    cookie: {maxAge: 60 * 1000 * 30}, // 过期时间（毫秒）
+    resave:true,//每次响应结束 的时候 都重新保存session
+    saveUninitialized:true //保存未初始化的session
+}));
+app.get(&apos;/&apos;, function (req, res) {
+    if (req.session.sign) {//检查用户是否已经登录
+        console.log(req.session);//打印session的值
+        res.send(&apos;welcome &lt;strong&gt;&apos; + req.session.name + &apos;&lt;/strong&gt;, 欢迎你再次登录&apos;);
+    } else {
+        //因为session是借用cookie实现的，所以当设置session的时候，会自动设置cookie
+        req.session.sign = true;
+        req.session.name = &apos;珠峰培训&apos;;
+        res.send(&apos;欢迎登陆！&apos;);
+    }
+});
+app.listen(80);
+</code></pre><h1 id="session-的实现原理"><a href="#session-的实现原理" class="headerlink" title="session 的实现原理"></a>session 的实现原理</h1><pre><code>var express = require(&apos;express&apos;);
+var app = express();
+app.use(require(&apos;cookie-parser&apos;)());
+//放在服务器端的客户明细表
+var session = {};
+app.get(&apos;/&apos;, function (req, res) {
+    //取出cookie中的sid
+  var sid = req.cookies.sid;
+    //如果有值的话就表示访问过了
+    if(sid){
+        //从服务器的session对象中取出当前客户端在服务器对应的session
+        var currentSession = session[sid];
+        //赋值
+        currentSession.mny = currentSession.mny-10;
+        res.send(&apos;&apos;+currentSession.mny);
+    }else{
+        //生成新的sid
+        var newSid = Date.now()+&apos;&apos;+Math.random();
+        session[newSid] = {mny:100};
+        //写入到客户端
+        res.setHeader(&apos;Set-Cookie&apos;,&apos;sid=&apos;+newSid);
+        res.send(&apos;新朋友&apos;);
+    }
+});
+app.listen(80);
+</code></pre><h1 id="session-的小知识点"><a href="#session-的小知识点" class="headerlink" title="session 的小知识点"></a>session 的小知识点</h1><ul>
+<li>在 express 中通过 app.use 使用 express-session 模块之后，会在 req 对象上增加一个 session 属性(是个对象)</li>
+<li>session 中的 cookie 参数选项主要是用来设置过期时间的</li>
+</ul>
+<h1 id="cookie-和-session-的区别"><a href="#cookie-和-session-的区别" class="headerlink" title="cookie 和 session 的区别"></a>cookie 和 session 的区别</h1><ul>
+<li>以一个比喻来解释：<ul>
+<li>cookie:你去理发店，店家给你发了一张卡，上面有些许小方格，每个方格代表可以理发一次，这张卡是你自己保管的，店家也不知道你到底还剩几次理发次数；(记录在客户端)</li>
+<li>session:你去理发店，店家给你发了一张电子卡，上面记录了你的余额，你只有一个卡号，具体还剩几次理发次数记录在店家那里，自己不知道；(记录在服务器端)</li>
+</ul>
+</li>
+<li>综上所述，session 比较安全</li>
+</ul>
+<blockquote>
+<p>cookie&amp;session 珠峰教程：<a href="http://school.zhufengpeixun.cn/course/47/learn#lesson/435" target="_blank" rel="noopener">http://school.zhufengpeixun.cn/course/47/learn#lesson/435</a></p>
+</blockquote>
+<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Node-js/" rel="tag"># Node.js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/22/Node-js之RESTful/" rel="next" title="Node.js之RESTful">
+                <i class="fa fa-chevron-left"></i> Node.js之RESTful
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="newlife" />
+            
+              <p class="site-author-name" itemprop="name">newlife</p>
+              <p class="site-description motion-element" itemprop="description">newlife means newborn</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/newlife201702" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:1245204973@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http-特点"><span class="nav-number">1.</span> <span class="nav-text"><a href="#http-&#x7279;&#x70B9;" class="headerlink" title="http &#x7279;&#x70B9;"></a>http &#x7279;&#x70B9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cookie"><span class="nav-number">2.</span> <span class="nav-text"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#express中cookie的使用"><span class="nav-number">3.</span> <span class="nav-text"><a href="#express&#x4E2D;cookie&#x7684;&#x4F7F;&#x7528;" class="headerlink" title="express&#x4E2D;cookie&#x7684;&#x4F7F;&#x7528;"></a>express&#x4E2D;cookie&#x7684;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cookie-使用注意事项"><span class="nav-number">4.</span> <span class="nav-text"><a href="#cookie-&#x4F7F;&#x7528;&#x6CE8;&#x610F;&#x4E8B;&#x9879;" class="headerlink" title="cookie &#x4F7F;&#x7528;&#x6CE8;&#x610F;&#x4E8B;&#x9879;"></a>cookie &#x4F7F;&#x7528;&#x6CE8;&#x610F;&#x4E8B;&#x9879;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过-document-cookie-进行设置-cookie-的原理"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x901A;&#x8FC7;-document-cookie-&#x8FDB;&#x884C;&#x8BBE;&#x7F6E;-cookie-&#x7684;&#x539F;&#x7406;" class="headerlink" title="&#x901A;&#x8FC7; document.cookie &#x8FDB;&#x884C;&#x8BBE;&#x7F6E; cookie &#x7684;&#x539F;&#x7406;"></a>&#x901A;&#x8FC7; document.cookie &#x8FDB;&#x884C;&#x8BBE;&#x7F6E; cookie &#x7684;&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cookie-的小知识点"><span class="nav-number">6.</span> <span class="nav-text"><a href="#cookie-&#x7684;&#x5C0F;&#x77E5;&#x8BC6;&#x70B9;" class="headerlink" title="cookie &#x7684;&#x5C0F;&#x77E5;&#x8BC6;&#x70B9;"></a>cookie &#x7684;&#x5C0F;&#x77E5;&#x8BC6;&#x70B9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#session"><span class="nav-number">7.</span> <span class="nav-text"><a href="#session" class="headerlink" title="session"></a>session</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#session-步骤"><span class="nav-number">8.</span> <span class="nav-text"><a href="#session-&#x6B65;&#x9AA4;" class="headerlink" title="session &#x6B65;&#x9AA4;"></a>session &#x6B65;&#x9AA4;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#express中session的使用"><span class="nav-number">9.</span> <span class="nav-text"><a href="#express&#x4E2D;session&#x7684;&#x4F7F;&#x7528;" class="headerlink" title="express&#x4E2D;session&#x7684;&#x4F7F;&#x7528;"></a>express&#x4E2D;session&#x7684;&#x4F7F;&#x7528;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#session-的实现原理"><span class="nav-number">10.</span> <span class="nav-text"><a href="#session-&#x7684;&#x5B9E;&#x73B0;&#x539F;&#x7406;" class="headerlink" title="session &#x7684;&#x5B9E;&#x73B0;&#x539F;&#x7406;"></a>session &#x7684;&#x5B9E;&#x73B0;&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#session-的小知识点"><span class="nav-number">11.</span> <span class="nav-text"><a href="#session-&#x7684;&#x5C0F;&#x77E5;&#x8BC6;&#x70B9;" class="headerlink" title="session &#x7684;&#x5C0F;&#x77E5;&#x8BC6;&#x70B9;"></a>session &#x7684;&#x5C0F;&#x77E5;&#x8BC6;&#x70B9;</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cookie-和-session-的区别"><span class="nav-number">12.</span> <span class="nav-text"><a href="#cookie-&#x548C;-session-&#x7684;&#x533A;&#x522B;" class="headerlink" title="cookie &#x548C; session &#x7684;&#x533A;&#x522B;"></a>cookie &#x548C; session &#x7684;&#x533A;&#x522B;</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Node-js-v8-9-0-文档"><span class="nav-number">12.0.0.0.0.1.</span> <span class="nav-text"><a href="#Node-js-v8-9-0-&#x6587;&#x6863;" class="headerlink" title="Node.js v8.9.0 &#x6587;&#x6863;"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 &#x6587;&#x6863;" target="_blank" rel="noopener">Node.js v8.9.0 &#x6587;&#x6863;</a></span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">newlife</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

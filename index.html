@@ -262,6 +262,395 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/23/Node-js之cookie-session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="newlife">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="newlife's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/23/Node-js之cookie-session/" itemprop="url">Node.js之cookie/session</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-23T21:16:09+08:00">
+                2017-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="http-特点"><a href="#http-特点" class="headerlink" title="http 特点"></a>http 特点</h1><ul>
+<li>web应用是基于HTTP协议的，而HTTP协议恰恰是一种无状态协议</li>
+</ul>
+<h1 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h1><ul>
+<li>cookie是网站为了辩别用户身份，进行会话跟踪而存储在客户端的数据</li>
+<li><p>通过响应头向客户端设置cookie</p>
+<pre><code>res.writeHead(200,{
+    &apos;Set-Cookie&apos;:&apos;age=6; path=/; Expires=&apos;+time
+});
+</code></pre></li>
+<li><p>读取客户端过来的cookie</p>
+<pre><code>req.headers.cookie:&apos;key1=value1; key2=value2&apos;
+</code></pre></li>
+</ul>
+<p>代码示例：</p>
+<p>1.httpcookie.js</p>
+<pre><code>var http = require(&apos;http&apos;);
+http.createServer(function (req, res) {
+    if (req.url == &apos;/write&apos;) {
+        //响应头 实体头 扩展头自定义头
+        var time = new Date(new Date().getTime() + 10 * 1000).toGMTString();
+        res.writeHead(200, {
+            &apos;Set-Cookie&apos;: &apos;age=6; path=/; Expires=&apos; + time
+        });
+        //第一次
+        res.end(&apos;ok&apos;);
+    } else if (req.url == &apos;/read&apos;) {
+        console.log(req.headers.cookie);
+        //第二次
+        res.end(&apos;hello&apos;);
+    }
+}).listen(8080);
+</code></pre><h1 id="express中cookie的使用"><a href="#express中cookie的使用" class="headerlink" title="express中cookie的使用"></a>express中cookie的使用</h1><ol>
+<li><p>cookie的创建</p>
+<pre><code>res.cookie(name,value,[,options]);
+</code></pre></li>
+</ol>
+<p><img src="/img/cookie_session/res_cookie.png" alt="res_cookie.png" title="res_cookie.png"></p>
+<ol>
+<li>获取cookie<ul>
+<li>使用req.cookie/req.singedCookies得到cookies值</li>
+<li>解析后的unsigned cookie(未使用签名功能)保存在req.cookies中，而解析后的signed cookie(使用了签名功能)只保存在req.signedCookies中</li>
+<li>req.cookies:对req.headers.cookie中的cookie进行解析，返回的是一个对象</li>
+<li>req.signedCookies:保存的是解析后的cookie的真实值，但是可能还会被JSONCookie进行处理</li>
+</ul>
+</li>
+</ol>
+<p>代码示例：</p>
+<p>2.expresscookie.js</p>
+<pre><code>var express = require(&apos;express&apos;);
+var cookieParser = require(&apos;cookie-parser&apos;);
+
+var app = express();
+app.use(cookieParser());
+// req.headers.cookie= name=zfpx; age=6
+app.get(&apos;/&apos;, function (req, res) {
+    // 如果请求中的 cookie 存在 visited, 则输出 cookie
+    // 否则，设置 cookie 字段 visited, 并设置过期时间为10分钟
+    if (req.cookies.visited) {
+        res.send(&quot;欢迎老朋友&quot;);
+    } else {
+        res.cookie(&apos;visited&apos;, 1, {maxAge: 10 * 1000});
+        res.send(&quot;欢迎新朋友&quot;);
+    }
+});
+app.listen(80);
+</code></pre><p>3.expresscookie.js</p>
+<pre><code>var express = require(&apos;express&apos;);
+var cookieParser = require(&apos;cookie-parser&apos;);
+
+var app = express();
+app.use(cookieParser());
+// req.headers.cookie= name=zfpx; age=6
+app.get(&apos;/write&apos;, function (req, res) {
+    // 默认设置
+    //res.cookie(&apos;name&apos;,&apos;zfpx&apos;);
+
+    //设置域名 只有再次访问指定域名的时候客户端才会向服务器端发送cookie
+    //res.cookie(&apos;name&apos;,&apos;zfpx&apos;,{
+    //    domain:&apos;.zfpx.cn&apos;.
+    //});
+
+    //指定路径 只有当下次客户端 向服务器发送请求时，如果path=/read1的时候，才会向服务器发送，否则 不发送
+    /* res.cookie(&apos;name&apos;,&apos;zfpx&apos;,{
+     path:&apos;/read1&apos;
+     });*/
+    //指定有效期
+    res.cookie(&apos;name&apos;, &apos;zfpx&apos;, {
+        expires: new Date(Date.now() + 10 * 1000),
+        maxAge: 10 * 1000
+    });
+    res.end(&apos;ok&apos;);
+});
+
+app.get(&apos;/read&apos;, function (req, res) {
+    console.log(req.cookies);
+    res.send(req.cookies);
+});
+app.get(&apos;/read1&apos;, function (req, res) {
+    console.log(req.cookies);
+    res.send(req.cookies);
+});
+app.listen(80);
+</code></pre><p>4.login.js(登录的例子)</p>
+<pre><code>var express = require(&apos;express&apos;);
+var cookieParser = require(&apos;cookie-parser&apos;);
+var path = require(&apos;path&apos;);
+var bodyParser = require(&apos;body-parser&apos;);
+var app = express();
+app.set(&apos;view engine&apos;, &apos;ejs&apos;);
+app.set(&apos;views&apos;, path.resolve());
+app.use(cookieParser());
+
+function checkLogin(req, res, next) {
+    if (req.cookies &amp;&amp; req.cookies.username) {
+        next();
+    } else {
+        res.redirect(&apos;/&apos;);
+    }
+}
+
+//进入登录页
+app.get(&apos;/&apos;, function (req, res) {
+    res.render(&apos;login&apos;, {});
+});
+
+// 登录
+app.get(&apos;/login&apos;, function (req, res) {
+    var username = req.query.username;
+    res.cookie(&apos;username&apos;, username);
+    //重定向，让客户端重向新求参数指定的路径
+    res.redirect(&apos;/user&apos;);
+});
+
+//用户主页
+app.get(&apos;/user&apos;, checkLogin, function (req, res) {
+    res.send(req.cookies.username);
+});
+
+app.listen(80);
+
+
+// login.ejs
+
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;/login&quot; method=&quot;get&quot;&gt;
+    用户名&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;登陆&quot;&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1 id="cookie-使用注意事项"><a href="#cookie-使用注意事项" class="headerlink" title="cookie 使用注意事项"></a>cookie 使用注意事项</h1><ul>
+<li>可能被客户端 <code>篡改</code>，使用前验证合法性</li>
+<li>不要存储 <code>敏感</code> 数据，比如用户密码，账户余额</li>
+<li>使用 <code>HttpOnly</code> 保证安全</li>
+<li>尽量减少cookie的 <code>体积</code></li>
+<li>设置正确的 <code>domain</code> 和 <code>path</code>，减少数据传输</li>
+</ul>
+<h1 id="通过-document-cookie-进行设置-cookie-的原理"><a href="#通过-document-cookie-进行设置-cookie-的原理" class="headerlink" title="通过 document.cookie 进行设置 cookie 的原理"></a>通过 document.cookie 进行设置 cookie 的原理</h1><pre><code>var document = {};
+Object.defineProperty(document, &apos;cookies&apos;, {
+    value: []
+})
+
+Object.defineProperty(document, &apos;cookie&apos;, {
+    set: function (cookie) {
+        this.cookies.push(cookie);
+    },
+    get: function () {
+        return this.cookies;
+    }
+})
+
+document.cookie = &apos;name=zfpx&apos;;
+document.cookie = &apos;age=6&apos;;
+console.log(document.cookie);
+</code></pre><h1 id="cookie-的小知识点"><a href="#cookie-的小知识点" class="headerlink" title="cookie 的小知识点"></a>cookie 的小知识点</h1><ul>
+<li>设置 cookie 的失效时间有两种方式：设置绝对时间(expires)和相对时间(maxAge)；设置相对时间能够补充设置绝对时间的缺陷，因为客户端能够自主修改时间，有可能导致 cookie 永远不失效，但是设计了相对时间就好比是倒计时，到了时间总会失效的，设置相对时间以客户端时间为准，在客户端进行倒计时</li>
+<li>在 express 中通过 app.use 使用 cookie-parser 模块之后，会在 req 对象上增加一个 cookies 属性(是个对象)</li>
+<li>一般 cookie 应该是由服务器端向客户端设置的</li>
+<li>当服务器端向客户端设置 cookie 时，cookie 内容后面的条件都是用来配置向服务器端发送请求时是否发送 cookie 的条件</li>
+<li>在谷歌浏览器的开发者工具中查看 cookie 时，只有域名、请求路径 …这些都匹配才能看到相应的 cookie;在 Network 中也能通过请求头查看 cookie</li>
+<li>为什么只有在服务器端向客户端发送 cookie 时才需要设置那些条件，而客户端向服务器端发送时就不需要？-&gt;因为客户端自己会按照条件逐个进行判断，只有满足条件的才会最终发送给服务器端</li>
+<li>当需要多个页面都需要使用这个 cookie 时，可以给域名条件项设置通配符，让多个页面都能访问到该 cookie</li>
+<li>在express 中，可以把中间件函数插在请求的路径和最终的业务处理之间，在匹配了路径之后和进行最终的业务处理之前，会先去执行中间件函数，只有中间件函数中执行了 next() 才会继续执行最后的业务处理，否则不会执行</li>
+<li>当通过 document.cookie 进行设置 cookie 时，发现给同一个对象的同一属性设置值并不会覆盖，原因是因为它采用了属性设置器</li>
+<li>HttpOnly: 不能通过 document.cookie 读取和写入</li>
+<li>expires 单位是秒；maxAge 单位是毫秒</li>
+</ul>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><ul>
+<li>会话跟踪，数据存放在 <code>服务器</code></li>
+<li>需要借助 <code>cookie</code> 存储一个 <code>会话ID</code>，服务器可以根据会话ID来查询出详细的session数据</li>
+</ul>
+<h1 id="session-步骤"><a href="#session-步骤" class="headerlink" title="session 步骤"></a>session 步骤</h1><ul>
+<li>在服务器端生成全局唯一标识符(session_id<sid>)</sid></li>
+<li>在服务器内存里开辟此session_id对应的数据存储空间</li>
+<li>session_id作为全局唯一标示符发送给客户端</li>
+<li>以后客户端再次访问服务器时会把session_id返回</li>
+</ul>
+<h1 id="express中session的使用"><a href="#express中session的使用" class="headerlink" title="express中session的使用"></a>express中session的使用</h1><p>代码示例：</p>
+<pre><code>var express = require(&apos;express&apos;);
+var session = require(&apos;express-session&apos;);
+var app = express();
+app.use(session({
+    secret: &apos;zfpx&apos;, //secret的值建议使用随机字符串
+    cookie: {maxAge: 60 * 1000 * 30}, // 过期时间（毫秒）
+    resave:true,//每次响应结束 的时候 都重新保存session
+    saveUninitialized:true //保存未初始化的session
+}));
+app.get(&apos;/&apos;, function (req, res) {
+    if (req.session.sign) {//检查用户是否已经登录
+        console.log(req.session);//打印session的值
+        res.send(&apos;welcome &lt;strong&gt;&apos; + req.session.name + &apos;&lt;/strong&gt;, 欢迎你再次登录&apos;);
+    } else {
+        //因为session是借用cookie实现的，所以当设置session的时候，会自动设置cookie
+        req.session.sign = true;
+        req.session.name = &apos;珠峰培训&apos;;
+        res.send(&apos;欢迎登陆！&apos;);
+    }
+});
+app.listen(80);
+</code></pre><h1 id="session-的实现原理"><a href="#session-的实现原理" class="headerlink" title="session 的实现原理"></a>session 的实现原理</h1><pre><code>var express = require(&apos;express&apos;);
+var app = express();
+app.use(require(&apos;cookie-parser&apos;)());
+//放在服务器端的客户明细表
+var session = {};
+app.get(&apos;/&apos;, function (req, res) {
+    //取出cookie中的sid
+  var sid = req.cookies.sid;
+    //如果有值的话就表示访问过了
+    if(sid){
+        //从服务器的session对象中取出当前客户端在服务器对应的session
+        var currentSession = session[sid];
+        //赋值
+        currentSession.mny = currentSession.mny-10;
+        res.send(&apos;&apos;+currentSession.mny);
+    }else{
+        //生成新的sid
+        var newSid = Date.now()+&apos;&apos;+Math.random();
+        session[newSid] = {mny:100};
+        //写入到客户端
+        res.setHeader(&apos;Set-Cookie&apos;,&apos;sid=&apos;+newSid);
+        res.send(&apos;新朋友&apos;);
+    }
+});
+app.listen(80);
+</code></pre><h1 id="session-的小知识点"><a href="#session-的小知识点" class="headerlink" title="session 的小知识点"></a>session 的小知识点</h1><ul>
+<li>在 express 中通过 app.use 使用 express-session 模块之后，会在 req 对象上增加一个 session 属性(是个对象)</li>
+<li>session 中的 cookie 参数选项主要是用来设置过期时间的</li>
+</ul>
+<h1 id="cookie-和-session-的区别"><a href="#cookie-和-session-的区别" class="headerlink" title="cookie 和 session 的区别"></a>cookie 和 session 的区别</h1><ul>
+<li>以一个比喻来解释：<ul>
+<li>cookie:你去理发店，店家给你发了一张卡，上面有些许小方格，每个方格代表可以理发一次，这张卡是你自己保管的，店家也不知道你到底还剩几次理发次数；(记录在客户端)</li>
+<li>session:你去理发店，店家给你发了一张电子卡，上面记录了你的余额，你只有一个卡号，具体还剩几次理发次数记录在店家那里，自己不知道；(记录在服务器端)</li>
+</ul>
+</li>
+<li>综上所述，session 比较安全</li>
+</ul>
+<blockquote>
+<p>cookie&amp;session 珠峰教程：<a href="http://school.zhufengpeixun.cn/course/47/learn#lesson/435" target="_blank" rel="noopener">http://school.zhufengpeixun.cn/course/47/learn#lesson/435</a></p>
+</blockquote>
+<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
+<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
+<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/22/Node-js之RESTful/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3083,488 +3472,6 @@ process.on(&quot;SIGINT&quot;, function () {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/14/Node-js之ajax/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="newlife">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="newlife's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/12/14/Node-js之ajax/" itemprop="url">Node.js之ajax</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-14T21:38:53+08:00">
-                2017-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="第一步-创建-ajax-对象"><a href="#第一步-创建-ajax-对象" class="headerlink" title="第一步    创建 ajax 对象"></a>第一步    <strong>创建</strong> <code>ajax</code> 对象</h1><p><code>var XHR = new XMLHttpRequest();</code></p>
-<h1 id="第二步-打开请求"><a href="#第二步-打开请求" class="headerlink" title="第二步    打开请求"></a>第二步    <strong>打开</strong>请求</h1><p><code>xhr.open(method, url, async, user, password);</code></p>
-<h3 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h3><p><img src="/img/open.png" alt="open.png" title="open.png"></p>
-<h1 id="第三步-指定接收响应的-回调函数"><a href="#第三步-指定接收响应的-回调函数" class="headerlink" title="第三步    指定接收响应的 回调函数"></a>第三步    指定接收响应的 回调函数</h1><ul>
-<li><p>当 XMLHTTPRequest 对象的 <code>readyState</code> 属性改变时调用回调函数</p>
-<p>  <code>xhr.onreadystatechange = function(){};</code></p>
-</li>
-</ul>
-<h1 id="XHR-对象状态"><a href="#XHR-对象状态" class="headerlink" title="XHR 对象状态"></a>XHR 对象状态</h1><p><img src="/img/readyState1.png" alt="readyState1.png" title="readyState1.png"></p>
-<h1 id="readyState-状态的值"><a href="#readyState-状态的值" class="headerlink" title="readyState 状态的值"></a><code>readyState</code> 状态的<strong>值</strong></h1><p><img src="/img/readyState2.png" alt="readyState2.png" title="readyState2.png"></p>
-<h1 id="服务器响应"><a href="#服务器响应" class="headerlink" title="服务器响应"></a>服务器响应</h1><p><img src="/img/response.png" alt="response.png" title="response.png"></p>
-<h1 id="发送请求"><a href="#发送请求" class="headerlink" title="发送请求"></a>发送请求</h1><ul>
-<li><code>send</code> 方法会把参数放到<strong>请求体</strong>里</li>
-<li>所有 <code>get</code> 不能通过请求体传<strong>参数</strong>，而 <code>post</code> 可以</li>
-<li><p>当使用同步的时候，<code>send</code> 方法后都会阻塞，一直等到服务器响应，所以 <code>send</code> 方法要放到<strong>最后</strong></p>
-<p>  <code>xhr.send(varBody);</code></p>
-</li>
-</ul>
-<h3 id="send-方法重载参数"><a href="#send-方法重载参数" class="headerlink" title="send 方法重载参数"></a><code>send</code> 方法重载参数</h3><p><img src="/img/send.png" alt="send.png" title="send.png"></p>
-<h1 id="form-标签的-enctype-属性"><a href="#form-标签的-enctype-属性" class="headerlink" title="form 标签的 enctype 属性"></a><code>form</code> 标签的 <code>enctype</code> 属性</h1><p><img src="/img/form_enctype.png" alt="form_enctype.png" title="form_enctype.png"></p>
-<h1 id="xhr-对象的方法"><a href="#xhr-对象的方法" class="headerlink" title="xhr 对象的方法"></a><code>xhr</code> 对象的<strong>方法</strong></h1><p><img src="/img/xhr_function.png" alt="xhr_function.png" title="xhr_function.png"></p>
-<h1 id="xhr-对象的属性"><a href="#xhr-对象的属性" class="headerlink" title="xhr 对象的属性"></a><code>xhr</code> 对象的<strong>属性</strong></h1><p><img src="/img/xhr_attr.png" alt="xhr_attr.png" title="xhr_attr.png"></p>
-<h1 id="responseType-响应类型"><a href="#responseType-响应类型" class="headerlink" title="responseType 响应类型"></a><code>responseType</code> 响应类型</h1><ul>
-<li><code>XMLHttpRequest.responseType</code> 设置该值能够改变响应类型，设置后会把 <code>XMLHttpRequest.response</code> 转化为相应的类型<br><img src="/img/responseType.png" alt="responseType.png" title="responseType.png"></li>
-</ul>
-<h1 id="图片上传"><a href="#图片上传" class="headerlink" title="图片上传"></a>图片上传</h1><p>文件上传、预览、删除等功能: <a href="http://blog.csdn.net/qingyjl/article/details/52003567" target="_blank" rel="noopener">http://blog.csdn.net/qingyjl/article/details/52003567</a></p>
-<ul>
-<li><p>上传图片需要使用 <code>type=&quot;file&quot;</code> 类型的 <code>input</code> 元素</p>
-<p>  <code>&lt;input type=&quot;file&quot; multiple  name=&quot;avatar&quot;&gt;</code></p>
-<p>  其中 <code>multiple</code> 属性是用来上传多张图片的， <code>name</code> 属性可以自定义</p>
-</li>
-<li>把上传后的图片显示出来<ol>
-<li>在服务器端，把 files 里的 avatar 里的path读出来，根据此路径通过 <code>fs.readFile</code> 方法把图片复制到 imgs 目录下</li>
-<li>把此图片的路径返回浏览器端</li>
-<li>在浏览器端构建一个 img 元素，追加到 body 上，并且指定 img 的 src 属性，此处 src 属性值为服务器返回的图片路径</li>
-<li>服务器端可以接收客户端发出的请求图片的请求，服务器返回图片的内容，最终在浏览器端图片得到显示</li>
-</ol>
-</li>
-</ul>
-<h1 id="FormData-对象-H5-新对象-的使用"><a href="#FormData-对象-H5-新对象-的使用" class="headerlink" title="FormData 对象(H5 新对象)的使用"></a><code>FormData</code> 对象(H5 新对象)的使用</h1><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/Using_FormData_Objects" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/Using_FormData_Objects</a></p>
-<p><a href="https://www.cnblogs.com/lhb25/p/html5-formdata-tutorials.html" target="_blank" rel="noopener">https://www.cnblogs.com/lhb25/p/html5-formdata-tutorials.html</a></p>
-<h3 id="通过FormData对象可以组装一组用-XMLHttpRequest发送请求的键-值对。它可以更灵活方便的发送表单数据，因为可以独立于表单使用。如果你把表单的编码类型设置为multipart-form-data-，则通过FormData传输的数据格式和表单通过submit-方法传输的数据格式相同"><a href="#通过FormData对象可以组装一组用-XMLHttpRequest发送请求的键-值对。它可以更灵活方便的发送表单数据，因为可以独立于表单使用。如果你把表单的编码类型设置为multipart-form-data-，则通过FormData传输的数据格式和表单通过submit-方法传输的数据格式相同" class="headerlink" title="通过FormData对象可以组装一组用 XMLHttpRequest发送请求的键/值对。它可以更灵活方便的发送表单数据，因为可以独立于表单使用。如果你把表单的编码类型设置为multipart/form-data ，则通过FormData传输的数据格式和表单通过submit() 方法传输的数据格式相同"></a>通过FormData对象可以组装一组用 XMLHttpRequest发送请求的键/值对。它可以更灵活方便的发送表单数据，因为可以独立于表单使用。如果你把表单的编码类型设置为multipart/form-data ，则通过FormData传输的数据格式和表单通过submit() 方法传输的数据格式相同</h3><pre><code>//准备发送给服务器的数据
-var formData = new FormData();
-//给这个表单对象增加一个表单元素
-formData.append(&apos;username&apos;,document.querySelector(&apos;input[name=username]&apos;).value);
-//给这个表单对象增加一个表单元素
-formData.append(&apos;password&apos;,document.querySelector(&apos;input[name=password]&apos;).value);
-var avatar = document.querySelector(&apos;input[name=avatar]&apos;)
-//给这个表单对象增加一个文件元素
-formData.append(&apos;avatar&apos;,avatar.files[0]);
-xhr.send(formData);
-</code></pre><h1 id="formidable-模块"><a href="#formidable-模块" class="headerlink" title="formidable 模块"></a><code>formidable</code> 模块</h1><p><a href="http://blog.csdn.net/charlene0824/article/details/51234394" target="_blank" rel="noopener">http://blog.csdn.net/charlene0824/article/details/51234394</a></p>
-<pre><code>if (pathname == &apos;/reg2&apos;) {
-    // 构建一个解析器
-    var formParser = new formidable.IncomingForm();
-    ///用解析器解析请求体
-    //非file的input会放在fields里
-    //文件类型的元素会放在files里(文件这么分类都是 parse 方法自动处理的)
-    formParser.parse(req, function (err, fields, files) {
-        fs.readFile(files.avatar.path, function (err, data) {
-            console.log(files.avatar);
-            var filename = &apos;/imgs/&apos; + files.avatar.name; // 创建存放图片的目录
-            fs.writeFile(&apos;.&apos; + filename, data, function (err) { // 根据此路径通过 fs.readFile 方法复制图片
-                res.writeHead(200, {&apos;Content-Type&apos;: &apos;text/plain&apos;});
-                res.end(filename); // 把此图片的路径返回浏览器端
-            })
-        })
-    });
-}
-
-// files
-{ avatar: 
-   File {
-     domain: null,
-     _events: {},
-     _eventsCount: 0,
-     _maxListeners: undefined,
-     size: 42271,
-     path: &apos;C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\upload_11b9e023ed180f1f0cb33f5a23fae377&apos;,
-     name: &apos;boy.png&apos;,
-     type: &apos;image/png&apos;,
-     hash: null,
-     lastModifiedDate: 2017-12-15T04:11:11.380Z,
-     _writeStream: 
-      WriteStream {
-        _writableState: [Object],
-        writable: false,
-        domain: null,
-        _events: {},
-        _eventsCount: 0,
-        _maxListeners: undefined,
-        path: &apos;C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\upload_11b9e023ed180f1f0cb33f5a23fae377&apos;,
-        fd: null,
-        flags: &apos;w&apos;,
-        mode: 438,
-        start: undefined,
-        autoClose: true,
-        pos: undefined,
-        bytesWritten: 42271,
-        closed: true 
-      } 
-    } 
-}
-</code></pre><h1 id="querystring-模块"><a href="#querystring-模块" class="headerlink" title="querystring 模块"></a><code>querystring</code> 模块</h1><p><a href="http://yijiebuyi.com/blog/d37512fc6df0fc4d0adfc2ec5c3d46ff.html" target="_blank" rel="noopener">http://yijiebuyi.com/blog/d37512fc6df0fc4d0adfc2ec5c3d46ff.html</a></p>
-<h3 id="node-js原生自带，直接-require-‘querystring’-即可使用"><a href="#node-js原生自带，直接-require-‘querystring’-即可使用" class="headerlink" title="node.js原生自带，直接 require(‘querystring’) 即可使用"></a>node.js原生自带，直接 require(‘querystring’) 即可使用</h3><ul>
-<li><p>querystring.parse(str, [sep], [eq], [options])</p>
-<p>  参数字符串(查询字符串)格式化成对象</p>
-<pre><code>var obj={name:&quot;一介布衣&quot;,url:&quot;http://yijiebuyi.com&quot;};
-var param= querystring.stringify(obj);
-</code></pre><p>  我们把param 字符串格式化成对象,使用默认分隔分配符</p>
-<pre><code>var newobj=querystring.parse(param);
-console.log(typeof newobj,newobj);
-</code></pre><p>  打印出来格式化后的数据类型 和 内容<br><img src="/img/querystring_parse1.png" alt="querystring_parse1.png" title="querystring_parse1.png"></p>
-<p>  可以看到格式化以后是object类型,并且汉字自动解码显示出来.<br>  当覆盖分割和分配符,如下:</p>
-<pre><code>param=querystring.stringify(obj,&apos;|&apos;,&apos;*&apos;);
-console.log(param);
-</code></pre><p><img src="/img/querystring_parse2.png" alt="querystring_parse2.png" title="querystring_parse2.png"></p>
-</li>
-<li><p>querystring.stringify(obj, [sep], [eq])</p>
-<p>  对象格式化成参数字符串 ,obj就是要格式化的对象,必选参数</p>
-<pre><code>var obj={name:&quot;一介布衣&quot;,url:&quot;http://yijiebuyi.com&quot;};
-var param= querystring.stringify(obj);
-//没有指定分隔符和分配符,并且自动编码汉字
-console.log(param);
-</code></pre><p><img src="/img/querystring_stringify1.png" alt="querystring_stringify1.png" title="querystring_stringify1.png"></p>
-<pre><code>param=querystring.stringify(obj,&apos;|&apos;,&apos;*&apos;);
-//指定了分隔符和分配符
-console.log(param);
-</code></pre><p><img src="/img/querystring_stringify2.png" alt="querystring_stringify2.png" title="querystring_stringify2.png"></p>
-</li>
-</ul>
-<h1 id="util-模块"><a href="#util-模块" class="headerlink" title="util 模块"></a><code>util</code> 模块</h1><p><a href="http://www.runoob.com/nodejs/nodejs-util.html" target="_blank" rel="noopener">http://www.runoob.com/nodejs/nodejs-util.html</a></p>
-<ul>
-<li>util.inspect(object,[showHidden],[depth],[colors])<br>  util.inspect 是一个将任意对象转换 为字符串的方法，通常用于调试和错误输出；它至少接受一个参数 object，即要转换的对象<ul>
-<li>showHidden 是一个可选参数，如果值为 true，将会输出更多隐藏信息</li>
-<li>depth 表示最大递归的层数，如果对象很复杂，你可以指定层数以控制输出信息的多 少；如果不指定depth，默认会递归2层，指定为 null 表示将不限递归层数完整遍历对象</li>
-<li>如果color 值为 true，输出格式将会以ANSI 颜色编码，通常用于在终端显示更漂亮 的效果<blockquote>
-<p>特别要指出的是，util.inspect 并不会简单地直接把对象转换为字符串，即使该对 象定义了toString 方法也不会调用</p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<p>代码示例：</p>
-<pre><code>var util = require(&apos;util&apos;); 
-function Person() { 
-    this.name = &apos;byvoid&apos;; 
-    this.toString = function() { 
-    return this.name; 
-    }; 
-} 
-var obj = new Person(); 
-console.log(util.inspect(obj)); 
-console.log(util.inspect(obj, true));
-</code></pre><p>运行结果是：</p>
-<pre><code>Person { name: &apos;byvoid&apos;, toString: [Function] }
-Person {
-  name: &apos;byvoid&apos;,
-  toString: 
-   { [Function]
-     [length]: 0,
-     [name]: &apos;&apos;,
-     [arguments]: null,
-     [caller]: null,
-     [prototype]: { [constructor]: [Circular] } } }
-</code></pre><ul>
-<li>util.inherits(constructor, superConstructor)是一个实现对象间原型继承 的函数</li>
-</ul>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf</a></p>
-<ul>
-<li><p>示例如下：</p>
-<pre><code>var util = require(&apos;util&apos;); 
-function Base() { 
-    this.name = &apos;base&apos;; 
-    this.base = 1991; 
-    this.sayHello = function() { 
-    console.log(&apos;Hello &apos; + this.name); 
-    }; 
-} 
-Base.prototype.showName = function() { 
-    console.log(this.name);
-}; 
-function Sub() { 
-    this.name = &apos;sub&apos;; 
-} 
-util.inherits(Sub, Base); 
-var objBase = new Base(); 
-objBase.showName(); 
-objBase.sayHello(); 
-console.log(objBase); 
-var objSub = new Sub(); 
-objSub.showName(); 
-//objSub.sayHello(); 
-console.log(objSub); 
-</code></pre></li>
-<li><p>我们定义了一个基础对象Base 和一个继承自Base 的Sub，Base 有三个在构造函数 内定义的属性和一个原型中定义的函数，通过util.inherits 实现继承。运行结果如下：</p>
-<pre><code>base 
-Hello base 
-{ name: &apos;base&apos;, base: 1991, sayHello: [Function] } 
-sub 
-{ name: &apos;sub&apos; }
-</code></pre></li>
-<li><p>注意：Sub 仅仅继承了Base 在原型中定义的函数，而构造函数内部创造的 base 属 性和 sayHello 函数都没有被 Sub 继承。<br>同时，在原型中定义的属性不会被console.log 作 为对象的属性输出。如果我们去掉 objSub.sayHello(); 这行的注释，将会看到：</p>
-<pre><code>node.js:201 
-throw e; // process.nextTick error, or &apos;error&apos; event on first tick 
-^ 
-TypeError: Object #&amp;lt;Sub&amp;gt; has no method &apos;sayHello&apos; 
-</code></pre></li>
-<li><p>util.inherits(Children,Parent) <code>&lt;Child,Parent是两个类&gt;</code> 实现原理：<code>Object.setPrototypeOf(ctor.prototype,superCtor.prototype)-&gt; Children.prototype=new Parent();</code></p>
-<pre><code>util.inherits(Children,Parent)
-// 解释：
-function temp() {}
-temp.prototype=Parent.prototype;
-Children.prototype=new temp();
-</code></pre></li>
-<li><p>通过 <code>Parent.call(this);</code> 实现子类对父类在非原型上的自定义的属性的继承</p>
-<pre><code>function Children() {
-    Parent.call(this);
-    this.name = &quot;children&quot;;
-}
-</code></pre></li>
-<li><p>util.isArray(object)</p>
-<ul>
-<li>如果给定的参数 “object” 是一个数组返回true，否则返回false</li>
-</ul>
-</li>
-<li>util.isRegExp(object)<ul>
-<li>如果给定的参数 “object” 是一个正则表达式返回true，否则返回false</li>
-</ul>
-</li>
-<li>util.isDate(object)<ul>
-<li>如果给定的参数 “object” 是一个日期返回true，否则返回false</li>
-</ul>
-</li>
-<li>util.isError(object)<ul>
-<li>如果给定的参数 “object” 是一个错误对象返回true，否则返回false</li>
-</ul>
-</li>
-</ul>
-<h1 id="mime-模块"><a href="#mime-模块" class="headerlink" title="mime 模块"></a><code>mime</code> 模块</h1><p><a href="https://www.cnblogs.com/jeacy/p/6992435.html" target="_blank" rel="noopener">https://www.cnblogs.com/jeacy/p/6992435.html</a></p>
-<pre><code>// 在使用nodejs中的mime模块处理静态文件的时候，出现mime.lookup的错误，
-// 具体错误如下：
-// mime.lookup is not a function
-// 原因是：mime 2.x.x 版本修改了函数名: lookup() -&gt; getType()
-</code></pre><h1 id="url-模块"><a href="#url-模块" class="headerlink" title="url 模块"></a><code>url</code> 模块</h1><p><a href="http://blog.csdn.net/vanhukseter/article/details/43870271" target="_blank" rel="noopener">http://blog.csdn.net/vanhukseter/article/details/43870271</a></p>
-<ul>
-<li><p>url.parse(urlString,boolean,boolean)</p>
-<p>  parse 这个方法可以将一个url的字符串解析并返回一个url的对象</p>
-<p>  参数：urlString 指传入一个url地址的字符串</p>
-</li>
-</ul>
-<p>　　　　　第二个参数（可省）传入一个布尔值，默认为false，为true时，返回的url对象中，query的属性为一个对象。</p>
-<p>　　　　　第三个参数（可省）传入一个布尔值，默认为false，为true时，解析时会将url的”//”和第一个”/”之间的部分解析为主机名</p>
-<p>示例:</p>
-<pre><code>var url = require(&apos;url&apos;);
-url.parse(&apos;http://www.baidu.com/news&apos;,false,true);
-</code></pre><p>返回的结果：</p>
-<pre><code>{ protocol: &apos;http:&apos;,
-  slashes: true,
-  auth: null,
-  host: &apos;www.baidu.com&apos;,
-  port: null,
-  hostname: &apos;www.baidu.com&apos;,
-  hash: null,
-  search: null,
-  query: null,
-  pathname: &apos;/news&apos;,
-  path: &apos;/news&apos;,
-  href: &apos;http://www.baidu.com/news&apos; }
-</code></pre><h1 id="request-的-data-事件"><a href="#request-的-data-事件" class="headerlink" title="request 的 data 事件"></a>request 的 <code>data</code> 事件</h1><p><a href="http://www.runoob.com/nodejs/node-js-get-post.html" target="_blank" rel="noopener">http://www.runoob.com/nodejs/node-js-get-post.html</a></p>
-<pre><code>if(pathname == &apos;/reg&apos;){
-    var result=&apos;&apos;;
-    //当读到客户端提交过来的数据时会触发data事件，然后调用回调函数(通过req的data事件监听函数，每当接受到请求体的数据，就累加到result变量中)
-    req.on(&apos;data&apos;,function(data){
-        result +=data;
-    })
-    req.on(&apos;end&apos;,function(){
-        // 数据接收完毕(在end事件触发后，通过querystring.parse将result解析为真正的POST请求格式，然后向客户端返回)
-        result = querystring.parse(result);
-        res.end(util.inspect(result)); // 发送响应
-    })
-}
-</code></pre><h1 id="路径问题"><a href="#路径问题" class="headerlink" title="路径问题"></a>路径问题</h1><pre><code>/**
-     *  . 当前目录
-     *  ./index.js 当前目录下的某个文件
-     *  / 1. 如果是在HTML的链接里，代表URL 根目录
-     *    2. 如果出现在读文件的时候,则它代理当前盘符的根目录
-     *  index.js 代表当前目录下面的index.js文件 == ./index.js
-     *  .. 代表上一级目录
-     *  ../../ 代表上一级的上一级目录
-     */
-</code></pre><h1 id="处理表单数据"><a href="#处理表单数据" class="headerlink" title="处理表单数据"></a>处理表单数据</h1><h3 id="处理成一个数组"><a href="#处理成一个数组" class="headerlink" title="处理成一个数组"></a>处理成一个数组</h3><pre><code>function serialize(form) {
-    // 把表单中的元素集合转成一个数组
-    var elements = Array.prototype.slice.call(form.elements);
-    var data = [];
-    // 循环这个数组
-    elements.forEach(function (element) {
-        //先取出元素的类型
-        var type = element.type;
-        switch (type) {
-            case &apos;submit&apos;:
-            case &apos;cancel&apos;:
-            case &apos;reset&apos;:
-                break;
-            case &apos;text&apos;:
-                data.push(element.name + &apos;=&apos; + element.value); // 把 type=&quot;text&quot; 的 input 元素添加至数组中，得到一个字符串数组
-        }
-    });
-    // 通过 join 方法将该数组以 &apos;&amp;&apos; 为分割符转换为字符串并返回
-    return data.join(&apos;&amp;&apos;);
-}
-
-// 把表单的数据 转成查询字符串
-var data = serialize(document.querySelector(&apos;form&apos;));
-// 把数据放在请求体里发送给服务器
-xhr.send(data);
-</code></pre><h3 id="处理成一个对象"><a href="#处理成一个对象" class="headerlink" title="处理成一个对象"></a>处理成一个对象</h3><pre><code>function toJson(form) {
-    // 把表单中的元素集合转成一个 JSON 格式对象
-    var elements = Array.prototype.slice.call(form.elements);
-    var data = {};
-    // 循环这个数组
-    elements.forEach(function (element) {
-        // 先取出元素的类型
-        var type = element.type;
-        switch (type) {
-            case &apos;submit&apos;:
-            case &apos;cancel&apos;:
-            case &apos;reset&apos;:
-                break;
-            case &apos;text&apos;:
-                data[element.name] = element.value; // 把 type=&quot;text&quot; 的 input 元素以 key-value 形式将表单元素的 name 和 value 添加至对象中
-        }
-    });
-    // 返回该对象
-    return data;
-}
-
-// 把表单的数据 转成 JSON 对象
-var data = toJson(document.querySelector(&apos;form&apos;));
-//把数据放在请求体里发送给服务器，注意不能直接把对象发送给服务器，需要转成字符串的形式
-xhr.send(JSON.stringify(data));
-</code></pre><h1 id="ajax-请求注意事项"><a href="#ajax-请求注意事项" class="headerlink" title="ajax 请求注意事项"></a><code>ajax</code> 请求注意事项</h1><ul>
-<li>xhr.send() 方法不要错误的放到 onreadystatechange 对应的回调函数中去，那样不会发送请求(这个错误比较隐晦，不容易被发现)</li>
-<li>异步请求时xhr.send() 是异步执行的方法，所以 onreadystatechange 方法可以放在 send 方法的前面和后面都可以；但是当为同步请求时，onreadystatechange 方法一定要放在 send 方法的前面，否则无法操作返回的数据</li>
-<li>只有当提交form表单，并且是GET请求的时候，浏览器才会把表单进行序列化(参数字符串)拼到URL后面(因为GET请求没有请求体)</li>
-<li>在 form 起始标签中可以通过 “method” 来指定是 “GET” 还是 “POST” 请求</li>
-<li>只有 type=”submit” 的按钮在点击后才会生成查询字符串(参数字符串) -&gt; <input type="submit" value="注册">;<input type="button" id="regBtn" value="注册"> 这样是不会生成参数字符串的</li>
-<li>POST 请求也不会生成参数字符串，因为 POST 请求会把它放到请求体里面</li>
-<li>xhr.setRequestHeader(‘Content-Type’,’application/x-www-form-urlencoded’); //设置请求头，不同的数据格式要采用不同的数据编码方式，而且这里设置的编码方式要和下面 send 方法中传递的数据的格式一致；为什么要相同呢？ -&gt; 因为服务器就是通过 Content-Type 来确定客户端发送的数据格式的，从而进行相关的数据解析，如果不一致的话，服务器解析就会出错</li>
-<li>在 form 表单中通过 enctype 属性来设置编码方式，当需要上传图片时，值为 “multipart/form-data”</li>
-<li>我们通过 xhr.send() 发送请求数据是中间步骤，为什么要先写 xhr.responseType=”json”; xhr.onreadystatechange=function() {}; …获取响应信息的代码. 最后写 xhr.send();这其实和绑定点击事件是一个道理，先要给点击事件绑定相应的方法，然后再点击；如果已经点击了再绑定方法就没用了</li>
-<li>使用 fs.exists(path, callback) 方法时，注意 path 如果是相对路径下的当前路径，记得要在路径前加上 “.”</li>
-<li>服务器配置路由时最后应该要配置其他所有未明确指定路径应该访问的资源，这样就不会导致客户端访问已有资源时出错(而且在服务端，html 文件引入 js 文件的相对路径前可以添加任意多个 “../“，因为添加的这些貌似不会对服务器读取资源产生任何影响，如： ../../js/index.js 与 ../js/index.js 与 index.js 都是相同的效果；但是如果添加一些指定的不存在的路径时，比如： /test/js/index.js 就会请求资源出错；以上只针对于服务端，当在本地预览 html 页面时，还是应该正确书写引用文件路径，如： ../js/index.js)</li>
-</ul>
-<h1 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h1><ul>
-<li><p>Fiddler</p>
-<p>  目前最常用的http抓包工具之一</p>
-</li>
-</ul>
-<h6 id="Node-js-v8-9-0-文档"><a href="#Node-js-v8-9-0-文档" class="headerlink" title="Node.js v8.9.0 文档"></a><a href="http://nodejs.cn/api/" title="Node.js v8.9.0 文档" target="_blank" rel="noopener">Node.js v8.9.0 文档</a></h6><blockquote>
-<p>本文来源: <a href="http://www.zhufengpeixun.cn" title="珠峰培训" target="_blank" rel="noopener">珠峰培训</a></p>
-<p>珠峰培训课程代码: <a href="https://github.com/zhufengnodejs/201601node" target="_blank" rel="noopener">https://github.com/zhufengnodejs/201601node</a></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3619,7 +3526,7 @@ xhr.send(JSON.stringify(data));
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
